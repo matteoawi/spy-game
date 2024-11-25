@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Gioco Spia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Stili CSS */
+    body {
+      margin: 0;
+      padding: 0;
+      /* Aggiunta di un'immagine di sfondo con overlay */
+      background: url('https://images.unsplash.com/photo-1517816743773-6e0fd518b4a6?auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Arial', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+      /* Aggiunta di un overlay scuro per migliorare la leggibilità */
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.268); /* Overlay scuro */
+      z-index: -1;
+    }
+
+    .container {
+      text-align: center;
+      padding: 5px;
+      min-height: 90vh; /* Imposta la min-height a 100% della viewport */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    h1, h2, h3 {
+      color: #ffffff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.418);
+    }
+
+    .block {
+      background-color: rgba(255, 255, 255, 0.85);
+      padding: 20px;
+      margin: 10px;
+      border-radius: 15px;
+      color: #000;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+      max-width: 300px;
+      width: 80%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* Rimosso box-shadow */
+    }
+
+    .block:hover {
+      background-color: rgba(255, 255, 255, 1);
+      transform: scale(1.05);
+    }
+
+    .block p {
+      margin: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .block p .emoji {
+      margin-right: 10px;
+      font-size: 24px;
+    }
+
+    button {
+      padding: 15px 30px;
+      margin: 20px;
+      border: none;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.85);
+      color: #000;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+      font-size: 18px;
+      max-width: 300px;
+      width: 80%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3); /* Effetto ombra solo sui pulsanti */
+    }
+
+    button:hover {
+      background: rgba(255, 255, 255, 1);
+      transform: scale(1.05);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Stile per il selettore di lingua */
+    .language-selector {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+    }
+
+    .language-selector select {
+      padding: 5px;
+      border: none;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 0.85);
+      color: #000;
+      font-size: 16px;
+    }
+
+    /* Stile per le pagine delle impostazioni */
+    .settings-page {
+      text-align: center;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.6); /* Overlay scuro per le pagine delle impostazioni */
+    }
+
+    input, select {
+      padding: 10px;
+      margin: 5px;
+      border: none;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.85);
+      color: #000;
+      width: 80%;
+      max-width: 300px;
+      font-size: 16px;
+    }
+
+    input::placeholder {
+      color: #000;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      max-width: 400px;
+      margin: 0 auto;
+      width: 80%;
+    }
+
+    li {
+      background-color: rgba(255, 255, 255, 0.85);
+      padding: 10px;
+      margin: 5px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #000;
+      /* Rimosso box-shadow */
+    }
+
+    li button {
+      background-color: rgba(255, 255, 255, 0.85);
+      padding: 5px 10px;
+      border-radius: 5px;
+      margin-left: 5px;
+      color: #000;
+      cursor: pointer;
+      font-size: 14px;
+      /* Rimosso box-shadow */
+    }
+
+    li button:hover {
+      background-color: rgba(255, 255, 255, 1);
+    }
+
+    li button.delete-btn {
+      background-color: transparent;
+      color: #000;
+      font-size: 16px;
+      border: none;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+    li button.delete-btn:hover {
+      color: #f00;
+    }
+
+    /* Stili per la card del ruolo */
+    .card {
+      width: 250px;
+      height: 350px;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 15px;
+      margin: 20px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      cursor: pointer;
+      transition: transform 0.3s, background 0.3s;
+      /* Rimosso box-shadow */
+      position: relative;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      background: rgba(255, 255, 255, 1);
+    }
+
+    .card.flipped {
+      background-color: #fff;
+      color: #000;
+    }
+
+    /* Media Queries per dispositivi mobili */
+    @media (max-width: 600px) {
+      .block {
+        padding: 15px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+      }
+
+      .card {
+        width: 200px;
+        height: 300px;
+      }
+
+      input, select {
+        width: 90%;
+      }
+
+      ul {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Selettore di lingua -->
+  <div class="language-selector">
+    <select id="language-select" onchange="changeLanguage()">
+      <option value="it">🇮🇹 Italiano</option>
+      <option value="en">🇬🇧 English</option>
+    </select>
+  </div>
+
+  <!-- Pagina Principale -->
+  <div id="home-page" class="container">
+    <h1 id="title">🎲 Gioco Spia 🕵️‍♂️</h1>
+    <div class="block" onclick="showPlayersPage()">
+      <p><span class="emoji">👥</span>Giocatori: <span id="players-count">0</span></p>
+    </div>
+    <div class="block" onclick="showCategoriesPage()">
+      <p><span class="emoji">📚</span>Categoria: <span id="category-name">Nessuna</span></p>
+    </div>
+    <div class="block" onclick="showGameSettingsPage()">
+      <p><span class="emoji">⚙️</span>Impostazioni di Gioco</p>
+    </div>
+    <div class="block" onclick="showLanguagePage()">
+      <p><span class="emoji">🌐</span>Lingua: <span id="current-language">Italiano</span></p>
+    </div>
+    <button onclick="startGame()"><span>🚀 Inizia Gioco</span></button>
+  </div>
+
+  <!-- Pagina Giocatori -->
+  <div id="players-page" class="settings-page hidden">
+    <h1 id="players-label">👥 Giocatori</h1>
+    <input type="text" id="player-name" placeholder="Nome giocatore">
+    <button onclick="addPlayer()"><span>➕ Aggiungi Giocatore</span></button>
+    <ul id="players-list"></ul>
+    <button onclick="goBackToHome()"><span>🔙 Torna Indietro</span></button>
+  </div>
+
+  <!-- Pagina Categorie -->
+  <div id="categories-page" class="settings-page hidden">
+    <h1 id="categories-label">📚 Categorie</h1>
+    <div style="width: 80%; max-width: 300px; margin: 0 auto;">
+      <select id="category-select" onchange="updateSelectedCategory()">
+        <option value="" disabled selected>🔍 Seleziona una categoria</option>
+      </select>
+    </div>
+    <button onclick="manageWords()"><span>🔧 Gestisci Parole</span></button>
+    <input type="text" id="new-category" placeholder="Nuova categoria">
+    <button onclick="addCategory()"><span>➕ Aggiungi Categoria</span></button>
+    <ul id="categories-list"></ul>
+    <button onclick="goBackToHome()"><span>🔙 Torna Indietro</span></button>
+  </div>
+
+  <!-- Pagina Impostazioni di Gioco -->
+  <div id="game-settings-page" class="settings-page hidden">
+    <h1 id="game-settings">⚙️ Impostazioni di Gioco</h1>
+    <label id="num-spies-label">Numero di spie:</label>
+    <input type="number" id="num-spies" min="1" value="1">
+    <label id="num-fake-spies-label">Numero di finte spie:</label>
+    <input type="number" id="num-fake-spies" min="0" value="0">
+    <label id="num-lawyers-label">Numero di avvocati:</label>
+    <input type="number" id="num-lawyers" min="0" value="0">
+    <label id="timer-label">Durata del round (minuti):</label>
+    <input type="number" id="timer" min="1" value="5">
+    <button onclick="saveGameSettings()"><span>💾 Salva Impostazioni</span></button>
+    <button onclick="goBackToHome()"><span>🔙 Torna Indietro</span></button>
+  </div>
+
+  <!-- Pagina Lingua -->
+  <div id="language-page" class="settings-page hidden">
+    <h1 id="language-title">🌐 Lingua</h1>
+    <select id="language-select-page" onchange="changeLanguageFromPage()">
+      <option value="it">🇮🇹 Italiano</option>
+      <option value="en">🇬🇧 English</option>
+    </select>
+    <button onclick="goBackToHome()"><span>🔙 Torna Indietro</span></button>
+  </div>
+
+  <!-- Pagina di Gestione delle Parole -->
+  <div id="words-page" class="settings-page hidden">
+    <h1 id="manage-words-title">🔧 Gestione delle Parole</h1>
+    <h2 id="category-title"></h2>
+    <input type="text" id="new-word" placeholder="Nuova parola">
+    <button onclick="addWord()"><span>➕ Aggiungi Parola</span></button>
+    <ul id="words-list"></ul>
+    <button onclick="goBackToCategories()"><span>🔙 Torna Indietro</span></button>
+  </div>
+
+  <!-- Pagina di Assegnazione dei Ruoli -->
+  <div id="assign-roles-page" class="container hidden">
+    <h1 id="assign-roles-title">🕵️‍♂️ Assegnazione dei Ruoli</h1>
+    <h2 id="current-player"></h2>
+    <div class="card" id="role-card">
+      <p id="click-to-see-role">🔍 Clicca per vedere il tuo ruolo</p>
+    </div>
+    <button id="next-player-btn" class="hidden" onclick="nextPlayer()"><span>➡️ Prossimo Giocatore</span></button>
+  </div>
+
+  <!-- Pagina di Gioco Attivo -->
+  <div id="game-page" class="container hidden">
+    <h1 id="game-in-progress">🎮 Gioco in Corso</h1>
+    <p class="timer" id="timer-display">5:00</p>
+    <button onclick="endRound()"><span>⏰ Termina Round</span></button>
+  </div>
+
+  <!-- Pagina di Votazione -->
+  <div id="voting-page" class="container hidden">
+    <h1 id="voting-title">🗳️ Votazione</h1>
+    <ul id="voting-list"></ul>
+    <button onclick="showResults()"><span>📊 Mostra Risultati</span></button>
+  </div>
+
+  <!-- Pagina dei Risultati -->
+  <div id="results-page" class="container hidden">
+    <h1 id="results-title">📈 Risultati della Votazione</h1>
+    <div id="results"></div>
+    <button onclick="restartGame()"><span>🔄 Gioca di Nuovo</span></button>
+  </div>
+
+  <!-- Script JavaScript -->
+  <script>
+    // Funzioni di Utilità per Gestire i Cookie
+    function setCookie(name, value, days) {
+      var expires = "";
+      if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + (encodeURIComponent(value) || "")  + expires + "; path=/";
+    }
+
+    function getCookie(name) {
+      var nameEQ = name + "=";
+      var ca = document.cookie.split(';');
+      for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return decodeURIComponent(c.substring(nameEQ.length,c.length));
+      }
+      return null;
+    }
+
+    function deleteCookie(name) {   
+      document.cookie = name+'=; Max-Age=-99999999; path=/';  
+    }
+
+    // Dati globali
+    var players = [];
+    var userCategories = {};
+    var gameSettings = {
+      numSpies: 1,
+      numFakeSpies: 0,
+      numLawyers: 0,
+      timer: 300 // Default 5 minutes
+    };
+    var currentPlayerIndex = 0;
+    var votes = {};
+    var timeRemaining;
+    var timerInterval;
+    var selectedCategory = '';
+    var language = 'it';
+
+    // Categorie predefinite (non salvate nei cookie)
+    var stockCategories = {
+      it: {
+        'Animali': [
+          'Cane', 'Gatto', 'Elefante', 'Leone', 'Tigre',
+          'Giraffa', 'Zebra', 'Scimmia', 'Orso', 'Lupo',
+          'Volpe', 'Coccodrillo', 'Rinoceronte', 'Ippopotamo', 'Delfino',
+          'Squalo', 'Balena', 'Pinguino', 'Aquila', 'Gufo',
+          'Serpente', 'Tartaruga', 'Polpo', 'Farfalla', 'Formica',
+          'Ragno', 'Ape', 'Pecora', 'Mucca', 'Maiale'
+        ],
+        'Cibo': [
+          'Pizza', 'Pasta', 'Gelato', 'Sushi', 'Hamburger',
+          'Insalata', 'Risotto', 'Minestrone', 'Lasagna', 'Ravioli',
+          'Tiramisù', 'Prosciutto', 'Formaggio', 'Pane', 'Biscotti',
+          'Cioccolato', 'Uova', 'Pollo', 'Bistecca', 'Pesce',
+          'Gamberi', 'Ostriche', 'Patatine fritte', 'Frittata', 'Zuppa',
+          'Yogurt', 'Frutta secca', 'Olio d\'oliva', 'Aceto balsamico', 'Caffè'
+        ],
+        'Sport': [
+          'Calcio', 'Basket', 'Nuoto', 'Tennis', 'Rugby',
+          'Pallavolo', 'Pallamano', 'Atletica', 'Ciclismo', 'Ginnastica',
+          'Sci', 'Snowboard', 'Pattinaggio', 'Equitazione', 'Boxe',
+          'Arti marziali', 'Canottaggio', 'Golf', 'Hockey', 'Surf',
+          'Scherma', 'Arrampicata', 'Pesca', 'Tiro con l\'arco', 'Motociclismo',
+          'Formula 1', 'Cricket', 'Baseball', 'Badminton', 'Squash'
+        ],
+        'Paesi': [
+          'Italia', 'Francia', 'Germania', 'Spagna', 'Giappone',
+          'Stati Uniti', 'Canada', 'Australia', 'Brasile', 'Cina',
+          'Russia', 'India', 'Messico', 'Sud Africa', 'Regno Unito',
+          'Portogallo', 'Grecia', 'Norvegia', 'Svezia', 'Finlandia',
+          'Danimarca', 'Argentina', 'Cile', 'Perù', 'Egitto',
+          'Marocco', 'Turchia', 'Thailandia', 'Indonesia', 'Nuova Zelanda'
+        ],
+        'Professioni': [
+          'Medico', 'Ingegnere', 'Avvocato', 'Insegnante', 'Poliziotto',
+          'Pompiere', 'Architetto', 'Farmacista', 'Infermiere', 'Dentista',
+          'Meccanico', 'Cuoco', 'Cameriere', 'Pilota', 'Assistente di volo',
+          'Musicista', 'Artista', 'Scrittore', 'Giornalista', 'Fotografo',
+          'Programmatore', 'Designer', 'Psicologo', 'Contabile', 'Manager',
+          'Veterinario', 'Biologo', 'Astronauta', 'Barbiere', 'Falegname'
+        ],
+        'Luoghi': [
+          'Bar', 'Ospedale', 'Scuola', 'Supermercato', 'Parco',
+          'Museo', 'Biblioteca', 'Cinema', 'Teatro', 'Ristorante',
+          'Albergo', 'Aeroporto', 'Stazione', 'Farmacia', 'Palestra',
+          'Spiaggia', 'Montagna', 'Centro commerciale', 'Ufficio', 'Chiesa',
+          'Banca', 'Zoo', 'Stadio', 'Porto', 'Piscina',
+          'Università', 'Piazza', 'Mercato', 'Caserma', 'Tribunale'
+        ]
+      },
+      en: {
+        'Animals': [
+          'Dog', 'Cat', 'Elephant', 'Lion', 'Tiger',
+          'Giraffe', 'Zebra', 'Monkey', 'Bear', 'Wolf',
+          'Fox', 'Crocodile', 'Rhinoceros', 'Hippopotamus', 'Dolphin',
+          'Shark', 'Whale', 'Penguin', 'Eagle', 'Owl',
+          'Snake', 'Turtle', 'Octopus', 'Butterfly', 'Ant',
+          'Spider', 'Bee', 'Sheep', 'Cow', 'Pig'
+        ],
+        'Food': [
+          'Pizza', 'Pasta', 'Ice Cream', 'Sushi', 'Hamburger',
+          'Salad', 'Risotto', 'Minestrone', 'Lasagna', 'Ravioli',
+          'Tiramisu', 'Ham', 'Cheese', 'Bread', 'Cookies',
+          'Chocolate', 'Eggs', 'Chicken', 'Steak', 'Fish',
+          'Shrimp', 'Oysters', 'French Fries', 'Omelette', 'Soup',
+          'Yogurt', 'Nuts', 'Olive Oil', 'Balsamic Vinegar', 'Coffee'
+        ],
+        'Sports': [
+          'Football', 'Basketball', 'Swimming', 'Tennis', 'Rugby',
+          'Volleyball', 'Handball', 'Athletics', 'Cycling', 'Gymnastics',
+          'Skiing', 'Snowboarding', 'Skating', 'Horse Riding', 'Boxing',
+          'Martial Arts', 'Rowing', 'Golf', 'Hockey', 'Surfing',
+          'Fencing', 'Climbing', 'Fishing', 'Archery', 'Motorcycling',
+          'Formula 1', 'Cricket', 'Baseball', 'Badminton', 'Squash'
+        ],
+        'Countries': [
+          'Italy', 'France', 'Germany', 'Spain', 'Japan',
+          'United States', 'Canada', 'Australia', 'Brazil', 'China',
+          'Russia', 'India', 'Mexico', 'South Africa', 'United Kingdom',
+          'Portugal', 'Greece', 'Norway', 'Sweden', 'Finland',
+          'Denmark', 'Argentina', 'Chile', 'Peru', 'Egypt',
+          'Morocco', 'Turkey', 'Thailand', 'Indonesia', 'New Zealand'
+        ],
+        'Professions': [
+          'Doctor', 'Engineer', 'Lawyer', 'Teacher', 'Police Officer',
+          'Firefighter', 'Architect', 'Pharmacist', 'Nurse', 'Dentist',
+          'Mechanic', 'Cook', 'Waiter', 'Pilot', 'Flight Attendant',
+          'Musician', 'Artist', 'Writer', 'Journalist', 'Photographer',
+          'Programmer', 'Designer', 'Psychologist', 'Accountant', 'Manager',
+          'Veterinarian', 'Biologist', 'Astronaut', 'Barber', 'Carpenter'
+        ],
+        'Places': [
+          'Bar', 'Hospital', 'School', 'Supermarket', 'Park',
+          'Museum', 'Library', 'Cinema', 'Theater', 'Restaurant',
+          'Hotel', 'Airport', 'Station', 'Pharmacy', 'Gym',
+          'Beach', 'Mountain', 'Shopping Mall', 'Office', 'Church',
+          'Bank', 'Zoo', 'Stadium', 'Harbor', 'Swimming Pool',
+          'University', 'Square', 'Market', 'Barracks', 'Court'
+        ]
+      }
+    };
+
+    // Traduzioni
+    var translations = {
+      it: {
+        title: "🎲 Gioco Spia 🕵️‍♂️",
+        setupGame: "Imposta il Gioco",
+        playersLabel: "Giocatori",
+        categoriesLabel: "Categorie",
+        gameSettings: "⚙️ Impostazioni di Gioco",
+        numSpiesLabel: "Numero di spie:",
+        numFakeSpiesLabel: "Numero di finte spie:",
+        numLawyersLabel: "Numero di avvocati:",
+        timerLabel: "Durata del round (minuti):",
+        manageWordsTitle: "🔧 Gestione delle Parole",
+        assignRolesTitle: "🕵️‍♂️ Assegnazione dei Ruoli",
+        clickToSeeRole: "🔍 Clicca per vedere il tuo ruolo",
+        gameInProgress: "🎮 Gioco in Corso",
+        votingTitle: "🗳️ Votazione",
+        resultsTitle: "📈 Risultati della Votazione",
+        nextPlayerBtn: "➡️ Prossimo Giocatore",
+        endRoundBtn: "⏰ Termina Round",
+        showResultsBtn: "📊 Mostra Risultati",
+        restartGameBtn: "🔄 Gioca di Nuovo",
+        addPlayerBtn: "➕ Aggiungi Giocatore",
+        addCategoryBtn: "➕ Aggiungi Categoria",
+        addWordBtn: "➕ Aggiungi Parola",
+        manageBtnText: "🔧 Gestisci Parole",
+        deleteWordBtnText: "🗑️ Elimina",
+        goBackBtn: "🔙 Torna Indietro",
+        startGameBtn: "🚀 Inizia Gioco",
+        playerPlaceholder: "Nome giocatore",
+        newCategoryPlaceholder: "Nuova categoria",
+        newWordPlaceholder: "Nuova parola",
+        confirmDeleteCategory: 'Vuoi eliminare la categoria "{category}"?',
+        confirmVote: 'Vuoi votare per {player}?',
+        alertVote: 'Hai votato per {player}!',
+        alertTimeUp: 'Il tempo è scaduto! È ora di votare.',
+        spy: "Spia",
+        fakespy: "Finta Spia",
+        lawyer: "Avvocato",
+        civilian: "Civile",
+        youAreSpy: "Sei la Spia!",
+        youAreFakeSpy: "Sei la Finta Spia! Parola: {word}",
+        youAreLawyer: "Sei l'Avvocato! La parola è \"{word}\" e le spie sono: {spyNames}.",
+        youAreCivilian: "Sei un Civile! La parola è: {word}",
+        mostVotedPlayer: "Il giocatore più votato è {player}, che era un {role}.",
+        lawyerEliminated: "L'Avvocato è stato eliminato. Le spie rimangono nascoste!",
+        needAtLeast3Players: "Devi avere almeno 3 giocatori.",
+        totalRolesExceedPlayers: "Il numero totale di ruoli speciali deve essere minore del numero di giocatori.",
+        categoryHasNoWords: "La categoria selezionata non ha parole associate. Aggiungi parole prima di iniziare.",
+        voteBtnText: "🗳️ Vota",
+        voteBtnTextWithEmoji: "🗳️ Vota",
+        spiesCaught: "Tutte le spie sono state scoperte! I civili vincono!",
+        spiesEscaped: "Non tutte le spie sono state scoperte. Le spie vincono!",
+        settingsSaved: "💾 Impostazioni salvate con successo!",
+        none: "Nessuna",
+        language: "🌐 Lingua"
+      },
+      en: {
+        title: "🎲 Spy Game 🕵️‍♂️",
+        setupGame: "Setup Game",
+        playersLabel: "Players",
+        categoriesLabel: "Categories",
+        gameSettings: "⚙️ Game Settings",
+        numSpiesLabel: "Number of spies:",
+        numFakeSpiesLabel: "Number of fake spies:",
+        numLawyersLabel: "Number of lawyers:",
+        timerLabel: "Round duration (minutes):",
+        manageWordsTitle: "🔧 Manage Words",
+        assignRolesTitle: "🕵️‍♂️ Assign Roles",
+        clickToSeeRole: "🔍 Click to see your role",
+        gameInProgress: "🎮 Game in Progress",
+        votingTitle: "🗳️ Voting",
+        resultsTitle: "📈 Voting Results",
+        nextPlayerBtn: "➡️ Next Player",
+        endRoundBtn: "⏰ End Round",
+        showResultsBtn: "📊 Show Results",
+        restartGameBtn: "🔄 Play Again",
+        addPlayerBtn: "➕ Add Player",
+        addCategoryBtn: "➕ Add Category",
+        addWordBtn: "➕ Add Word",
+        manageBtnText: "🔧 Manage Words",
+        deleteWordBtnText: "🗑️ Delete",
+        goBackBtn: "🔙 Go Back",
+        startGameBtn: "🚀 Start Game",
+        playerPlaceholder: "Player name",
+        newCategoryPlaceholder: "New category",
+        newWordPlaceholder: "New word",
+        confirmDeleteCategory: 'Do you want to delete the category "{category}"?',
+        confirmVote: 'Do you want to vote for {player}?',
+        alertVote: 'You voted for {player}!',
+        alertTimeUp: 'Time is up! It\'s time to vote.',
+        spy: "Spy",
+        fakespy: "Fake Spy",
+        lawyer: "Lawyer",
+        civilian: "Civilian",
+        youAreSpy: "You are the Spy!",
+        youAreFakeSpy: "You are the Fake Spy! Word: {word}",
+        youAreLawyer: "You are the Lawyer! The word is \"{word}\" and the spies are: {spyNames}.",
+        youAreCivilian: "You are a Civilian! The word is: {word}",
+        mostVotedPlayer: "The most voted player is {player}, who was a {role}.",
+        lawyerEliminated: "The Lawyer has been eliminated. The spies remain hidden!",
+        needAtLeast3Players: "You need at least 3 players.",
+        totalRolesExceedPlayers: "The total number of special roles must be less than the number of players.",
+        categoryHasNoWords: "The selected category has no words. Add words before starting.",
+        voteBtnText: "🗳️ Vote",
+        voteBtnTextWithEmoji: "🗳️ Vote",
+        spiesCaught: "All spies have been caught! Civilians win!",
+        spiesEscaped: "Not all spies were caught. Spies win!",
+        settingsSaved: "💾 Settings saved successfully!",
+        none: "None",
+        language: "🌐 Language"
+      }
+    };
+
+    // Funzione per tradurre il testo
+    function t(key, params) {
+      var text = translations[language][key] || key;
+      if (params) {
+        for (var param in params) {
+          text = text.replace(new RegExp('\\{' + param + '\\}', 'g'), params[param]);
+        }
+      }
+      return text;
+    }
+
+    // Funzione per cambiare la lingua
+    function changeLanguage() {
+      language = document.getElementById('language-select').value;
+      setCookie('language', language, 365);
+      applyTranslations();
+      updateCategoriesUI(); // Aggiorna le categorie quando si cambia lingua
+      updateHomePage(); // Aggiorna la pagina principale
+    }
+
+    // Funzione per cambiare la lingua dalla pagina dedicata
+    function changeLanguageFromPage() {
+      language = document.getElementById('language-select-page').value;
+      document.getElementById('language-select').value = language;
+      setCookie('language', language, 365);
+      applyTranslations();
+      updateCategoriesUI();
+      updateHomePage();
+    }
+
+    // Funzione per applicare le traduzioni
+    function applyTranslations() {
+      document.getElementById('title').textContent = t('title');
+      document.getElementById('players-label').textContent = t('playersLabel');
+      document.getElementById('categories-label').textContent = t('categoriesLabel');
+      document.getElementById('game-settings').textContent = t('gameSettings');
+      document.getElementById('num-spies-label').textContent = t('numSpiesLabel');
+      document.getElementById('num-fake-spies-label').textContent = t('numFakeSpiesLabel');
+      document.getElementById('num-lawyers-label').textContent = t('numLawyersLabel');
+      document.getElementById('timer-label').textContent = t('timerLabel');
+      document.getElementById('manage-words-title').textContent = t('manageWordsTitle');
+      document.getElementById('assign-roles-title').textContent = t('assignRolesTitle');
+      document.getElementById('click-to-see-role').textContent = t('clickToSeeRole');
+      document.getElementById('game-in-progress').textContent = t('gameInProgress');
+      document.getElementById('voting-title').textContent = t('votingTitle');
+      document.getElementById('results-title').textContent = t('resultsTitle');
+      document.getElementById('next-player-btn').innerHTML = '<span>' + t('nextPlayerBtn') + '</span>';
+      document.querySelector('#game-page button').innerHTML = '<span>' + t('endRoundBtn') + '</span>';
+      document.querySelector('#voting-page button').innerHTML = '<span>' + t('showResultsBtn') + '</span>';
+      document.querySelector('#results-page button').innerHTML = '<span>' + t('restartGameBtn') + '</span>';
+      document.querySelector('#players-page button[onclick="addPlayer()"]').innerHTML = '<span>' + t('addPlayerBtn') + '</span>';
+      document.querySelector('#categories-page button[onclick="addCategory()"]').innerHTML = '<span>' + t('addCategoryBtn') + '</span>';
+      document.querySelector('#categories-page button[onclick="manageWords()"]').innerHTML = '<span>' + t('manageBtnText') + '</span>';
+      document.querySelector('#words-page button[onclick="addWord()"]').innerHTML = '<span>' + t('addWordBtn') + '</span>';
+      document.querySelector('#words-page button[onclick="goBackToCategories()"]').innerHTML = '<span>' + t('goBackBtn') + '</span>';
+      document.querySelector('#game-settings-page button[onclick="saveGameSettings()"]').innerHTML = '<span>💾 Save!</span>';
+
+      
+      var goBackButtons = document.querySelectorAll('.settings-page button[onclick="goBackToHome()"], .settings-page button[onclick="goBackToCategories()"]');
+      for (var i = 0; i < goBackButtons.length; i++) {
+        goBackButtons[i].innerHTML = '<span>' + t('goBackBtn') + '</span>';
+      }
+      
+      document.getElementById('player-name').placeholder = t('playerPlaceholder');
+      document.getElementById('new-category').placeholder = t('newCategoryPlaceholder');
+      document.getElementById('new-word').placeholder = t('newWordPlaceholder');
+      document.getElementById('language-title').textContent = t('language');
+      document.querySelector('#home-page button[onclick="startGame()"]').innerHTML = '<span>' + t('startGameBtn') + '</span>';
+    }
+
+    // Inizializzazione dei dati
+    function initializeData() {
+      var storedPlayers = getCookie('players');
+      var storedLanguage = getCookie('language');
+      
+      // Imposta la lingua prima di caricare le categorie
+      language = storedLanguage || 'it';
+      document.getElementById('language-select').value = language;
+      document.getElementById('language-select-page').value = language;
+      
+      var storedCategories = getCookie('userCategories_' + language);
+      userCategories = storedCategories ? JSON.parse(storedCategories) : {};
+      var storedGameSettings = getCookie('gameSettings');
+      gameSettings = storedGameSettings ? JSON.parse(storedGameSettings) : gameSettings;
+      var storedSelectedCategory = getCookie('selectedCategory');
+      selectedCategory = storedSelectedCategory || '';
+
+      players = storedPlayers ? JSON.parse(storedPlayers) : [];
+
+      applyTranslations();
+      updateCategoriesUI();
+      updatePlayersUI();
+      updateHomePage();
+      loadGameSettings();
+    }
+
+    // Funzioni per salvare i dati
+    function saveData() {
+      setCookie('players', JSON.stringify(players), 365);
+      setCookie('userCategories_' + language, JSON.stringify(userCategories), 365);
+      setCookie('gameSettings', JSON.stringify(gameSettings), 365);
+      setCookie('selectedCategory', selectedCategory, 365);
+    }
+
+    // Funzioni per la Pagina Principale
+    function updateHomePage() {
+      document.getElementById('players-count').textContent = players.length;
+      document.getElementById('category-name').textContent = selectedCategory ? selectedCategory : t('none');
+      document.getElementById('current-language').textContent = (language === 'it') ? 'Italiano' : 'English';
+    }
+
+    // Navigazione tra le pagine
+    function showPlayersPage() {
+      hideAllPages();
+      document.getElementById('players-page').classList.remove('hidden');
+    }
+
+    function showCategoriesPage() {
+      hideAllPages();
+      document.getElementById('categories-page').classList.remove('hidden');
+    }
+
+    function showGameSettingsPage() {
+      hideAllPages();
+      document.getElementById('game-settings-page').classList.remove('hidden');
+      loadGameSettings();
+    }
+
+    function showLanguagePage() {
+      hideAllPages();
+      document.getElementById('language-page').classList.remove('hidden');
+    }
+
+    function goBackToHome() {
+      hideAllPages();
+      document.getElementById('home-page').classList.remove('hidden');
+      updateHomePage();
+    }
+
+    function goBackToCategories() {
+      hideAllPages();
+      document.getElementById('categories-page').classList.remove('hidden');
+    }
+
+    function hideAllPages() {
+      var pages = ['home-page', 'players-page', 'categories-page', 'game-settings-page', 'language-page', 'words-page', 'assign-roles-page', 'game-page', 'voting-page', 'results-page'];
+      for (var i = 0; i < pages.length; i++) {
+        document.getElementById(pages[i]).classList.add('hidden');
+      }
+    }
+
+    // Funzioni per la Pagina Giocatori
+    function addPlayer() {
+      var playerName = document.getElementById('player-name').value.trim();
+      if (playerName && players.indexOf(playerName) === -1) {
+        players.push(playerName);
+        saveData();
+        updatePlayersUI();
+        document.getElementById('player-name').value = '';
+        updateHomePage();
+      }
+    }
+
+    function updatePlayersUI() {
+      var playersList = document.getElementById('players-list');
+      playersList.innerHTML = '';
+      for (var i = 0; i < players.length; i++) {
+        var player = players[i];
+        var li = document.createElement('li');
+        li.textContent = player;
+        var deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = '<span>' + t('deleteWordBtnText') + '</span>';
+        deleteBtn.onclick = (function(index) {
+          return function() {
+            players.splice(index, 1);
+            saveData();
+            updatePlayersUI();
+            updateHomePage();
+          };
+        })(i);
+        li.appendChild(deleteBtn);
+        playersList.appendChild(li);
+      }
+    }
+
+    // Funzioni per la Pagina Categorie
+    function addCategory() {
+      var categoryName = document.getElementById('new-category').value.trim();
+      if (categoryName && !userCategories[categoryName] && !stockCategories[language][categoryName]) {
+        userCategories[categoryName] = [];
+        saveData();
+        updateCategoriesUI();
+        document.getElementById('new-category').value = '';
+      }
+    }
+
+    function updateSelectedCategory() {
+      selectedCategory = document.getElementById('category-select').value;
+      setCookie('selectedCategory', selectedCategory, 365);
+      document.getElementById('category-name').textContent = selectedCategory ? selectedCategory : t('none');
+    }
+
+    function updateCategoriesUI() {
+      var categorySelect = document.getElementById('category-select');
+      var categoriesList = document.getElementById('categories-list');
+      categorySelect.innerHTML = '<option value="" disabled selected>🔍 Seleziona una categoria</option>';
+      categoriesList.innerHTML = '';
+
+      // Carica le categorie predefinite e personalizzate
+      var allCategories = {};
+      for (var cat in stockCategories[language]) {
+        allCategories[cat] = stockCategories[language][cat];
+      }
+      for (var cat in userCategories) {
+        allCategories[cat] = userCategories[cat];
+      }
+
+      console.log("All Categories Loaded:", allCategories); // Debug
+
+      for (var category in allCategories) {
+        var option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        if (category === selectedCategory) {
+          option.selected = true;
+        }
+        categorySelect.appendChild(option);
+
+        var li = document.createElement('li');
+        var categoryNameSpan = document.createElement('span');
+        categoryNameSpan.textContent = category;
+
+        var manageBtn = document.createElement('button');
+        manageBtn.innerHTML = '<span>' + t('manageBtnText') + '</span>';
+        manageBtn.onclick = (function(cat) {
+          return function() {
+            selectedCategory = cat;
+            setCookie('selectedCategory', selectedCategory, 365);
+            showWordsPage();
+          };
+        })(category);
+
+        li.appendChild(categoryNameSpan);
+        li.appendChild(manageBtn);
+
+        // Solo le categorie dell'utente possono essere eliminate
+        if (userCategories[category]) {
+          var deleteBtn = document.createElement('button');
+          deleteBtn.textContent = '✕';
+          deleteBtn.className = 'delete-btn';
+          deleteBtn.onclick = (function(cat) {
+            return function() {
+              if (confirm(t('confirmDeleteCategory', { category: cat }))) {
+                delete userCategories[cat];
+                saveData();
+                updateCategoriesUI();
+              }
+            };
+          })(category);
+          li.appendChild(deleteBtn);
+        }
+
+        categoriesList.appendChild(li);
+      }
+      updateHomePage();
+    }
+
+    function manageWords() {
+      selectedCategory = document.getElementById('category-select').value;
+      setCookie('selectedCategory', selectedCategory, 365);
+      showWordsPage();
+    }
+
+    // Funzioni per la Pagina Impostazioni di Gioco
+    function saveGameSettings() {
+      gameSettings.numSpies = parseInt(document.getElementById('num-spies').value);
+      gameSettings.numFakeSpies = parseInt(document.getElementById('num-fake-spies').value);
+      gameSettings.numLawyers = parseInt(document.getElementById('num-lawyers').value);
+      gameSettings.timer = parseInt(document.getElementById('timer').value) * 60;
+      saveData();
+      alert(t('settingsSaved'));
+      updateHomePage();
+    }
+
+    function loadGameSettings() {
+      document.getElementById('num-spies').value = gameSettings.numSpies;
+      document.getElementById('num-fake-spies').value = gameSettings.numFakeSpies;
+      document.getElementById('num-lawyers').value = gameSettings.numLawyers;
+      document.getElementById('timer').value = gameSettings.timer / 60;
+    }
+
+    // Funzioni per la Pagina di Gestione delle Parole
+    function showWordsPage() {
+      hideAllPages();
+      document.getElementById('words-page').classList.remove('hidden');
+      document.getElementById('category-title').textContent = t('categoriesLabel') + ': ' + selectedCategory;
+      updateWordsUI();
+    }
+
+    function updateWordsUI() {
+      var wordsList = document.getElementById('words-list');
+      wordsList.innerHTML = '';
+
+      var allCategories = {};
+      for (var cat in stockCategories[language]) {
+        allCategories[cat] = stockCategories[language][cat];
+      }
+      for (var cat in userCategories) {
+        allCategories[cat] = userCategories[cat];
+      }
+
+      var words = allCategories[selectedCategory];
+      if (!words) {
+        console.log("Selected category does not exist in allCategories:", selectedCategory);
+        words = [];
+      }
+
+      console.log("Words Loaded for Category:", selectedCategory, words); // Debug
+
+      for (var i = 0; i < words.length; i++) {
+        var word = words[i];
+        var li = document.createElement('li');
+        li.textContent = word;
+
+        // Solo le parole delle categorie dell'utente possono essere eliminate
+        if (userCategories[selectedCategory]) {
+          var deleteBtn = document.createElement('button');
+          deleteBtn.innerHTML = '<span>' + t('deleteWordBtnText') + '</span>';
+          deleteBtn.onclick = (function(index) {
+            return function() {
+              userCategories[selectedCategory].splice(index, 1);
+              saveData();
+              updateWordsUI();
+            };
+          })(i);
+          li.appendChild(deleteBtn);
+        }
+
+        wordsList.appendChild(li);
+      }
+    }
+
+    function addWord() {
+      var newWord = document.getElementById('new-word').value.trim();
+      if (newWord) {
+        if (!userCategories[selectedCategory]) {
+          userCategories[selectedCategory] = [];
+        }
+        userCategories[selectedCategory].push(newWord);
+        saveData();
+        updateWordsUI();
+        document.getElementById('new-word').value = '';
+      }
+    }
+
+    // Funzioni per avviare il gioco
+    function startGame() {
+      if (players.length < 3) {
+        alert(t('needAtLeast3Players'));
+        return;
+      }
+
+      var numSpies = gameSettings.numSpies;
+      var numFakeSpies = gameSettings.numFakeSpies;
+      var numLawyers = gameSettings.numLawyers;
+      var totalRoles = numSpies + numFakeSpies + numLawyers;
+
+      if (totalRoles >= players.length) {
+        alert(t('totalRolesExceedPlayers'));
+        return;
+      }
+
+      if (!selectedCategory) {
+        alert(t('categoryHasNoWords'));
+        return;
+      }
+
+      var allCategories = {};
+      for (var cat in stockCategories[language]) {
+        allCategories[cat] = stockCategories[language][cat];
+      }
+      for (var cat in userCategories) {
+        allCategories[cat] = userCategories[cat];
+      }
+
+      var words = allCategories[selectedCategory];
+      if (!words || words.length === 0) {
+        alert(t('categoryHasNoWords'));
+        return;
+      }
+
+      gameSettings.players = players.slice();
+      gameSettings.roles = [];
+      gameSettings.selectedWord = words[Math.floor(Math.random() * words.length)];
+
+      // Assegna i ruoli con chiavi standard
+      gameSettings.roles = gameSettings.roles.concat(createRoleArray('spy', numSpies));
+      gameSettings.roles = gameSettings.roles.concat(createRoleArray('fakespy', numFakeSpies));
+      gameSettings.roles = gameSettings.roles.concat(createRoleArray('lawyer', numLawyers));
+      gameSettings.roles = gameSettings.roles.concat(createRoleArray('civilian', players.length - totalRoles));
+      shuffleArray(gameSettings.roles);
+
+      // Determina gli indici delle spie
+      gameSettings.spyIndices = [];
+      for (var i = 0; i < gameSettings.roles.length; i++) {
+        if (gameSettings.roles[i] === 'spy') {
+          gameSettings.spyIndices.push(i);
+        }
+      }
+
+      saveData(); // Salva i ruoli assegnati
+      showAssignRolesPage();
+    }
+
+    function createRoleArray(roleName, count) {
+      var arr = [];
+      for (var i = 0; i < count; i++) {
+        arr.push(roleName);
+      }
+      return arr;
+    }
+
+    function shuffleArray(array) {
+      for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+    }
+
+    // Funzioni per la Pagina di Assegnazione dei Ruoli
+    function showAssignRolesPage() {
+      hideAllPages();
+      document.getElementById('assign-roles-page').classList.remove('hidden');
+      currentPlayerIndex = 0;
+      showNextPlayer();
+    }
+
+    function showNextPlayer() {
+      if (currentPlayerIndex >= gameSettings.players.length) {
+        showGamePage();
+        return;
+      }
+
+      var currentPlayer = gameSettings.players[currentPlayerIndex];
+      document.getElementById('current-player').textContent = t('playersLabel') + ': ' + currentPlayer;
+      var roleCard = document.getElementById('role-card');
+      roleCard.classList.remove('flipped');
+      roleCard.innerHTML = '<p id="click-to-see-role">' + t('clickToSeeRole') + '</p>';
+      roleCard.onclick = function() {
+        revealRole(roleCard);
+      };
+      document.getElementById('next-player-btn').classList.add('hidden');
+    }
+
+    function revealRole(card) {
+      var role = gameSettings.roles[currentPlayerIndex];
+      card.classList.add('flipped');
+
+      var content = '';
+      if (role === 'civilian') {
+        content = t('youAreCivilian', { word: gameSettings.selectedWord });
+      } else if (role === 'spy') {
+        content = t('youAreSpy');
+      } else if (role === 'fakespy') {
+        content = t('youAreFakeSpy', { word: gameSettings.selectedWord });
+      } else if (role === 'lawyer') {
+        var spyNames = [];
+        for (var i = 0; i < gameSettings.spyIndices.length; i++) {
+          spyNames.push(gameSettings.players[gameSettings.spyIndices[i]]);
+        }
+        spyNames = spyNames.join(', ');
+        content = t('youAreLawyer', { word: gameSettings.selectedWord, spyNames: spyNames });
+      }
+
+      card.innerHTML = '<p>' + content + '</p>';
+      document.getElementById('next-player-btn').classList.remove('hidden');
+    }
+
+    function nextPlayer() {
+      currentPlayerIndex++;
+      showNextPlayer();
+    }
+
+    // Funzioni per la Pagina di Gioco Attivo
+    function showGamePage() {
+      hideAllPages();
+      document.getElementById('game-page').classList.remove('hidden');
+      timeRemaining = gameSettings.timer;
+      startTimer();
+    }
+
+    function startTimer() {
+      var timerDisplay = document.getElementById('timer-display');
+      updateTimerDisplay(timerDisplay);
+
+      timerInterval = setInterval(function() {
+        timeRemaining--;
+        updateTimerDisplay(timerDisplay);
+        if (timeRemaining <= 0) {
+          clearInterval(timerInterval);
+          endRound();
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay(display) {
+      var minutes = Math.floor(timeRemaining / 60);
+      var seconds = timeRemaining % 60;
+      display.textContent = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+    }
+
+    function endRound() {
+      clearInterval(timerInterval);
+      alert(t('alertTimeUp'));
+      showVotingPage();
+    }
+
+    // Funzioni per la Pagina di Votazione
+    function showVotingPage() {
+      hideAllPages();
+      document.getElementById('voting-page').classList.remove('hidden');
+      votes = {};
+      startVoting();
+    }
+
+    function startVoting() {
+      var votingList = document.getElementById('voting-list');
+      votingList.innerHTML = '';
+      for (var i = 0; i < gameSettings.players.length; i++) {
+        var player = gameSettings.players[i];
+        var li = document.createElement('li');
+        li.textContent = player;
+        var voteBtn = document.createElement('button');
+        voteBtn.innerHTML = '<span>' + t('voteBtnTextWithEmoji') + '</span>';
+        voteBtn.onclick = (function(p) {
+          return function() {
+            castVote(p);
+          };
+        })(player);
+        li.appendChild(voteBtn);
+        votingList.appendChild(li);
+      }
+    }
+
+    function castVote(player) {
+      if (confirm(t('confirmVote', { player: player }))) {
+        votes[player] = (votes[player] || 0) + 1;
+        alert(t('alertVote', { player: player }));
+      }
+    }
+
+    function showResults() {
+      showResultsPage();
+    }
+
+    // Funzioni per la Pagina dei Risultati
+    function showResultsPage() {
+      hideAllPages();
+      document.getElementById('results-page').classList.remove('hidden');
+
+      var resultsDiv = document.getElementById('results');
+      var sortedVotes = [];
+      for (var player in votes) {
+        sortedVotes.push([player, votes[player]]);
+      }
+      sortedVotes.sort(function(a, b) {
+        return b[1] - a[1];
+      });
+
+      var resultHTML = '<h2>' + t('resultsTitle') + ':</h2><ul>';
+      for (var i = 0; i < sortedVotes.length; i++) {
+        var playerVote = sortedVotes[i];
+        resultHTML += '<li>' + playerVote[0] + ': ' + playerVote[1] + ' 🗳️</li>';
+      }
+      resultHTML += '</ul>';
+
+      // Determina il giocatore più votato
+      if (sortedVotes.length > 0) {
+        var mostVotedPlayer = sortedVotes[0][0];
+        var playerIndex = gameSettings.players.indexOf(mostVotedPlayer);
+        var roleKey = gameSettings.roles[playerIndex]; // Usa la chiave standard
+        var role = t(roleKey);
+        resultHTML += '<p>' + t('mostVotedPlayer', { player: mostVotedPlayer, role: role }) + '</p>';
+      }
+
+      // Controlla se tutte le spie sono state scoperte
+      var spiesFound = true;
+      for (var i = 0; i < gameSettings.spyIndices.length; i++) {
+        var spyName = gameSettings.players[gameSettings.spyIndices[i]];
+        if (!votes[spyName]) {
+          spiesFound = false;
+          break;
+        }
+      }
+
+      if (spiesFound) {
+        resultHTML += '<p>' + t('spiesCaught') + '</p>';
+      } else {
+        resultHTML += '<p>' + t('spiesEscaped') + '</p>';
+      }
+
+      resultsDiv.innerHTML = resultHTML;
+    }
+
+    function restartGame() {
+      gameSettings = {
+        numSpies: gameSettings.numSpies,
+        numFakeSpies: gameSettings.numFakeSpies,
+        numLawyers: gameSettings.numLawyers,
+        timer: gameSettings.timer
+      };
+      votes = {};
+      currentPlayerIndex = 0;
+      hideAllPages();
+      document.getElementById('home-page').classList.remove('hidden');
+      updateHomePage();
+    }
+
+    // Inizializzazione
+    window.onload = function() {
+      initializeData();
+    };
+  </script>
+</body>
+</html>
