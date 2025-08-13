@@ -3,14 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0d0f1a" id="metaTheme" />
+  <meta name="theme-color" content="#0b0f19" id="metaTheme" />
   <title>Gioco Spia — Edizione Pro (Fake Spy + Avvocato)</title>
   <meta name="description" content="Party game mobile-first. Ruoli: Spia, Finta Spia, Avvocato, Civile. Timer, voto, categorie personalizzate. PWA + tema auto." />
   <link rel="icon" href='data:image/svg+xml;utf8,
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="%2367e8f9"/><stop offset="1" stop-color="%2394a3b8"/></linearGradient></defs>
+    <defs>
+      <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="%2367e8f9"/><stop offset="1" stop-color="%2394a3b8"/></linearGradient>
+    </defs>
     <rect rx="28" width="128" height="128" fill="url(%23g)"/>
-    <g fill="%230d0f1a" transform="translate(24,24)">
+    <g fill="%230b0f19" transform="translate(24,24)">
       <circle cx="24" cy="24" r="10"/>
       <rect x="18" y="52" width="60" height="10" rx="5"/>
       <path d="M12 72c8 8 20 12 34 12s26-4 34-12l-6-8c-7 7-17 10-28 10s-21-3-28-10z"/>
@@ -20,74 +22,64 @@
     /* ====== Reset & Tokens ====== */
     *,*::before,*::after{box-sizing:border-box}
     :root{
-      --bg:#0d0f1a; --surface:#111425; --surface-2:#0b1020; --line:rgba(255,255,255,.07);
+      --bg:#0b0f19; --surface:#0f1424; --surface-2:#0b1020; --line:rgba(255,255,255,.08);
       --fg:#e8edf7; --muted:#a9b2c7; --primary:#60a5fa; --accent:#67e8f9; --ok:#34d399; --danger:#ef476f;
-      --shadow:0 10px 30px rgba(0,0,0,.45); --ring:0 0 0 3px rgba(96,165,250,.35);
-      --r-lg:22px; --r-md:14px; --r-sm:10px; --space:clamp(14px,3.2vw,20px);
-      --content:max(280px, min(100vw, 780px));
-      /* Colori ruoli */
-      --c-spy:#ef476f;         /* Spia */
-      --c-fake:#f59e0b;        /* Finta Spia */
-      --c-law:#34d399;         /* Avvocato */
-      --c-civ:#60a5fa;         /* Civile */
+      --shadow:0 10px 32px rgba(0,0,0,.5); --ring:0 0 0 3px rgba(96,165,250,.35);
+      --r-lg:22px; --r-md:16px; --r-sm:10px; --space:clamp(14px,3.6vw,22px);
+      --content:min(100vw - 2*var(--space), 860px);
+      /* Badges ruolo */
+      --c-spy:#ef476f; --c-fake:#f59e0b; --c-law:#34d399; --c-civ:#60a5fa;
     }
     [data-theme="light"]:root{
-      --bg:#f8fafc; --surface:#ffffff; --surface-2:#eef2ff; --line:rgba(13,15,26,.06);
+      --bg:#f8fafc; --surface:#ffffff; --surface-2:#eef2ff; --line:rgba(13,15,26,.08);
       --fg:#0d1224; --muted:#64748b; --primary:#2563eb; --accent:#06b6d4; --ok:#16a34a; --danger:#dc2626;
-      --shadow:0 8px 28px rgba(2,6,23,.08); --ring:0 0 0 3px rgba(37,99,235,.22);
+      --shadow:0 10px 28px rgba(2,6,23,.08); --ring:0 0 0 3px rgba(37,99,235,.22);
       --c-spy:#dc2626; --c-fake:#d97706; --c-law:#16a34a; --c-civ:#2563eb;
     }
     html,body{height:100%}
-    body{margin:0;color:var(--fg);background:var(--bg);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;line-height:1.35;-webkit-font-smoothing:antialiased}
+    body{margin:0;color:var(--fg);background:var(--bg);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;line-height:1.42;-webkit-font-smoothing:antialiased;touch-action:manipulation}
 
     /* Background */
     .bg{position:fixed;inset:0;pointer-events:none;z-index:-2;
       background:
-        radial-gradient(800px 420px at 120% -10%, rgba(103,232,249,.12), transparent 60%),
-        radial-gradient(700px 400px at -20% 110%, rgba(96,165,250,.15), transparent 60%),
-        linear-gradient(180deg, var(--bg), var(--surface-2) 40%, var(--bg) 90%);
+        radial-gradient(800px 420px at 120% -10%, rgba(103,232,249,.14), transparent 60%),
+        radial-gradient(700px 400px at -20% 110%, rgba(96,165,250,.18), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--surface-2) 35%, var(--bg) 85%);
     }
-    .grain{position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.22;mix-blend-mode:soft-light;
-      background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 40 40"><g fill="%23ffffff" fill-opacity="0.025"><circle cx="2" cy="2" r="1"/><circle cx="6" cy="18" r="1"/><circle cx="14" cy="6" r="1"/><circle cx="22" cy="30" r="1"/><circle cx="36" cy="12" r="1"/></g></svg>');
+    .grain{position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.18;mix-blend-mode:soft-light;
+      background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 40 40"><g fill="%23ffffff" fill-opacity="0.03"><circle cx="2" cy="2" r="1"/><circle cx="6" cy="18" r="1"/><circle cx="14" cy="6" r="1"/><circle cx="22" cy="30" r="1"/><circle cx="36" cy="12" r="1"/></g></svg>');
     }
 
     /* Layout */
-    header{ /* NON sticky: richiesto */
-      position:relative; top:auto; z-index:20; border-bottom:1px solid var(--line);
-      background:color-mix(in oklab, var(--surface), transparent 30%);
+    header{position:relative;z-index:20;border-bottom:1px solid var(--line);backdrop-filter:blur(6px);
+      background:color-mix(in oklab, var(--surface), transparent 28%);
     }
-    .bar{max-width:var(--content);margin:0 auto;padding:10px var(--space);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:nowrap}
-    .brand{display:flex;align-items:center;gap:10px;min-width:0}
-    .brand h1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .logo{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-weight:900;color:#0d0f1a;background:conic-gradient(from 210deg,var(--accent),var(--primary),#a78bfa,var(--accent));box-shadow:0 10px 24px rgba(103,232,249,.25);flex:0 0 auto}
-    .controls{display:flex;align-items:center;gap:8px;flex:0 0 auto}
-    .wrap{max-width:var(--content);margin:0 auto;padding:calc(var(--space) + env(safe-area-inset-top)) var(--space) calc(84px + env(safe-area-inset-bottom));}
+    .bar{max-width:var(--content);margin:0 auto;padding:10px var(--space);display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .brand{display:flex;align-items:center;gap:10px;cursor:pointer}
+    .logo{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:transparent;box-shadow:none}
+    .logo .mark{filter:drop-shadow(0 6px 18px rgba(103,232,249,.35))}
+    .wrap{max-width:var(--content);margin:0 auto;padding:calc(var(--space) + env(safe-area-inset-top)) var(--space) calc(110px + env(safe-area-inset-bottom));}
 
     h1{font-size:18px;margin:0}
     h2{font-size:22px;margin:0 0 6px}
     .muted{color:var(--muted)}
-    .note{font-size:.88rem;color:var(--muted)}
 
     /* Controls */
-    select,input[type=text],input[type=number],textarea{width:100%;padding:14px;background:var(--surface-2);color:var(--fg);border:1px solid var(--line);border-radius:var(--r-md);font-size:16px;outline:none}
+    select,input[type=text],input[type=number],textarea{width:100%;min-height:48px;padding:12px 14px;background:var(--surface-2);color:var(--fg);border:1px solid var(--line);border-radius:var(--r-md);font-size:16px;outline:none}
     select:focus,input:focus,textarea:focus{box-shadow:var(--ring);border-color:color-mix(in srgb,var(--primary),transparent 50%)}
-    .btn{appearance:none;-webkit-tap-highlight-color:transparent;cursor:pointer;border:none;border-radius:999px;padding:12px 16px;font-weight:800;letter-spacing:.2px;box-shadow:var(--shadow);background:var(--primary);color:#0d0f1a;position:relative;overflow:hidden}
-    .btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+    .btn{appearance:none;-webkit-tap-highlight-color:transparent;cursor:pointer;border:none;border-radius:999px;min-height:48px;padding:12px 16px;font-weight:800;letter-spacing:.2px;box-shadow:var(--shadow);background:var(--primary);color:#0b0f19;position:relative;overflow:hidden}
+    .btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}
     .btn.danger{background:var(--danger);color:#fff}
-    .btn.ok{background:var(--ok);color:#0d0f1a}
+    .btn.ok{background:var(--ok);color:#0b0f19}
     .btn.secondary{background:color-mix(in srgb,var(--primary),var(--accent) 40%)}
 
-    /* Cards + Accordion */
-    .card{background:linear-gradient(180deg,var(--surface),var(--surface-2));border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;box-shadow:var(--shadow);transform:translateY(6px) scale(.98);opacity:0;transition:transform .5s cubic-bezier(.2,.7,.2,1),opacity .5s}
+    /* Cards + spacing + animations */
+    .card{background:linear-gradient(180deg,var(--surface),var(--surface-2));border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;box-shadow:var(--shadow);
+      transform:translateY(10px) scale(.985);opacity:0;transition:transform .5s cubic-bezier(.2,.7,.2,1),opacity .5s, margin .3s ease;margin:14px 0}
     .card.in{transform:translateY(0) scale(1);opacity:1}
     .section-title{display:flex;align-items:center;gap:8px;margin:0 0 8px}
-    .accordion{border-radius:var(--r-lg);overflow:hidden}
-    .acc-head{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;padding:14px 16px;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;margin-bottom:10px}
-    .acc-head h2{margin:0;font-size:18px}
-    .acc-body{display:block}
-    .acc-body.collapsed{display:none}
+
     .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .row.nowrap{flex-wrap:nowrap}
     .grow{flex:1 1 auto}
     .list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
     .list li{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;background:var(--surface-2);border:1px solid var(--line);border-radius:14px}
@@ -98,58 +90,83 @@
     [data-view]{display:none}
     [data-view].show{display:block}
 
+    /* Splash */
+    .splash{position:fixed;inset:0;display:grid;place-items:center;z-index:100;background:radial-gradient(1200px 600px at 50% -10%,color-mix(in srgb,var(--primary),transparent 68%),transparent),var(--bg);transition:opacity .6s,visibility .6s}
+    .splash.hide{opacity:0;pointer-events:none;visibility:hidden}
+
     /* Hero */
-    .hero{text-align:center;padding:24px 10px 8px}
+    .hero{text-align:center;padding:26px 12px 10px}
     .hero h2{font-size:clamp(28px,8.5vw,40px)}
     .hero p{margin:0 auto 14px;max-width:34ch}
     .cta{display:flex;gap:10px;justify-content:center}
 
     /* Role card */
-    .role-card{display:grid;place-items:center;min-height:340px;border-radius:var(--r-lg);background:var(--surface-2);border:1px dashed var(--line);user-select:none;transform-style:preserve-3d;transition:transform .12s ease;padding:28px}
+    .role-card{display:grid;place-items:center;min-height:320px;border-radius:var(--r-lg);background:var(--surface-2);border:1px dashed var(--line);user-select:none;transform-style:preserve-3d;transition:transform .12s ease;padding:28px}
     .role-card.revealed{border-style:solid}
-    .role-title{font-size:1.1rem;margin:0 0 6px}
-    .role-strong{font-weight:900}
-    .role-name{font-size:1.25rem;font-weight:900;margin:6px 0}
-    .role-word{font-weight:900}
+    .role-name{font-weight:900}
 
-    /* Modals (no alert/confirm di sistema) */
+    /* Legend roles (outside the card) */
+    .roles-legend{display:grid;gap:10px;margin-top:12px}
+    .role-item{display:flex;gap:10px;align-items:flex-start;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+    .badge{display:inline-flex;align-items:center;font-weight:800;padding:6px 10px;border-radius:999px}
+    .b-spy{background:color-mix(in srgb, var(--c-spy), #000 10%); color:#fff}
+    .b-fake{background:color-mix(in srgb, var(--c-fake), #000 10%); color:#0b0f19}
+    .b-law{background:color-mix(in srgb, var(--c-law), #000 8%); color:#0b0f19}
+    .b-civ{background:color-mix(in srgb, var(--c-civ), #000 8%); color:#0b0f19}
+
+    /* Collapsible (start collapsed) */
+    [data-collapsible] .card-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    [data-collapsible] .card-body{overflow:hidden;max-height:0;transition:max-height .35s ease}
+    [data-collapsible].open .card-body{max-height:var(--h,800px)}
+    [data-collapsible] [data-collapse]{min-width:48px}
+
+    /* Modals */
     dialog{border:none;padding:0;border-radius:20px;background:linear-gradient(180deg,var(--surface),var(--surface-2));color:var(--fg);width:min(680px,92vw);box-shadow:var(--shadow)}
     dialog::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(2px)}
     .modal-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
     .modal-body{padding:18px}
-    .modal-actions{display:flex;gap:10px;justify-content:flex-end;padding:0 18px 16px}
 
     /* FX */
     #fxConfetti{position:fixed;inset:0;pointer-events:none;z-index:50}
 
     footer{opacity:.8;padding:18px;text-align:center;font-size:.92rem}
 
-    /* Badges di ruolo */
-    .badge{display:inline-flex;align-items:center;font-weight:800;padding:6px 10px;border-radius:999px}
-    .b-spy{background:color-mix(in srgb, var(--c-spy), #000 10%); color:#fff}
-    .b-fake{background:color-mix(in srgb, var(--c-fake), #000 10%); color:#0d0f1a}
-    .b-law{background:color-mix(in srgb, var(--c-law), #000 8%); color:#0d0f1a}
-    .b-civ{background:color-mix(in srgb, var(--c-civ), #000 8%); color:#0d0f1a}
-
-    /* Mobile header: tutto su una riga */
     @media (max-width:480px){
       .bar{gap:8px}
       .brand h1{font-size:16px}
-      .controls select{max-width:74px}
       .btn{padding:12px 14px}
-      .acc-head{padding:12px 14px}
       .role-card{min-height:300px;padding:24px}
     }
   </style>
 </head>
 <body>
+  <svg width="0" height="0" class="sr-defs" aria-hidden="true" focusable="false" style="position:absolute">
+    <defs>
+      <!-- Logo principale -->
+      <symbol id="logo-spy" viewBox="0 0 48 48">
+        <rect x="2" y="2" width="44" height="44" rx="10" fill="url(#gmain)"/>
+        <defs>
+          <linearGradient id="gmain" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#67e8f9"/>
+            <stop offset="1" stop-color="#94a3b8"/>
+          </linearGradient>
+        </defs>
+        <g fill="#0b0f19" transform="translate(6,6)">
+          <circle cx="12" cy="12" r="5"/>
+          <rect x="9" y="26" width="24" height="5" rx="2.5"/>
+          <path d="M6 36c4 4 10 6 17 6s13-2 17-6l-3-4c-3.5 3.5-8.5 5-14 5s-10.5-1.5-14-5z"/>
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
   <div class="bg"></div>
   <div class="grain"></div>
 
   <!-- Splash -->
-  <div class="splash" id="splash">
+  <div class="splash" id="splash" aria-hidden="true">
     <div class="card in" style="text-align:center;max-width:320px">
-      <div class="logo" style="width:64px;height:64px;margin-inline:auto">🕵️‍♂️</div>
+      <div class="logo" style="width:64px;height:64px;margin-inline:auto"><svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><use href="#logo-spy"></use></svg></div>
       <h2 style="margin:8px 0 4px">Gioco Spia</h2>
       <p class="muted" style="margin:0">Ready • Set • Suspect</p>
     </div>
@@ -157,12 +174,13 @@
 
   <header>
     <div class="bar">
-      <button class="logo btn ghost" id="homeBtn" title="Home" aria-label="Home" style="box-shadow:none">🕵️‍♂️</button>
-      <div class="brand" style="cursor:pointer" id="titleBtn" title="Vai alla home">
+      <div class="brand" id="titleBtn" title="Home">
+        <div class="logo" aria-hidden="true"><svg class="mark" viewBox="0 0 48 48"><use href="#logo-spy"></use></svg></div>
         <h1 id="appTitle">Gioco Spia</h1>
       </div>
-      <div class="controls">
+      <div class="row">
         <button id="themeBtn" class="btn ghost" title="Tema">🌓</button>
+        <label class="sr-only" for="lang">Lingua</label>
         <select id="lang" aria-label="Lingua">
           <option value="it">🇮🇹 IT</option>
           <option value="en">🇬🇧 EN</option>
@@ -186,87 +204,101 @@
         </div>
       </div>
 
-      <!-- RIMOSSA la card “Mobile‑first” come richiesto -->
-      <div class="card"><h3 class="section-title">🧠 <span>Ruoli speciali</span></h3>
-        <p class="muted">Spia, Finta Spia, Avvocato, Civile. Timer & votazione integrati.</p>
-        <p class="note">💾 Salvataggio automatico: giocatori, impostazioni e categorie restano nel tuo browser.</p>
+      <div class="card">
+        <h3 class="section-title">✨ Perché è top</h3>
+        <ul class="list">
+          <li><span>🎭 Ruoli extra: Finta Spia & Avvocato</span><span class="chip">Pro</span></li>
+          <li><span>⏱️ Timer libero</span><span class="chip">No limiti</span></li>
+          <li><span>📚 Categorie pronte + personalizzabili</span><span class="chip">Salvate</span></li>
+        </ul>
       </div>
     </section>
 
     <!-- Setup -->
     <section data-view id="view-home">
-      <div class="accordion">
-        <!-- Giocatori -->
-        <div class="acc-head" data-acc="players"><h2>👥 <span data-i="players">Giocatori</span> (<span id="playersCount">0</span>)</h2><span class="muted">riduci/espandi</span></div>
-        <div class="acc-body" id="acc-players">
-          <div class="card">
-            <div class="row nowrap">
-              <input id="playerInput" class="grow" type="text" maxlength="24" placeholder="Nome giocatore" />
-              <button id="addPlayer" class="btn">➕ Aggiungi giocatore</button>
-            </div>
-            <ul id="playersList" class="list" aria-label="Lista giocatori"></ul>
-            <div class="row">
-              <button id="shufflePlayers" class="btn ghost">🔀 <span data-i="shuffle">Mescola</span></button>
-              <button id="clearPlayers" class="btn danger">🗑️ <span data-i="clear">Svuota</span></button>
-            </div>
-            <p class="note" style="margin-top:8px">💾 Salvataggio automatico dei giocatori.</p>
-          </div>
+      <!-- Giocatori -->
+      <div class="card" id="card-players" data-collapsible>
+        <div class="card-head">
+          <h2 class="section-title">👥 <span data-i="players">Giocatori</span> (<span id="playersCount">0</span>)</h2>
+          <button class="btn ghost" data-collapse aria-label="Espandi/Comprimi">▾</button>
         </div>
-
-        <!-- Categorie -->
-        <div class="acc-head" data-acc="cats"><h2>📚 <span data-i="categories">Categorie</span></h2><span class="muted">riduci/espandi</span></div>
-        <div class="acc-body" id="acc-cats">
-          <div class="card">
-            <div class="row">
-              <select id="categorySelect" class="grow" aria-label="Categoria"></select>
-              <button id="openCats" class="btn ghost">🔧 <span data-i="manage">Gestisci</span></button>
-            </div>
-            <p class="muted" id="selectedCategoryView">📌 <span data-i="selectedCat">Categoria selezionata</span>: <strong id="selCatTxt">—</strong></p>
-            <p class="note">💾 Le categorie personalizzate sono salvate automaticamente per lingua.</p>
+        <div class="card-body">
+          <div class="row">
+            <input id="playerInput" class="grow" type="text" maxlength="24" placeholder="Nome giocatore" />
+            <button id="addPlayer" class="btn" aria-label="Aggiungi giocatore">➕ <span data-i="add">Aggiungi</span></button>
           </div>
+          <ul id="playersList" class="list" aria-label="Lista giocatori"></ul>
+          <div class="row">
+            <button id="shufflePlayers" class="btn ghost">🔀 <span data-i="shuffle">Mescola</span></button>
+            <button id="clearPlayers" class="btn danger">🗑️ <span data-i="clear">Svuota</span></button>
+          </div>
+          <p class="muted" style="margin-top:6px">💾 <span data-i="autosavePlayers">Salvataggio automatico dei giocatori nel browser.</span></p>
         </div>
+      </div>
 
-        <!-- Impostazioni -->
-        <div class="acc-head" data-acc="settings"><h2>⚙️ <span data-i="gameSettings">Impostazioni</span></h2><span class="muted">riduci/espandi</span></div>
-        <div class="acc-body" id="acc-settings">
-          <div class="card">
-            <div class="row">
-              <div class="grow">
-                <label for="numSpies">🕵️ <span data-i="numSpies">Spie</span></label>
-                <div class="row"><input id="numSpies" type="number" min="1" max="4" step="1" value="1" />
-                  <button class="btn ghost" data-step="numSpies" data-delta="-1">–</button>
-                  <button class="btn ghost" data-step="numSpies" data-delta="1">+</button>
-                </div>
-              </div>
-              <div class="grow">
-                <label for="numFakeSpies">🎭 <span data-i="numFakeSpies">Finte spie</span></label>
-                <div class="row"><input id="numFakeSpies" type="number" min="0" max="4" step="1" value="0" />
-                  <button class="btn ghost" data-step="numFakeSpies" data-delta="-1">–</button>
-                  <button class="btn ghost" data-step="numFakeSpies" data-delta="1">+</button>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="grow">
-                <label for="numLawyers">⚖️ <span data-i="numLawyers">Avvocati</span></label>
-                <div class="row"><input id="numLawyers" type="number" min="0" max="2" step="1" value="0" />
-                  <button class="btn ghost" data-step="numLawyers" data-delta="-1">–</button>
-                  <button class="btn ghost" data-step="numLawyers" data-delta="1">+</button>
-                </div>
-              </div>
-              <div class="grow">
-                <label for="roundMinutes">⏱️ <span data-i="roundMinutes">Minuti</span></label>
-                <div class="row"><input id="roundMinutes" type="number" min="1" max="20" step="1" value="5" />
-                  <button class="btn ghost" data-step="roundMinutes" data-delta="-1">–</button>
-                  <button class="btn ghost" data-step="roundMinutes" data-delta="1">+</button>
-                </div>
+      <!-- Categorie -->
+      <div class="card" id="card-categories" data-collapsible>
+        <div class="card-head">
+          <h2 class="section-title">📚 <span data-i="categories">Categorie</span></h2>
+          <button class="btn ghost" data-collapse aria-label="Espandi/Comprimi">▾</button>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <select id="categorySelect" class="grow" aria-label="Categoria"></select>
+            <button id="openCats" class="btn ghost">🔧 <span data-i="manage">Gestisci</span></button>
+          </div>
+          <p class="muted" id="selectedCategoryView">📌 <span data-i="selectedCat">Categoria selezionata</span>: <strong id="selCatTxt">—</strong></p>
+        </div>
+      </div>
+
+      <!-- Impostazioni -->
+      <div class="card" id="card-settings" data-collapsible>
+        <div class="card-head">
+          <h2 class="section-title">⚙️ <span data-i="gameSettings">Impostazioni</span></h2>
+          <button class="btn ghost" data-collapse aria-label="Espandi/Comprimi">▾</button>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="grow">
+              <label for="numSpies">🕵️ <span data-i="numSpies">Spie</span></label>
+              <div class="row">
+                <input id="numSpies" type="number" min="1" step="1" value="1" />
+                <button class="btn ghost" data-step="numSpies" data-delta="-1">–</button>
+                <button class="btn ghost" data-step="numSpies" data-delta="1">+</button>
               </div>
             </div>
-            <p class="muted" id="rolesHint">💡 <span data-i="rolesHint">I ruoli speciali totali devono essere minori dei giocatori.</span></p>
-            <div class="row">
-              <button id="saveSettings" class="btn ok">💾 <span data-i="save">Salva</span></button>
-              <span class="chip" id="summaryPill" aria-live="polite"></span>
+            <div class="grow">
+              <label for="numFakeSpies">🎭 <span data-i="numFakeSpies">Finte spie</span></label>
+              <div class="row">
+                <input id="numFakeSpies" type="number" min="0" step="1" value="0" />
+                <button class="btn ghost" data-step="numFakeSpies" data-delta="-1">–</button>
+                <button class="btn ghost" data-step="numFakeSpies" data-delta="1">+</button>
+              </div>
             </div>
+          </div>
+          <div class="row">
+            <div class="grow">
+              <label for="numLawyers">⚖️ <span data-i="numLawyers">Avvocati</span></label>
+              <div class="row">
+                <input id="numLawyers" type="number" min="0" step="1" value="0" />
+                <button class="btn ghost" data-step="numLawyers" data-delta="-1">–</button>
+                <button class="btn ghost" data-step="numLawyers" data-delta="1">+</button>
+              </div>
+            </div>
+            <div class="grow">
+              <label for="roundMinutes">⏱️ <span data-i="roundMinutes">Minuti</span></label>
+              <div class="row">
+                <!-- Nessun limite: min 0, senza max -->
+                <input id="roundMinutes" type="number" min="0" step="1" value="5" />
+                <button class="btn ghost" data-step="roundMinutes" data-delta="-1">–</button>
+                <button class="btn ghost" data-step="roundMinutes" data-delta="1">+</button>
+              </div>
+            </div>
+          </div>
+          <p class="muted" id="rolesHint">💡 <span data-i="rolesHint">I ruoli speciali totali devono essere minori del numero di giocatori.</span></p>
+          <div class="row">
+            <button id="saveSettings" class="btn ok">💾 <span data-i="save">Salva</span></button>
+            <span class="chip" id="summaryPill" aria-live="polite"></span>
           </div>
         </div>
       </div>
@@ -277,14 +309,15 @@
         <p class="muted"><span data-i="preflight">Assicurati di avere almeno 3 giocatori e una categoria con parole.</span></p>
         <div class="row">
           <button id="startGameMain" class="btn secondary">▶️ <span data-i="startNow">Inizia ora</span></button>
-          <button id="howToBtn" class="btn ghost">📜 <span data-i="rules">Regole</span></button>
+          <button id="howToBtn" class="btn ghost">📜 <span data-i="rules">Istruzioni</span></button>
         </div>
       </div>
     </section>
 
     <!-- Gestione categorie -->
     <section data-view id="view-cats">
-      <div class="card"><h2 class="section-title">📚 <span data-i="manageCats">Gestisci categorie</span></h2>
+      <div class="card">
+        <h2 class="section-title">📚 <span data-i="manageCats">Gestisci categorie</span></h2>
         <div class="row"><button id="backHomeFromCats" class="btn ghost">← <span data-i="back">Indietro</span></button></div>
       </div>
       <div class="card"><h3 class="section-title">🧩 <span data-i="yourCats">Le tue categorie</span></h3>
@@ -293,8 +326,10 @@
       <div class="card"><h3 class="section-title">➕ <span data-i="newCat">Nuova categoria</span></h3>
         <div class="row"><input id="catName" class="grow" type="text" placeholder="Nome categoria (es. Film)" /></div>
         <div class="row"><textarea id="catWords" rows="3" placeholder="Parole separate da virgola o a capo"></textarea></div>
-        <div class="row"><button id="saveCategory" class="btn ok">💾 <span data-i="save">Salva</span></button></div>
-        <p class="note" style="margin-top:6px">💾 Salvataggio automatico nel browser (per lingua).</p>
+        <div class="row">
+          <button id="saveCategory" class="btn ok">💾 <span data-i="save">Salva</span></button>
+        </div>
+        <p class="muted" style="margin-top:6px">💾 <span data-i="autosaveCats">Le categorie personalizzate sono salvate automaticamente (per lingua).</span></p>
       </div>
       <div class="card"><h3 class="section-title">📦 <span data-i="stockCats">Categorie predefinite</span></h3>
         <ul id="stockCatsList" class="list"></ul>
@@ -312,6 +347,9 @@
         <div class="row" style="margin-top:12px">
           <button id="nextPlayer" class="btn secondary" disabled>➡️ <span data-i="next">Prossimo</span></button>
         </div>
+
+        <!-- Legenda ruoli FUORI dalla card, con descrizioni -->
+        <div id="rolesLegendBox" class="roles-legend"></div>
       </div>
     </section>
 
@@ -319,8 +357,7 @@
     <section data-view id="view-game">
       <div class="card" style="text-align:center">
         <h2 class="section-title" style="justify-content:center">🎮 <span data-i="live">Gioco in corso</span></h2>
-        <p id="firstQuestionHint" class="note" style="margin-bottom:6px"></p>
-        <p class="note" style="margin-top:0">ℹ️ Iniziate a fare domande per scoprire chi è la spia.</p>
+        <p id="firstQuestionHint" class="muted" style="margin-top:0"></p>
         <div class="timer" id="timer">05:00</div>
         <div class="row" style="justify-content:center;gap:10px;margin-top:8px">
           <button id="pauseTimer" class="btn ghost">⏸️ <span data-i="pause">Pausa</span></button>
@@ -333,8 +370,11 @@
     <section data-view id="view-vote">
       <div class="card">
         <h2 class="section-title">🗳️ <span data-i="voting">Votazione</span></h2>
+        <p class="muted" id="voteHint">Tocca un nome per votare. Puoi togliere voti con −.</p>
         <ul id="voteList" class="list" aria-label="Sospetti da votare"></ul>
-        <div class="row"><button id="seeResults" class="btn secondary">📊 <span data-i="seeResults">Mostra risultati</span></button></div>
+        <div class="row">
+          <button id="seeResults" class="btn secondary">📊 <span data-i="seeResults">Mostra risultati</span></button>
+        </div>
       </div>
     </section>
 
@@ -357,412 +397,514 @@
 
   <!-- Modale: Istruzioni -->
   <dialog id="modalHelp" aria-labelledby="helpTitle">
-    <div class="modal-head"><strong id="helpTitle">📜 Regole</strong><button class="btn ghost" id="closeHelp">✕</button></div>
+    <div class="modal-head"><strong id="helpTitle">📜 Istruzioni</strong><button class="btn ghost" id="closeHelp" aria-label="Chiudi">✕</button></div>
     <div class="modal-body"><div id="helpContent" class="muted"></div></div>
   </dialog>
 
-  <!-- Modale: Toast/Info/Confirm -->
+  <!-- Modale: Toast/Info -->
   <dialog id="modal" aria-live="polite">
-    <div class="modal-head"><strong id="modalTitle">Info</strong><button class="btn ghost" id="modalClose">✕</button></div>
+    <div class="modal-head"><strong id="modalTitle">Info</strong><button class="btn ghost" id="modalClose" aria-label="Chiudi">✕</button></div>
     <div class="modal-body" id="modalBody"></div>
-    <div class="modal-actions" id="modalActions" style="display:none"></div>
   </dialog>
 
   <script>
-    // ====== Utils ======
-    const LS={get:(k,f)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):(f??null)}catch{return f??null}},set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}},del:k=>{try{localStorage.removeItem(k)}catch{}}};
-    const $=s=>document.querySelector(s); const $$=s=>[...document.querySelectorAll(s)];
-    const Role={spy:'spy',fake:'fake',law:'law',civ:'civ'};
-    const roleLabel=(r,lang)=> lang==='it' ? (r===Role.spy?'Spia':r===Role.fake?'Finta Spia':r===Role.law?'Avvocato':'Civile') : (r===Role.spy?'Spy':r===Role.fake?'Fake Spy':r===Role.law?'Lawyer':'Civilian');
-    const roleBadgeCls=r=> r===Role.spy?'b-spy':r===Role.fake?'b-fake':r===Role.law?'b-law':'b-civ';
+  "use strict";
+  /* ====== Utils ====== */
+  const LS={get:(k,f)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):(f??null)}catch{return f??null}},set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}},del:k=>{try{localStorage.removeItem(k)}catch{}}};
+  const $=s=>document.querySelector(s); const $$=s=>[...document.querySelectorAll(s)];
+  const Role={spy:"spy",fake:"fake",law:"law",civ:"civ"};
 
-    // i18n
-    const T={
-      it:{appTitle:"Gioco Spia",startNow:"Inizia",rules:"Istruzioni",players:"Giocatori",shuffle:"Mescola",clear:"Svuota",categories:"Categorie",manage:"Gestisci",gameSettings:"Impostazioni",numSpies:"Spie",numFakeSpies:"Finte spie",numLawyers:"Avvocati",roundMinutes:"Minuti",rolesHint:"I ruoli speciali totali devono essere minori dei giocatori.",save:"Salva",start:"Avvia partita",preflight:"Assicurati di avere almeno 3 giocatori e una categoria con parole.",selectedCat:"Categoria selezionata",manageCats:"Gestisci categorie",yourCats:"Le tue categorie",newCat:"Nuova categoria",stockCats:"Categorie predefinite",back:"Indietro",assign:"Assegnazione ruoli",clickRole:"Clicca o premi Invio per vedere il tuo ruolo",next:"Prossimo",live:"Gioco in corso",pause:"Pausa",endRound:"Termina round",voting:"Votazione",seeResults:"Mostra risultati",results:"Risultati",reveal:"Rivela tutti i ruoli",playAgain:"Gioca di nuovo",footer:"Gioco locale: i dati restano nel tuo browser.",errs_need3:"Devi avere almeno 3 giocatori.",errs_roles:"I ruoli speciali totali devono essere minori del numero di giocatori.",errs_cat:"Seleziona una categoria con almeno una parola.",saved:"Impostazioni salvate!",words:"parole",lawyerText:(w,s)=>`Sei l'Avvocato! La parola è "<span class="role-word">${w}</span>" e le spie sono: <b>${s}</b>.`,spyText:()=>"Sei la <span class='role-strong'>Spia</span>!",fakeText:w=>`Sei la <span class='role-strong'>Finta Spia</span>! Parola: <span class="role-word">${w}</span>`,civText:w=>`Sei un <span class='role-strong'>Civile</span>! La parola è: <span class="role-word">${w}</span>`,timerUp:"Tempo scaduto! Si va al voto.",confirmVote:p=>`Confermi il voto per ${p}?`,voted:p=>`Hai votato per ${p}.`,eliminated:(p,r)=>`${p} eliminat* — era ${r}.`,civsWin:"I Civili vincono!",spiesWin:"Le Spie vincono!",rolesLegend:"Legenda ruoli",legendHTML:`<span class="badge b-spy">🕵️ Spia</span> · <span class="badge b-fake">🎭 Finta Spia</span> · <span class="badge b-law">⚖️ Avvocato</span> · <span class="badge b-civ">👤 Civile</span>`,helpHTML:`<p><strong>Obiettivo</strong> — Indovinare chi è la <em>Spia</em>.</p><p><strong>Ruoli</strong><br>🕵️ <b>Spia</b>: non vede la parola. Vince se al voto viene eliminato un non‑spia.<br>🎭 <b>Finta Spia</b>: vede la parola ma gioca con le Spie (depista i Civili).<br>⚖️ <b>Avvocato</b>: vede parola e identità delle Spie. È con i Civili.<br>👤 <b>Civile</b>: vede la parola.</p><p><strong>Round</strong> — 1) Assegna ruoli. 2) Discussione. 3) Voto unico. 4) Eliminazione. Se è (Finta) Spia → Civili vincono; altrimenti Spie.</p>`,mustReveal:"Prima leggi il tuo ruolo toccando la carta."},
-      en:{appTitle:"Spy Game",startNow:"Start",rules:"Rules",players:"Players",shuffle:"Shuffle",clear:"Clear",categories:"Categories",manage:"Manage",gameSettings:"Settings",numSpies:"Spies",numFakeSpies:"Fake spies",numLawyers:"Lawyers",roundMinutes:"Minutes",rolesHint:"Special roles total must be less than players.",save:"Save",start:"Start match",preflight:"Make sure you have at least 3 players and a category with words.",selectedCat:"Selected category",manageCats:"Manage categories",yourCats:"Your categories",newCat:"New category",stockCats:"Default categories",back:"Back",assign:"Assign roles",clickRole:"Click or press Enter to see your role",next:"Next",live:"Game in progress",pause:"Pause",endRound:"End round",voting:"Voting",seeResults:"Show results",results:"Results",reveal:"Reveal all roles",playAgain:"Play again",footer:"Local game: data stays in your browser.",errs_need3:"You need at least 3 players.",errs_roles:"Special roles total must be less than the number of players.",errs_cat:"Select a category with at least one word.",saved:"Settings saved!",words:"words",lawyerText:(w,s)=>`You are the Lawyer! The word is "<span class="role-word">${w}</span>" and the spies are: <b>${s}</b>.`,spyText:()=>"You are the <span class='role-strong'>Spy</span>!",fakeText:w=>`You are the <span class='role-strong'>Fake Spy</span>! Word: <span class="role-word">${w}</span>`,civText:w=>`You are a <span class='role-strong'>Civilian</span>! The word is: <span class="role-word">${w}</span>`,timerUp:"Time is up! Voting time.",confirmVote:p=>`Confirm vote for ${p}?`,voted:p=>`You voted for ${p}.`,eliminated:(p,r)=>`${p} eliminated — was ${r}.`,civsWin:"Civilians win!",spiesWin:"Spies win!",rolesLegend:"Roles legend",legendHTML:`<span class="badge b-spy">🕵️ Spy</span> · <span class="badge b-fake">🎭 Fake Spy</span> · <span class="badge b-law">⚖️ Lawyer</span> · <span class="badge b-civ">👤 Civilian</span>`,helpHTML:`<p><strong>Goal</strong> — Find the <em>Spy</em>.</p><p><strong>Roles</strong>…</p>`,mustReveal:"Please reveal your role first by tapping the card."}
-    };
-
-    const STOCK={
-      it:{"Animali":["Cane","Gatto","Elefante","Leone","Tigre","Giraffa","Zebra","Scimmia","Orso","Lupo","Volpe","Pinguino","Delfino","Aquila","Gufo"],"Cibo":["Pizza","Pasta","Gelato","Sushi","Hamburger","Lasagna","Risotto","Tiramisù","Cioccolato","Formaggio"],"Sport":["Calcio","Basket","Nuoto","Tennis","Rugby","Volley","Ciclismo","Atletica","Sci","Pattinaggio"],"Luoghi":["Bar","Ospedale","Scuola","Parco","Museo","Biblioteca","Cinema","Ristorante","Aeroporto","Stadio"],"Professioni":["Medico","Ingegnere","Avvocato","Insegnante","Poliziotto","Pompiere","Architetto","Cuoco","Pilota","Musicista"]},
-      en:{"Animals":["Dog","Cat","Elephant","Lion","Tiger","Giraffe","Zebra","Monkey","Bear","Wolf","Fox","Penguin","Dolphin","Eagle","Owl"],"Food":["Pizza","Pasta","Ice Cream","Sushi","Hamburger","Lasagna","Risotto","Tiramisu","Chocolate","Cheese"],"Sports":["Football","Basketball","Swimming","Tennis","Rugby","Volleyball","Cycling","Athletics","Skiing","Skating"],"Places":["Bar","Hospital","School","Park","Museum","Library","Cinema","Restaurant","Airport","Stadium"],"Professions":["Doctor","Engineer","Lawyer","Teacher","Police Officer","Firefighter","Architect","Cook","Pilot","Musician"]}
-    };
-
-    const state={
-      lang:LS.get('lang','it'),
-      theme:LS.get('theme','auto'),
-      players:LS.get('players',[]),
-      custom:LS.get('custom_'+(LS.get('lang','it')||'it'),{}),
-      category:LS.get('category',''),
-      settings:LS.get('settings',{spies:1,fakes:0,laws:0,minutes:5}),
-      game:null
-    };
-
-    // Theme
-    function metaThemeSync(){const meta=$('#metaTheme');meta.content=getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();}
-    function applyTheme(){const root=document.documentElement; if(state.theme==='auto'){const dark=matchMedia('(prefers-color-scheme: dark)').matches; root.setAttribute('data-theme',dark?'dark':'light');} else {root.setAttribute('data-theme',state.theme);} metaThemeSync();}
-    function cycleTheme(){state.theme=state.theme==='auto'?'light':state.theme==='light'?'dark':'auto'; LS.set('theme',state.theme); $('#themeBtn').textContent=state.theme==='auto'?'🌓':state.theme==='light'?'☀️':'🌙'; applyTheme();}
-    matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{if(state.theme==='auto') applyTheme();});
-
-    // i18n
-    function i18nRefresh(){
-      const t=T[state.lang];
-      $('#appTitle').textContent=t.appTitle;
-      $$('#lang option').forEach(o=>o.selected=(o.value===state.lang));
-      $('#heroTitle').textContent=state.lang==='it'?'Il party game in tasca':'The party game in your pocket';
-      $('#heroDesc').textContent=state.lang==='it'?'Spie, Fake Spy e Avvocato. UI moderna, salvataggio locale, nessun account.':'Spies, Fake Spy & Lawyer. Modern UI, local save, no account.';
-      $$('[data-i]').forEach(el=>{const k=el.getAttribute('data-i'); el.textContent=t[k]??el.textContent});
-      $('#playerInput').placeholder=state.lang==='it'?'Nome giocatore':'Player name';
-      $('#catName').placeholder=state.lang==='it'?'Nome categoria (es. Film)':'Category name (e.g., Movies)';
-      $('#catWords').placeholder=state.lang==='it'?'Parole separate da virgola o a capo':'Words separated by comma or newline';
-      $('#helpTitle').textContent=state.lang==='it'?'Istruzioni':'Rules';
-      $('#helpContent').innerHTML=t.helpHTML;
-      renderCategories(); renderSummaryPill(); updateSelectedCatView(); renderPlayers(); renderCatsPage(); revealOnScroll();
+  /* ====== i18n ====== */
+  const T={
+    it:{
+      appTitle:"Gioco Spia", startNow:"Inizia", rules:"Istruzioni", players:"Giocatori", add:"Aggiungi",
+      shuffle:"Mescola", clear:"Svuota", categories:"Categorie", manage:"Gestisci", gameSettings:"Impostazioni",
+      numSpies:"Spie", numFakeSpies:"Finte spie", numLawyers:"Avvocati", roundMinutes:"Minuti",
+      rolesHint:"I ruoli speciali totali devono essere minori del numero di giocatori.",
+      save:"Salva", start:"Avvia partita",
+      preflight:"Assicurati di avere almeno 3 giocatori e una categoria con parole.",
+      selectedCat:"Categoria selezionata", manageCats:"Gestisci categorie", yourCats:"Le tue categorie",
+      newCat:"Nuova categoria", stockCats:"Categorie predefinite", back:"Indietro",
+      assign:"Assegnazione ruoli", clickRole:"Clicca o premi Invio per vedere il tuo ruolo", next:"Prossimo",
+      live:"Gioco in corso", pause:"Pausa", endRound:"Termina round", voting:"Votazione",
+      seeResults:"Mostra risultati", results:"Risultati", reveal:"Rivela tutti i ruoli", playAgain:"Gioca di nuovo",
+      footer:"Gioco locale: i dati restano nel tuo browser.", errs_need3:"Devi avere almeno 3 giocatori.",
+      errs_roles:"I ruoli speciali totali devono essere minori del numero di giocatori.",
+      errs_cat:"Seleziona una categoria con almeno una parola.", saved:"Impostazioni salvate!", words:"parole",
+      autosavePlayers:"Salvataggio automatico dei giocatori nel browser.",
+      autosaveCats:"Le categorie personalizzate sono salvate automaticamente (per lingua).",
+      /* Ruoli */
+      lawyerText:(w,s)=>`Sei l'<b>Avvocato</b>! Giochi con la <b>Spia</b>. Parola: <span class="role-name">${w}</span>. Spia: <b>${s}</b>.`,
+      spyText:()=>"Sei la <b>Spia</b>! Non conosci la parola: sopravvivi col tuo Avvocato.",
+      fakeText:w=>`Sei la <b>Finta Spia</b>! Conosci la parola (<span class="role-name">${w}</span>) ma giochi da solə.`,
+      civText:w=>`Sei un <b>Civile</b>! La parola è <span class="role-name">${w}</span>.`,
+      timerUp:"Tempo scaduto! Si va al voto.",
+      eliminated:(p,r)=>`${p} eliminat* — era ${r}.`,
+      civsWin:"I Civili vincono!",
+      everyoneBeatsFake:"Bravi! Avete smascherato la Finta Spia — vincono tutti gli altri!",
+      fakeWins:"La Finta Spia vince da sola! Tutti gli altri perdono.",
+      /* Istruzioni complete */
+      helpHTML: `
+      <h3>🎯 Obiettivo</h3>
+      <p>Scovare chi mente… o far fuori la persona giusta!</p>
+      <h3>🪪 Ruoli & squadre</h3>
+      <ul>
+        <li><b>Spia</b> (team Ombra): non conosce la parola. <i>Gioca insieme</i> all'<b>Avvocato</b>.</li>
+        <li><b>Avvocato</b> (team Ombra): conosce la parola e sa chi è la Spia; la aiuta a sopravvivere.</li>
+        <li><b>Finta Spia</b> (solista): conosce la parola ma gioca da sola. Se al voto viene eliminato <i>chiunque tranne lei</i>, <b>vince da sola</b> e tutti gli altri perdono.</li>
+        <li><b>Civile</b> (team Civili): conosce la parola; vuole smascherare la Spia o la Finta Spia.</li>
+      </ul>
+      <h3>🕹️ Svolgimento round</h3>
+      <ol>
+        <li>Assegnazione segreta dei ruoli.</li>
+        <li>Discussione libera con indizi <i>senza dire la parola</i>.</li>
+        <li>Voto unico: una persona viene eliminata.</li>
+        <li><b>Esito</b>:
+          <ul>
+            <li>Eliminata la <b>Finta Spia</b> → <b>vincono tutti gli altri</b>.</li>
+            <li>Eliminata la <b>Spia</b> → <b>vincono i Civili</b>.</li>
+            <li>Eliminato un <b>Civile</b> o l'<b>Avvocato</b> → <b>vince la Finta Spia da sola</b>.</li>
+          </ul>
+        </li>
+      </ol>
+      <p class="muted">Tip: fai domande secche, risposte concise, occhi sulle esitazioni 😉</p>
+      `
+    },
+    en:{
+      appTitle:"Spy Game", startNow:"Start", rules:"Rules", players:"Players", add:"Add",
+      shuffle:"Shuffle", clear:"Clear", categories:"Categories", manage:"Manage", gameSettings:"Settings",
+      numSpies:"Spies", numFakeSpies:"Fake spies", numLawyers:"Lawyers", roundMinutes:"Minutes",
+      rolesHint:"Special roles total must be less than the number of players.",
+      save:"Save", start:"Start match",
+      preflight:"Make sure you have at least 3 players and a category with words.",
+      selectedCat:"Selected category", manageCats:"Manage categories", yourCats:"Your categories",
+      newCat:"New category", stockCats:"Default categories", back:"Back",
+      assign:"Assign roles", clickRole:"Click or press Enter to see your role", next:"Next",
+      live:"Game in progress", pause:"Pause", endRound:"End round", voting:"Voting",
+      seeResults:"Show results", results:"Results", reveal:"Reveal all roles", playAgain:"Play again",
+      footer:"Local game: data stays in your browser.", errs_need3:"You need at least 3 players.",
+      errs_roles:"Special roles total must be less than the number of players.",
+      errs_cat:"Select a category with at least one word.", saved:"Settings saved!", words:"words",
+      autosavePlayers:"Players are saved locally.", autosaveCats:"Custom categories are saved per language.",
+      lawyerText:(w,s)=>`You are the <b>Lawyer</b>! You play with the <b>Spy</b>. Word: <span class="role-name">${w}</span>. Spy: <b>${s}</b>.`,
+      spyText:()=>"You are the <b>Spy</b>! You don't know the word—survive with your Lawyer.",
+      fakeText:w=>`You are the <b>Fake Spy</b>! You know the word (<span class="role-name">${w}</span>) but play solo.`,
+      civText:w=>`You are a <b>Civilian</b>! The word is <span class="role-name">${w}</span>.`,
+      timerUp:"Time is up! Voting time.",
+      eliminated:(p,r)=>`${p} eliminated — was ${r}.`,
+      civsWin:"Civilians win!",
+      everyoneBeatsFake:"Nice! You eliminated the Fake Spy — everyone else wins!",
+      fakeWins:"Fake Spy wins alone! Everyone else loses.",
+      helpHTML: `
+      <h3>🎯 Goal</h3>
+      <p>Find the liar… or vote the right person out!</p>
+      <h3>🪪 Roles & teams</h3>
+      <ul>
+        <li><b>Spy</b> (Shadow team): doesn't know the word. <i>Plays together</i> with the <b>Lawyer</b>.</li>
+        <li><b>Lawyer</b> (Shadow team): knows the word and who the Spy is; helps the Spy survive.</li>
+        <li><b>Fake Spy</b> (solo): knows the word but plays alone. If the vote eliminates <i>anyone but them</i>, they <b>win alone</b> and everyone else loses.</li>
+        <li><b>Civilian</b> (Civilians team): knows the word; wants to catch the Spy or Fake Spy.</li>
+      </ul>
+      <h3>🕹️ Round</h3>
+      <ol>
+        <li>Secret role assignment.</li>
+        <li>Open discussion using hints <i>without saying the word</i>.</li>
+        <li>Single vote: one person is eliminated.</li>
+        <li><b>Outcome</b>:
+          <ul>
+            <li><b>Fake Spy</b> eliminated → <b>everyone else wins</b>.</li>
+            <li><b>Spy</b> eliminated → <b>Civilians</b> win.</li>
+            <li><b>Civilian</b> or <b>Lawyer</b> eliminated → <b>Fake Spy wins alone</b>.</li>
+          </ul>
+        </li>
+      </ol>
+      <p class="muted">Tip: ask sharp questions, keep answers short, watch the hesitation 😉</p>
+      `
     }
+  };
 
-    // Toast/Modal (no alert/confirm)
-    function modalInfo(html,actions){
-      const d=$('#modal'); if(!d||typeof d.showModal!=='function'){return;}
-      $('#modalTitle').textContent='';
-      $('#modalBody').innerHTML=html;
-      const act=$('#modalActions');
-      act.innerHTML=''; act.style.display=actions&&actions.length?'flex':'none';
-      (actions||[]).forEach(a=>{
-        const b=document.createElement('button');
-        b.className='btn '+(a.kind||'secondary'); b.textContent=a.label;
-        b.onclick=()=>{a.onClick?.(); d.close();}
-        act.appendChild(b);
+  /* ====== Categorie arricchite ====== */
+  const STOCK={
+    it:{
+      "Animali":["Cane","Gatto","Elefante","Leone","Tigre","Giraffa","Zebra","Scimmia","Orso","Lupo","Volpe","Pinguino","Delfino","Aquila","Gufo","Koala","Panda","Ippopotamo","Rinoceronte","Canguro"],
+      "Cibo":["Pizza","Pasta","Gelato","Sushi","Hamburger","Lasagna","Risotto","Tiramisù","Cioccolato","Formaggio","Insalata","Panino","Zuppa","Paella","Gnocchi","Focaccia","Piadina"],
+      "Sport":["Calcio","Basket","Nuoto","Tennis","Rugby","Volley","Ciclismo","Atletica","Sci","Pattinaggio","Surf","Arrampicata","Boxe","Scherma"],
+      "Luoghi":["Bar","Ospedale","Scuola","Parco","Museo","Biblioteca","Cinema","Ristorante","Aeroporto","Stadio","Spiaggia","Mercato","Hotel","Discoteca"],
+      "Professioni":["Medico","Ingegnere","Avvocato","Insegnante","Poliziotto","Pompiere","Architetto","Cuoco","Pilota","Musicista","Programmatore","Dentista","Fioraio"],
+      "Oggetti":["Telefono","Orologio","Lampada","Bicicletta","Computer","Chiave","Bottiglia","Zaino","Forchetta","Sedia","Specchio","Libro"],
+      "Tecnologia":["Smartphone","Tablet","Router","Droni","Console","Stampante","Auricolari","Telecomando","Mouse","Tastiera","Webcam"],
+      "Film & Serie":["Star Wars","Il Padrino","Breaking Bad","Stranger Things","Titanic","Avatar","Matrix","Inception","Harry Potter","Il trono di spade"],
+      "Mestieri antichi":["Fabbro","Sarto","Vasaio","Carpentiere","Maniscalco","Cestaio"]
+    },
+    en:{
+      "Animals":["Dog","Cat","Elephant","Lion","Tiger","Giraffe","Zebra","Monkey","Bear","Wolf","Fox","Penguin","Dolphin","Eagle","Owl","Koala","Panda","Hippo","Rhino","Kangaroo"],
+      "Food":["Pizza","Pasta","Ice Cream","Sushi","Burger","Lasagna","Risotto","Tiramisu","Chocolate","Cheese","Salad","Sandwich","Soup","Paella","Gnocchi","Focaccia","Flatbread"],
+      "Sports":["Football","Basketball","Swimming","Tennis","Rugby","Volleyball","Cycling","Athletics","Skiing","Skating","Surfing","Climbing","Boxing","Fencing"],
+      "Places":["Bar","Hospital","School","Park","Museum","Library","Cinema","Restaurant","Airport","Stadium","Beach","Market","Hotel","Club"],
+      "Professions":["Doctor","Engineer","Lawyer","Teacher","Police Officer","Firefighter","Architect","Chef","Pilot","Musician","Programmer","Dentist","Florist"],
+      "Objects":["Phone","Watch","Lamp","Bicycle","Computer","Key","Bottle","Backpack","Fork","Chair","Mirror","Book"],
+      "Technology":["Smartphone","Tablet","Router","Drones","Game Console","Printer","Earbuds","Remote","Mouse","Keyboard","Webcam"],
+      "Movies & Series":["Star Wars","The Godfather","Breaking Bad","Stranger Things","Titanic","Avatar","The Matrix","Inception","Harry Potter","Game of Thrones"],
+      "Old crafts":["Blacksmith","Tailor","Potter","Carpenter","Farrier","Basket weaver"]
+    }
+  };
+
+  const state={
+    lang: LS.get('lang','it'),
+    theme: LS.get('theme','auto'),
+    players: LS.get('players',[]),
+    custom: LS.get('custom_'+(LS.get('lang','it')||'it'),{}),
+    category: LS.get('category',''),
+    settings: LS.get('settings',{spies:1,fakes:0,laws:0,minutes:5}),
+    game: null
+  };
+
+  /* ====== Tema ====== */
+  function metaThemeSync(){ const meta=$('#metaTheme'); meta.content=getComputedStyle(document.documentElement).getPropertyValue('--bg').trim(); }
+  function applyTheme(){ const root=document.documentElement; if(state.theme==='auto'){ const dark=matchMedia('(prefers-color-scheme: dark)').matches; root.setAttribute('data-theme',dark?'dark':'light'); } else { root.setAttribute('data-theme',state.theme); } metaThemeSync(); }
+  function cycleTheme(){ state.theme=state.theme==='auto'?'light':state.theme==='light'?'dark':'auto'; LS.set('theme',state.theme); $('#themeBtn').textContent=state.theme==='auto'?'🌓':state.theme==='light'?'☀️':'🌙'; applyTheme(); }
+  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{ if(state.theme==='auto') applyTheme(); });
+
+  /* ====== i18n ====== */
+  function i18nRefresh(){
+    const t=T[state.lang];
+    $('#appTitle').textContent=t.appTitle;
+    $$('#lang option').forEach(o=>o.selected=(o.value===state.lang));
+    $('#heroTitle').textContent=state.lang==='it'?'Il party game in tasca':'The party game in your pocket';
+    $('#heroDesc').textContent=state.lang==='it'?'Spie, Finta Spia e Avvocato. UI moderna, salvataggio locale, nessun account.':'Spies, Fake Spy & Lawyer. Modern UI, local save, no account.';
+    $$('[data-i]').forEach(el=>{const k=el.getAttribute('data-i'); el.textContent=t[k]??el.textContent});
+    $('#playerInput').placeholder=state.lang==='it'?'Nome giocatore':'Player name';
+    $('#catName').placeholder=state.lang==='it'?'Nome categoria (es. Film)':'Category name (e.g., Movies)';
+    $('#catWords').placeholder=state.lang==='it'?'Parole separate da virgola o a capo':'Words separated by comma or newline';
+    $('#helpTitle').textContent=state.lang==='it'?'Istruzioni':'Rules';
+    $('#helpContent').innerHTML=t.helpHTML;
+    renderCategories(); renderSummaryPill(); updateSelectedCatView(); renderPlayers(); renderCatsPage(); renderRolesLegend(); revealOnScroll();
+  }
+
+  /* ====== Toast ====== */
+  function toast(msg){ const d=$('#modal'); if(!d||typeof d.showModal!=='function'){ alert(msg); return } $('#modalTitle').textContent=''; $('#modalBody').innerHTML=`<p>${msg}</p>`; d.showModal(); }
+  $('#modalClose')?.addEventListener('click',()=>$('#modal')?.close());
+
+  /* ====== Players ====== */
+  function renderPlayers(){
+    const ul=$('#playersList'); if(!ul) return; ul.innerHTML='';
+    state.players.forEach((p,idx)=>{
+      const li=document.createElement('li');
+      li.innerHTML=`<span>${p}</span>
+        <span class="row">
+          <button class="btn ghost" data-move="-1" aria-label="Su">⬆️</button>
+          <button class="btn ghost" data-move="1" aria-label="Giù">⬇️</button>
+          <button class="btn danger" aria-label="Rimuovi">✕</button>
+        </span>`;
+      li.querySelector('[data-move="-1"]').onclick=()=>{ if(idx>0){ [state.players[idx-1],state.players[idx]]=[state.players[idx],state.players[idx-1]]; savePlayers(); renderPlayers(); } };
+      li.querySelector('[data-move="1"]').onclick=()=>{ if(idx<state.players.length-1){ [state.players[idx+1],state.players[idx]]=[state.players[idx],state.players[idx+1]]; savePlayers(); renderPlayers(); } };
+      li.querySelector('.btn.danger').onclick=()=>{ state.players.splice(idx,1); savePlayers(); renderPlayers(); };
+      ul.appendChild(li);
+    });
+    $('#playersCount').textContent=state.players.length;
+  }
+  function addPlayer(){ const v=$('#playerInput').value.trim(); if(!v) return; if(state.players.includes(v)){ $('#playerInput').value=''; return; } state.players.push(v); $('#playerInput').value=''; savePlayers(); renderPlayers(); }
+  function savePlayers(){ LS.set('players',state.players) }
+
+  /* ====== Categories ====== */
+  const STOCK_ALL=()=>STOCK[state.lang];
+  function allCategories(){ return {...STOCK_ALL(), ...(state.custom||{})} }
+  function renderCategories(){
+    const sel=$('#categorySelect'); if(!sel) return; sel.innerHTML='';
+    const cats=allCategories(); const ph=document.createElement('option');
+    ph.disabled=true; ph.selected=!state.category; ph.textContent=state.lang==='it'?'Seleziona una categoria':'Select a category'; sel.appendChild(ph);
+    Object.keys(cats).sort().forEach(cat=>{
+      const o=document.createElement('option'); o.value=cat; o.textContent=`${cat} (${cats[cat].length} ${T[state.lang].words})`; if(cat===state.category) o.selected=true; sel.appendChild(o)
+    });
+    updateSelectedCatView();
+  }
+  function updateSelectedCatView(){ const el=$('#selCatTxt'); if(el) el.textContent=state.category||'—' }
+
+  function renderCatsPage(){
+    const customUl=$('#customCatsList'); const stockUl=$('#stockCatsList'); if(!customUl||!stockUl) return;
+    customUl.innerHTML=''; stockUl.innerHTML='';
+    const custom=state.custom||{}; const stock=STOCK_ALL();
+    Object.keys(custom).sort().forEach(cat=>{
+      const li=document.createElement('li');
+      li.dataset.cat=cat;
+      li.innerHTML=`<span>${cat} <span class="muted">(${custom[cat].length})</span></span>
+                    <span class="row"><button class="btn ghost" data-edit>✏️</button><button class="btn danger" data-del>✕</button></span>`;
+      li.querySelector('[data-edit]').onclick=()=>openEditor(cat, li);
+      li.querySelector('[data-del]').onclick=()=>{ if(confirm(state.lang==='it'?`Eliminare la categoria "${cat}"?`:`Delete category "${cat}"?`)){
+        delete custom[cat]; state.custom=custom; LS.set('custom_'+state.lang,custom); if(state.category===cat) state.category='';
+        renderCategories(); renderCatsPage();
+      }};
+      customUl.appendChild(li);
+    });
+    Object.keys(stock).sort().forEach(cat=>{
+      const li=document.createElement('li'); li.innerHTML=`<span>${cat} <span class="muted">(${stock[cat].length})</span></span><span class="chip">${state.lang==='it'?'Predefinita':'Default'}</span>`; stockUl.appendChild(li);
+    });
+  }
+  function parseWords(txt){ return [...new Set(txt.split(/[\n,;]+/).map(s=>s.trim()).filter(Boolean))] }
+  function saveNewCategory(){
+    const name=$('#catName').value.trim(); if(!name) return toast(state.lang==='it'?'Inserisci un nome categoria.':'Enter a category name.');
+    const words=parseWords($('#catWords').value); if(words.length===0) return toast(state.lang==='it'?'Aggiungi almeno una parola.':'Add at least one word.');
+    if(!state.custom) state.custom={}; state.custom[name]=[...(state.custom[name]||[]), ...words].filter((w,i,a)=>a.indexOf(w)===i);
+    LS.set('custom_'+state.lang,state.custom); $('#catName').value=''; $('#catWords').value='';
+    renderCategories(); renderCatsPage(); toast(state.lang==='it'?'Categoria salvata!':'Category saved!');
+  }
+  function openEditor(cat, liEl){
+    const ul=$('#customCatsList'); [...ul.children].forEach(li=>li.classList.remove('editing'));
+    const li = liEl || [...ul.children].find(el=> el.dataset.cat===cat); if(!li) return;
+    li.classList.add('editing');
+    const box=document.createElement('div'); box.style.marginTop='10px';
+    box.innerHTML=`<div class="row"><input id="wInput" class="grow" type="text" placeholder="${state.lang==='it'?'Aggiungi parola e premi Invio':'Add word and press Enter'}"/></div><div id="wChips" class="row" style="flex-wrap:wrap;gap:8px;margin-top:8px"></div>`;
+    li.appendChild(box);
+    const chips=$('#wChips');
+    function draw(){
+      chips.innerHTML='';
+      (state.custom[cat]||[]).forEach((w,i)=>{
+        const c=document.createElement('span'); c.className='chip'; c.innerHTML=`${w} <button class="btn danger" style="padding:4px 8px" aria-label="Rimuovi">×</button>`;
+        c.querySelector('button').onclick=()=>{ state.custom[cat].splice(i,1); LS.set('custom_'+state.lang,state.custom); draw(); renderCategories(); };
+        chips.appendChild(c);
       });
-      d.showModal();
     }
-    function toast(msg){modalInfo(`<p>${msg}</p>`);}
-
-    // Players
-    function renderPlayers(){
-      const ul=$('#playersList'); if(!ul) return; ul.innerHTML='';
-      state.players.forEach((p,idx)=>{
-        const li=document.createElement('li');
-        li.innerHTML=`<span>${p}</span>
-          <span class="row">
-            <button class="btn ghost" data-move="-1" title="Su">⬆️</button>
-            <button class="btn ghost" data-move="1" title="Giù">⬇️</button>
-            <button class="btn danger" title="Rimuovi">✕</button>
-          </span>`;
-        li.querySelector('[data-move="-1"]').onclick=()=>{if(idx>0){[state.players[idx-1],state.players[idx]]=[state.players[idx],state.players[idx-1]]; savePlayers(); renderPlayers();}};
-        li.querySelector('[data-move="1"]').onclick=()=>{if(idx<state.players.length-1){[state.players[idx+1],state.players[idx]]=[state.players[idx],state.players[idx+1]]; savePlayers(); renderPlayers();}};
-        li.querySelector('.btn.danger').onclick=()=>{state.players.splice(idx,1); savePlayers(); renderPlayers();};
-        ul.appendChild(li);
-      });
-      $('#playersCount').textContent=state.players.length;
-    }
-    function addPlayer(){const v=$('#playerInput').value.trim(); if(!v) return; if(state.players.includes(v)){ $('#playerInput').value=''; return;} state.players.push(v); $('#playerInput').value=''; savePlayers(); renderPlayers();}
-    function savePlayers(){LS.set('players',state.players)}
-
-    // Categories
-    const STOCK_ALL=()=>STOCK[state.lang];
-    function allCategories(){return {...STOCK_ALL(), ...(state.custom||{})}}
-    function renderCategories(){
-      const sel=$('#categorySelect'); if(!sel) return; sel.innerHTML='';
-      const cats=allCategories(); const ph=document.createElement('option');
-      ph.disabled=true; ph.selected=!state.category; ph.textContent=state.lang==='it'?'Seleziona una categoria':'Select a category'; sel.appendChild(ph);
-      Object.keys(cats).sort().forEach(cat=>{
-        const o=document.createElement('option'); o.value=cat; o.textContent=`${cat} (${cats[cat].length} ${T[state.lang].words})`; if(cat===state.category) o.selected=true; sel.appendChild(o)
-      });
-      updateSelectedCatView();
-    }
-    function updateSelectedCatView(){const el=$('#selCatTxt'); if(el) el.textContent=state.category||'—'}
-
-    function renderCatsPage(){
-      const customUl=$('#customCatsList'); const stockUl=$('#stockCatsList'); if(!customUl||!stockUl) return;
-      customUl.innerHTML=''; stockUl.innerHTML='';
-      const custom=state.custom||{}; const stock=STOCK_ALL();
-      Object.keys(custom).sort().forEach(cat=>{
-        const li=document.createElement('li');
-        li.innerHTML=`<span>${cat} <span class="muted">(${custom[cat].length})</span></span>
-                      <span class="row">
-                        <button class="btn ghost" data-edit>✏️</button>
-                        <button class="btn danger" data-del>✕</button>
-                      </span>`;
-        li.querySelector('[data-edit]').onclick=()=>openEditor(cat);
-        li.querySelector('[data-del]').onclick=()=>{ modalInfo(`<p>${state.lang==='it'?'Eliminare la categoria':"Delete category"} "<b>${cat}</b>"?</p>`,[
-          {label: state.lang==='it'?'Annulla':'Cancel', kind:'ghost'},
-          {label: state.lang==='it'?'Elimina':'Delete', kind:'danger', onClick:()=>{ delete custom[cat]; state.custom=custom; LS.set('custom_'+state.lang,custom); if(state.category===cat) state.category=''; renderCategories(); renderCatsPage(); }}
-        ]); };
-        customUl.appendChild(li);
-      });
-      Object.keys(stock).sort().forEach(cat=>{
-        const li=document.createElement('li'); li.innerHTML=`<span>${cat} <span class="muted">(${stock[cat].length})</span></span><span class="chip">Predefinita</span>`; stockUl.appendChild(li);
-      });
-    }
-    function parseWords(txt){return [...new Set(txt.split(/[\n,;]+|,(?=(?:[^"]*"[^"]*")*[^"]*$)/g).join('\n').split(/\s+/).map(s=>s.trim()).filter(Boolean))]}
-    function saveNewCategory(){
-      const name=$('#catName').value.trim(); if(!name) return;
-      const words=parseWords($('#catWords').value); if(words.length===0) return;
-      if(!state.custom) state.custom={}; if(!state.custom[name]) state.custom[name]=[];
-      state.custom[name].push(...words.filter(w=>!state.custom[name].includes(w)));
-      LS.set('custom_'+state.lang,state.custom);
-      $('#catName').value=''; $('#catWords').value='';
-      renderCategories(); renderCatsPage(); toast(state.lang==='it'?'Categoria salvata!':'Category saved!');
-    }
-    function openEditor(cat){
-      const ul=$('#customCatsList'); [...ul.children].forEach(li=>li.classList.remove('editing'));
-      const li=[...ul.children].find(el=> el.firstChild && el.firstChild.textContent.trim().startsWith(cat)); if(!li) return;
-      li.classList.add('editing');
-      const box=document.createElement('div'); box.style.marginTop='10px';
-      box.innerHTML=`<div class="row"><input id="wInput" class="grow" type="text" placeholder="${state.lang==='it'?'Aggiungi parola e premi Invio':'Add word and press Enter'}"/></div><div id="wChips" class="row" style="flex-wrap:wrap;gap:8px;margin-top:8px"></div>`;
-      li.appendChild(box);
-      const chips=$('#wChips');
-      function draw(){
-        chips.innerHTML='';
-        (state.custom[cat]||[]).forEach((w,i)=>{
-          const c=document.createElement('span'); c.className='chip'; c.innerHTML=`${w} <button class="btn danger" style="padding:4px 8px">×</button>`;
-          c.querySelector('button').onclick=()=>{state.custom[cat].splice(i,1); LS.set('custom_'+state.lang,state.custom); draw(); renderCategories();};
-          chips.appendChild(c);
-        });
+    draw();
+    box.querySelector('#wInput').addEventListener('keydown',e=>{
+      if(e.key==='Enter'){
+        const v=e.target.value.trim(); if(!v) return;
+        if(!state.custom[cat]) state.custom[cat]=[];
+        if(!state.custom[cat].includes(v)) state.custom[cat].push(v);
+        e.target.value=''; LS.set('custom_'+state.lang,state.custom); draw(); renderCategories();
       }
-      draw();
-      box.querySelector('#wInput').addEventListener('keydown',e=>{
-        if(e.key==='Enter'){
-          const v=e.target.value.trim(); if(!v) return;
-          if(!state.custom[cat].includes(v)) state.custom[cat].push(v);
-          e.target.value=''; LS.set('custom_'+state.lang,state.custom); draw(); renderCategories();
-        }
-      });
+    });
+  }
+
+  /* ====== Impostazioni ====== */
+  const nonneg=n=>Math.max(0,Number(n||0));
+  function readSettings(){
+    const spies=Math.max(1, Number($('#numSpies').value||1));
+    const fakes=nonneg($('#numFakeSpies').value);
+    const laws=nonneg($('#numLawyers').value);
+    const minutes=nonneg($('#roundMinutes').value); // nessun limite superiore
+    return {spies,fakes,laws,minutes};
+  }
+  function writeSettings(s){ $('#numSpies').value=s.spies; $('#numFakeSpies').value=s.fakes; $('#numLawyers').value=s.laws; $('#roundMinutes').value=s.minutes; renderSummaryPill(); }
+  function saveSettings(){ state.settings=readSettings(); LS.set('settings',state.settings); toast(T[state.lang].saved); renderSummaryPill(); }
+  function renderSummaryPill(){ const s=state.settings; $('#summaryPill').textContent=`🕵️ ${s.spies} · 🎭 ${s.fakes} · ⚖️ ${s.laws} · ⏱️ ${s.minutes}′`; }
+
+  /* ====== Legenda ruoli (fuori card) ====== */
+  function renderRolesLegend(){
+    const box=$('#rolesLegendBox'); if(!box) return;
+    const t=T[state.lang];
+    const items=[
+      {badge:'b-spy', label: state.lang==='it'?'Spia':'Spy', desc: state.lang==='it'?'Non conosce la parola. Gioca con l’Avvocato.':'Doesn’t know the word. Plays with the Lawyer.'},
+      {badge:'b-law', label: state.lang==='it'?'Avvocato':'Lawyer', desc: state.lang==='it'?'Conosce parola e identità della Spia.':'Knows the word and who the Spy is.'},
+      {badge:'b-fake', label: state.lang==='it'?'Finta Spia':'Fake Spy', desc: state.lang==='it'?'Conosce la parola ma gioca da solə. Se eliminano qualcun altro, vince da solə.':'Knows the word but plays solo. If anyone else is eliminated, wins alone.'},
+      {badge:'b-civ', label: state.lang==='it'?'Civile':'Civilian', desc: state.lang==='it'?'Conosce la parola. Vuole smascherare Spia o Finta Spia.':'Knows the word. Wants to catch Spy or Fake Spy.'},
+    ];
+    box.innerHTML = items.map(it=>`
+      <div class="role-item">
+        <span class="badge ${it.badge}">${it.label}</span>
+        <p class="muted" style="margin:2px 0 0">${it.desc}</p>
+      </div>
+    `).join('');
+  }
+
+  /* ====== Gioco ====== */
+  const roleLabel=(r)=> state.lang==='it' ? (r===Role.spy?'Spia':r===Role.fake?'Finta Spia':r===Role.law?'Avvocato':'Civile') : (r===Role.spy?'Spy':r===Role.fake?'Fake Spy':r===Role.law?'Lawyer':'Civilian');
+
+  function startGame(){
+    const s=readSettings();
+    const cats=allCategories(); const words=(state.category && cats[state.category])?cats[state.category]:[];
+    if(state.players.length<3) return toast(T[state.lang].errs_need3);
+    if(s.spies+s.fakes+s.laws>=state.players.length) return toast(T[state.lang].errs_roles);
+    if(!state.category||words.length===0) return toast(T[state.lang].errs_cat);
+
+    state.settings=s; LS.set('settings',s); LS.set('category',state.category);
+
+    // Scegli parola & mescola
+    const secret=words[(Math.random()*words.length)|0];
+    const order=[...state.players]; for(let i=order.length-1;i>0;i--){const j=(Math.random()*(i+1))|0; [order[i],order[j]]=[order[j],order[i]]}
+    const roles=[]; for(let i=0;i<s.spies;i++) roles.push(Role.spy); for(let i=0;i<s.fakes;i++) roles.push(Role.fake); for(let i=0;i<s.laws;i++) roles.push(Role.law);
+    while(roles.length<order.length) roles.push(Role.civ);
+    for(let i=roles.length-1;i>0;i--){const j=(Math.random()*(i+1))|0; [roles[i],roles[j]]=[roles[j],roles[i]]}
+    const spyNames=roles.map((r,i)=> (r===Role.spy)?order[i]:null).filter(Boolean); // solo Spia vera
+    state.game={order,roles,secret,spyNames,index:0,timer:null,time:s.minutes*60,votes:{},finished:false};
+    showView('view-roles'); showNextRole(); setFirstQuestion();
+  }
+
+  function showNextRole(){
+    const g=state.game; if(!g) return;
+    if(g.index>=g.order.length){ showView('view-game'); startTimer(); return; }
+    const name=g.order[g.index];
+    $('#currentPlayerLbl').innerHTML = (state.lang==='it'?'Nome del giocatore: ':'Player: ') + `<b class="role-name">${name}</b>`;
+    const card=$('#roleCard'); card.classList.remove('revealed'); card.style.pointerEvents='auto';
+    card.innerHTML=`<span class="muted">${T[state.lang].clickRole}</span>`;
+    $('#nextPlayer').disabled=true;
+    let revealed=false;
+    function reveal(){
+      if(revealed) return; revealed=true;
+      const role=g.roles[g.index];
+      card.classList.add('revealed');
+      let text='';
+      if(role===Role.civ) text=T[state.lang].civText(g.secret);
+      else if(role===Role.spy) text=T[state.lang].spyText();
+      else if(role===Role.fake) text=T[state.lang].fakeText(g.secret);
+      else if(role===Role.law) text=T[state.lang].lawyerText(g.secret, g.spyNames.join(', '));
+      card.innerHTML=`<div style="text-align:center"><p style="font-size:1.12rem">${text}</p></div>`;
+      $('#nextPlayer').disabled=false; card.style.pointerEvents='none'; card.onclick=null; card.onkeydown=null;
     }
+    card.onclick=reveal; card.onkeydown=e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); reveal(); } };
+    card.onmousemove=e=>{ const r=card.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width*2-1; const y=(e.clientY-r.top)/r.height*2-1; card.style.transform=`rotateX(${(-y*6).toFixed(2)}deg) rotateY(${(x*6).toFixed(2)}deg)` };
+    card.onmouseleave=()=>{ card.style.transform='rotateX(0) rotateY(0)' };
+    $('#nextPlayer').onclick=()=>{ g.index++; showNextRole(); };
+  }
 
-    // Settings
-    const clamp=(n,min,max)=>Math.max(min,Math.min(max,Number(n||0)));
-    function readSettings(){const spies=clamp($('#numSpies').value,1,4); const fakes=clamp($('#numFakeSpies').value,0,4); const laws=clamp($('#numLawyers').value,0,2); const minutes=clamp($('#roundMinutes').value,1,20); return {spies,fakes,laws,minutes}};
-    function writeSettings(s){$('#numSpies').value=s.spies; $('#numFakeSpies').value=s.fakes; $('#numLawyers').value=s.laws; $('#roundMinutes').value=s.minutes; renderSummaryPill();}
-    function saveSettings(){state.settings=readSettings(); LS.set('settings',state.settings); toast(T[state.lang].saved); renderSummaryPill();}
-    function renderSummaryPill(){const s=state.settings; $('#summaryPill').textContent=`🕵️ ${s.spies} · 🎭 ${s.fakes} · ⚖️ ${s.laws} · ⏱️ ${s.minutes}′`; }
+  // Prima domanda (random)
+  function setFirstQuestion(){
+    const g=state.game; if(!g) return;
+    const pick=g.order[(Math.random()*g.order.length)|0];
+    $('#firstQuestionHint').innerHTML = (state.lang==='it'?'Inizia a fare una domanda: ':'First question by: ') + `<b>${pick}</b>`;
+  }
 
-    // Game
-    function startGame(){
-      // preflight
-      const s=readSettings();
-      const cats=allCategories(); const words=(state.category && cats[state.category])?cats[state.category]:[];
-      if(state.players.length<3){ scrollToSection('players'); return toast(T[state.lang].errs_need3); }
-      if(s.spies+s.fakes+s.laws>=state.players.length){ scrollToSection('settings'); return toast(T[state.lang].errs_roles); }
-      if(!state.category||words.length===0){ scrollToSection('cats'); return toast(T[state.lang].errs_cat); }
+  // Timer
+  const fmt=s=>{ const m=Math.floor(s/60).toString().padStart(2,'0'); const sec=(s%60).toString().padStart(2,'0'); return `${m}:${sec}` };
+  function startTimer(){ const g=state.game; if(!g) return; $('#timer').textContent=fmt(g.time); clearInterval(g.timer); g.timer=setInterval(()=>{ g.time=Math.max(0,g.time-1); $('#timer').textContent=fmt(g.time); if(g.time<=0){ clearInterval(g.timer); onTimeUp(); } },1000) }
+  function pauseTimer(){ const g=state.game; if(!g) return; if(g.timer){ clearInterval(g.timer); g.timer=null; $('#pauseTimer').innerHTML='▶️ '+(state.lang==='it'?'Riprendi':'Resume'); } else { startTimer(); $('#pauseTimer').innerHTML='⏸️ '+T[state.lang].pause; } }
+  function onTimeUp(){ toast(T[state.lang].timerUp); goVote(); }
 
-      state.settings=s; LS.set('settings',s); LS.set('category',state.category);
+  // Voting
+  function goVote(){
+    showView('view-vote');
+    const g=state.game; g.votes={};
+    const ul=$('#voteList'); ul.innerHTML='';
+    g.order.forEach(p=>{
+      g.votes[p]=0;
+      const li=document.createElement('li');
+      li.innerHTML=`<strong>${p}</strong>
+        <span class="row">
+          <button class="btn ghost" data-dec aria-label="-1">−</button>
+          <span class="chip" data-count>0</span>
+          <button class="btn secondary" data-inc aria-label="Vota">Vota</button>
+        </span>`;
+      const countEl=li.querySelector('[data-count]');
+      const inc=()=>{ g.votes[p]++; countEl.textContent=g.votes[p]; };
+      const dec=()=>{ g.votes[p]=Math.max(0,g.votes[p]-1); countEl.textContent=g.votes[p]; };
+      li.querySelector('[data-inc]').onclick=inc; li.querySelector('[data-dec]').onclick=dec;
+      ul.appendChild(li);
+    });
+  }
 
-      // pick word + shuffle players/roles
-      const secret=words[Math.floor(Math.random()*words.length)];
-      const order=[...state.players]; for(let i=order.length-1;i>0;i--){const j=(Math.random()*(i+1))|0; [order[i],order[j]]=[order[j],order[i]]}
-      const roles=[]; for(let i=0;i<s.spies;i++) roles.push(Role.spy); for(let i=0;i<s.fakes;i++) roles.push(Role.fake); for(let i=0;i<s.laws;i++) roles.push(Role.law);
-      while(roles.length<order.length) roles.push(Role.civ);
-      for(let i=roles.length-1;i>0;i--){const j=(Math.random()*(i+1))|0; [roles[i],roles[j]]=[roles[j],roles[i]]}
-      const spyNames=roles.map((r,i)=> (r===Role.spy||r===Role.fake)?order[i]:null).filter(Boolean);
-      state.game={order,roles,secret,spyNames,index:0,timer:null,time:s.minutes*60,votes:{},finished:false, revealed:false};
+  function showResults(){
+    const g=state.game; if(!g) return; showView('view-results');
+    const arr=Object.entries(g.votes).sort((a,b)=>b[1]-a[1]);
+    let html=''; html+='<ul class="list">'+arr.map(([name,c])=>`<li><span>${name}</span><span class="chip">🗳️ ${c}</span></li>`).join('')+'</ul>';
+    if(!arr.length || arr[0][1]===0){ html+=`<p class="muted" style="margin-top:10px">${state.lang==='it'?'Nessun voto espresso.':'No votes cast.'}</p>`; $('#resultsBox').innerHTML=html; return; }
+    // tie-break
+    const topVal=arr[0][1]; const topNames=arr.filter(([_,c])=>c===topVal).map(([n])=>n);
+    const eliminated = topNames.length>1 ? topNames[(Math.random()*topNames.length)|0] : topNames[0];
+    const idx=g.order.indexOf(eliminated); const role=g.roles[idx];
 
-      showView('view-roles'); showNextRole();
+    html+=`<p style="margin-top:12px">${T[state.lang].eliminated(eliminated,roleLabel(role))}</p>`;
+
+    // Esiti corretti: Spy+Lawyer team; Fake solo
+    if(role===Role.fake){
+      html+=`<p class="chip" style="margin-top:10px;background:var(--ok);color:#0b0f19">✅ ${T[state.lang].everyoneBeatsFake}</p>`;
+      confetti('civ');
+    }else if(role===Role.spy){
+      html+=`<p class="chip" style="margin-top:10px;background:var(--ok);color:#0b0f19">✅ ${T[state.lang].civsWin}</p>`;
+      confetti('civ');
+    }else{
+      html+=`<p class="chip" style="margin-top:10px;background:var(--danger);color:#fff">❌ ${T[state.lang].fakeWins}</p>`;
+      confetti('spy');
     }
+    $('#resultsBox').innerHTML=html;
 
-    function showNextRole(){
-      const g=state.game; if(!g) return;
-      if(g.index>=g.order.length){ showView('view-game'); startTimer(); setFirstQuestion(); return; }
-      const name=g.order[g.index];
-      // “Nome del giocatore” in singolare, grande e bold
-      $('#currentPlayerLbl').innerHTML = (state.lang==='it'?'Nome del giocatore: ':'Player: ') + `<span class="role-name">${name}</span>`;
-      const card=$('#roleCard'); card.classList.remove('revealed'); g.revealed=false;
-      card.innerHTML=`<div style="text-align:center">
-        <p class="role-title muted">${T[state.lang].clickRole}</p>
-        <p class="muted" style="margin-top:8px">${T[state.lang].rolesLegend}: ${T[state.lang].legendHTML}</p>
-      </div>`;
-      $('#nextPlayer').disabled=true;
-
-      function reveal(){
-        if(g.revealed) return; // niente doppio reveal
-        const role=g.roles[g.index];
-        g.revealed=true;
-        card.classList.add('revealed');
-        // testo con parole/ruolo in grassetto e badge colore
-        let desc='';
-        if(role===Role.civ) desc=T[state.lang].civText(g.secret);
-        else if(role===Role.spy) desc=T[state.lang].spyText();
-        else if(role===Role.fake) desc=T[state.lang].fakeText(g.secret);
-        else if(role===Role.law) desc=T[state.lang].lawyerText(g.secret,g.spyNames.join(', '));
-        card.innerHTML=`<div style="text-align:center">
-          <div class="badge ${roleBadgeCls(role)}" style="margin-bottom:8px">${roleLabel(role,state.lang)}</div>
-          <p style="font-size:1.12rem">${desc}</p>
-          <p class="muted" style="margin-top:10px;font-size:.9rem">${T[state.lang].rolesLegend}: ${T[state.lang].legendHTML}</p>
-        </div>`;
-        $('#nextPlayer').disabled=false;
-        card.onclick=null; card.onkeydown=null;
-      }
-      card.onclick=reveal; card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();reveal();}};
-      card.onmousemove=e=>{const r=card.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width*2-1; const y=(e.clientY-r.top)/r.height*2-1; card.style.transform=`rotateX(${(-y*6).toFixed(2)}deg) rotateY(${(x*6).toFixed(2)}deg)`};
-      card.onmouseleave=()=>{card.style.transform='rotateX(0) rotateY(0)'};
-
-      $('#nextPlayer').onclick=()=>{
-        if(!g.revealed){ return toast(T[state.lang].mustReveal); }
-        g.index++; showNextRole();
-      };
-    }
-
-    // Timer
-    const fmt=s=>{const m=Math.floor(s/60).toString().padStart(2,'0'); const sec=(s%60).toString().padStart(2,'0'); return `${m}:${sec}`};
-    function startTimer(){const g=state.game; if(!g) return; $('#timer').textContent=fmt(g.time); clearInterval(g.timer); g.timer=setInterval(()=>{g.time=Math.max(0,g.time-1); $('#timer').textContent=fmt(g.time); if(g.time<=0){clearInterval(g.timer); onTimeUp();}},1000)}
-    function pauseTimer(){const g=state.game; if(!g) return; if(g.timer){clearInterval(g.timer); g.timer=null; $('#pauseTimer').innerHTML='▶️ '+(state.lang==='it'?'Riprendi':'Resume');} else {startTimer(); $('#pauseTimer').innerHTML='⏸️ '+T[state.lang].pause;}}
-    function onTimeUp(){toast(T[state.lang].timerUp); goVote();}
-
-    // “La prima domanda la fa: …”
-    function setFirstQuestion(){
-      const g=state.game; if(!g) return;
-      const pick=g.order[(Math.random()*g.order.length)|0];
-      $('#firstQuestionHint').innerHTML = `La prima domanda la fa: <b>${pick}</b>`;
-    }
-
-    // Voting
-    function goVote(){
-      showView('view-vote');
-      const g=state.game; g.votes={}; const ul=$('#voteList'); ul.innerHTML='';
-      g.order.forEach(p=>{
-        const li=document.createElement('li');
-        li.innerHTML=`<span>${p}</span>
-          <span class="row">
-            <button class="btn secondary" data-vote="+">Vota</button>
-            <span class="chip" data-count>🗳️ 0</span>
-            <button class="btn ghost" data-vote="-">−</button>
-          </span>`;
-        const count=li.querySelector('[data-count]');
-        const update=()=>{count.textContent='🗳️ '+(g.votes[p]||0)}
-        li.querySelector('[data-vote="+"]').onclick=()=>{g.votes[p]=(g.votes[p]||0)+1; update();};
-        li.querySelector('[data-vote="-"]').onclick=()=>{g.votes[p]=Math.max(0,(g.votes[p]||0)-1); update();};
-        ul.appendChild(li);
-      });
-    }
-
-    function showResults(){
-      const g=state.game; if(!g) return; showView('view-results');
-      const entries=Object.entries(g.votes);
-      const arr=entries.length?entries.sort((a,b)=>b[1]-a[1]):[];
-      let html='';
-      html+='<ul class="list">'+g.order.map(name=>{
-        const c=g.votes[name]||0;
-        return `<li><span>${name}</span><span class="chip">🗳️ ${c}</span></li>`;
-      }).join('')+'</ul>';
-
-      if(arr.length===0 || (arr[0][1]||0)===0){
-        html+=`<p class="muted" style="margin-top:10px">${state.lang==='it'?'Nessun voto espresso.':'No votes cast.'}</p>`;
-        $('#resultsBox').innerHTML=html; return;
-      }
-
-      // gestisci ex-aequo
-      const max=arr[0][1];
-      const topTied=arr.filter(x=>x[1]===max).map(x=>x[0]);
-      const chosen=topTied[(Math.random()*topTied.length)|0];
-
-      const idx=g.order.indexOf(chosen);
-      const role=g.roles[idx];
-      html+=`<p style="margin-top:12px">${T[state.lang].eliminated(chosen,roleLabel(role,state.lang))}</p>`;
-      const spyTeam=(role===Role.spy||role===Role.fake);
-      html+=`<p class="chip" style="margin-top:10px; ${spyTeam?'background:var(--ok);color:#0d0f1a':'background:var(--danger);color:#fff'}">${spyTeam?'✅':'❌'} ${spyTeam?T[state.lang].civsWin:T[state.lang].spiesWin}</p>`;
-      $('#resultsBox').innerHTML=html;
-      confetti(spyTeam?'civ':'spy');
-    }
-
-    let revealedListShown=false;
-    function revealAll(){
-      const g=state.game; if(!g || revealedListShown) return;
+    // Rivela tutti i ruoli (una sola volta → poi sparisce)
+    const btn=$('#revealAll');
+    btn.style.display='inline-flex';
+    btn.onclick=()=>{
       const list=g.order.map((p,i)=>({name:p,role:g.roles[i]}));
-      const rows=list.map(o=>`<li><span>${o.name}</span><span class="chip ${roleBadgeCls(o.role)}">${roleLabel(o.role,state.lang)}</span></li>`).join('');
+      const rows=list.map(o=>`<li><span>${o.name}</span><span class="chip">${roleLabel(o.role)}</span></li>`).join('');
       $('#resultsBox').innerHTML+=`<div style="margin-top:10px"><ul class="list">${rows}</ul></div>`;
-      revealedListShown=true;
-    }
-    function restart(){state.game=null; revealedListShown=false; showView('view-home')}
+      btn.style.display='none';
+    };
+  }
+  function restart(){ state.game=null; showView('view-home'); $('#revealAll').style.display='none'; }
 
-    // Lang switch
-    function loadCustomForLang(lang){ state.custom = LS.get('custom_'+lang,{}); }
-    function switchLang(lang){ state.lang = lang; LS.set('lang',lang); loadCustomForLang(lang); i18nRefresh(); }
+  /* ====== Nav + UI ====== */
+  function showView(id){
+    $$('[data-view]').forEach(s=>s.classList.remove('show'));
+    const el=document.getElementById(id);
+    if(el){ el.classList.add('show'); revealOnScroll(); window.scrollTo({top:0,behavior:'smooth'}); }
+  }
+  function revealOnScroll(){
+    const cards=$$('.card');
+    if(!('IntersectionObserver' in window)){cards.forEach(c=>c.classList.add('in')); return;}
+    const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in'); io.unobserve(e.target)}})},{rootMargin:'0px 0px -10% 0px',threshold:.12});
+    cards.forEach(c=>io.observe(c));
+  }
+  // Collapsible: chiusi di default + animazione
+  function setupCollapsibles(){
+    $$('[data-collapsible]').forEach(c=>{
+      const body=c.querySelector('.card-body'); const btn=c.querySelector('[data-collapse]');
+      const setH=()=>c.style.setProperty('--h', body.scrollHeight+'px');
+      const toggle=()=>{ setH(); c.classList.toggle('open'); };
+      btn.addEventListener('click',toggle);
+      // chiusi all'avvio
+      c.classList.remove('open'); setH();
+      // sezione Players la apro quando aggiungo il primo nome
+    });
+  }
 
-    // Nav + FX + Accordion
-    function showView(id){$$('[data-view]').forEach(s=>s.classList.remove('show')); const el=document.getElementById(id); if(el){ el.classList.add('show'); revealOnScroll(); window.scrollTo({top:0,behavior:'smooth'}); }}
-    function revealOnScroll(){const cards=$$('.card'); if(!('IntersectionObserver' in window)){cards.forEach(c=>c.classList.add('in')); return;} const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting) e.target.classList.add('in');});},{rootMargin:'0px 0px -10% 0px',threshold:.1}); cards.forEach(c=>io.observe(c));}
-    function addRipples(){document.body.addEventListener('click',e=>{const b=e.target.closest('.btn'); if(!b) return; const r=b.getBoundingClientRect(); const d=document.createElement('span'); const size=Math.max(r.width,r.height); d.style.cssText=`position:absolute;left:${e.clientX-r.left-size/2}px;top:${e.clientY-r.top-size/2}px;width:${size}px;height:${size}px;border-radius:50%;background:rgba(255,255,255,.25);transform:scale(0);opacity:.7;pointer-events:none;transition:transform .4s ease,opacity .6s;`; b.appendChild(d); requestAnimationFrame(()=>d.style.transform='scale(1.6)'); setTimeout(()=>{d.style.opacity='0'; setTimeout(()=>d.remove(),300);},250);});}
-    function toggleAcc(which){
-      const body=$('#acc-'+which);
-      body.classList.toggle('collapsed');
-    }
-    function scrollToSection(which){
-      // espandi e scrolla alla sezione giusta
-      const head=$(`[data-acc="${which}"]`); const body=$('#acc-'+which);
-      if(body.classList.contains('collapsed')) body.classList.remove('collapsed');
-      showView('view-home');
-      setTimeout(()=> head?.scrollIntoView({behavior:'smooth',block:'start'}), 100);
-    }
+  /* ====== Confetti ====== */
+  function confetti(type){const cvs=$('#fxConfetti'); const ctx=cvs.getContext('2d'); const W=cvs.width=innerWidth, H=cvs.height=innerHeight; const colors=type==='civ'?['#67e8f9','#60a5fa','#a78bfa','#ffffff']:['#ef476f','#ff9aa5','#ffd1d6','#ffffff']; const parts=Array.from({length:120},()=>({x:Math.random()*W,y:-20,vx:(Math.random()-.5)*2,vy:2+Math.random()*2,size:4+Math.random()*6,rot:Math.random()*360,color:colors[(Math.random()*colors.length)|0],life:60+Math.random()*60})); let anim; function frame(){ctx.clearRect(0,0,W,H); parts.forEach(p=>{p.x+=p.vx; p.y+=p.vy; p.vy+=.02; p.rot+=3; p.life--; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180); ctx.fillStyle=p.color; ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size); ctx.restore();}); if(parts.some(p=>p.life>0 && p.y<H+20)) anim=requestAnimationFrame(frame); else cancelAnimationFrame(anim);} frame(); setTimeout(()=>ctx.clearRect(0,0,W,H),2600);}
 
-    // Confetti
-    function confetti(type){const cvs=$('#fxConfetti'); const ctx=cvs.getContext('2d'); const W=cvs.width=innerWidth, H=cvs.height=innerHeight; const colors=type==='civ'?['#67e8f9','#60a5fa','#a78bfa','#ffffff']:['#ef476f','#ff9aa5','#ffd1d6','#ffffff']; const parts=Array.from({length:110},()=>({x:Math.random()*W,y:-20,vx:(Math.random()-.5)*2,vy:2+Math.random()*2,size:4+Math.random()*6,rot:Math.random()*360,color:colors[(Math.random()*colors.length)|0],life:60+Math.random()*60})); let anim; function frame(){ctx.clearRect(0,0,W,H); parts.forEach(p=>{p.x+=p.vx; p.y+=p.vy; p.vy+=.02; p.rot+=3; p.life--; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180); ctx.fillStyle=p.color; ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size); ctx.restore();}); if(parts.some(p=>p.life>0 && p.y<H+20)) anim=requestAnimationFrame(frame); else cancelAnimationFrame(anim);} frame(); setTimeout(()=>ctx.clearRect(0,0,W,H),2500);}
+  /* ====== PWA (facoltativo) ====== */
+  function registerPWA(){ if('serviceWorker' in navigator){ navigator.serviceWorker.register('/sw.js').catch(()=>{});} const link=document.createElement('link'); link.rel='manifest'; link.href='/manifest.webmanifest'; document.head.appendChild(link); }
 
-    // PWA
-    function registerPWA(){ if('serviceWorker' in navigator){ navigator.serviceWorker.register('/sw.js').catch(()=>{});} const link=document.createElement('link'); link.rel='manifest'; link.href='/manifest.webmanifest'; document.head.appendChild(link);}    
+  /* ====== Eventi ====== */
+  // Splash: scompare veramente (poi rimosso dal DOM)
+  function hideSplash(){ const s=$('#splash'); if(!s) return; s.classList.add('hide'); setTimeout(()=> s.remove(), 700); }
 
-    // Events
-    $('#themeBtn').onclick=cycleTheme; 
-    $('#lang').onchange=e=>switchLang(e.target.value);
-    $('#goStart').onclick=()=>showView('view-home'); $('#goHow').onclick=()=>$('#modalHelp').showModal();
-    $('#homeBtn').onclick=()=>showView('view-landing');
-    $('#titleBtn').onclick=()=>showView('view-landing');
+  $('#themeBtn').onclick=cycleTheme;
+  $('#lang').onchange=e=>{ state.lang = e.target.value; LS.set('lang',state.lang); state.custom = LS.get('custom_'+state.lang,{}) || {}; i18nRefresh(); };
+  $('#titleBtn').onclick=()=>showView('view-landing');
+  $('#goStart').onclick=()=>showView('view-home');
+  $('#goHow').onclick=()=>$('#modalHelp').showModal();
+  $('#helpBtn').onclick=()=>$('#modalHelp').showModal();
+  $('#closeHelp').onclick=()=>$('#modalHelp').close();
 
-    // Accordion heads
-    $$('[data-acc]').forEach(h=> h.addEventListener('click',()=> toggleAcc(h.getAttribute('data-acc'))));
+  $('#addPlayer').onclick=()=>{ addPlayer(); const c=$('#card-players'); if(c && !c.classList.contains('open')) { c.classList.add('open'); c.style.setProperty('--h', c.querySelector('.card-body').scrollHeight+'px'); }};
+  $('#playerInput').addEventListener('keydown',e=>{if(e.key==='Enter'){ $('#addPlayer').click(); }});
+  $('#shufflePlayers').onclick=()=>{state.players.sort(()=>Math.random()-.5); savePlayers(); renderPlayers();};
+  $('#clearPlayers').onclick=()=>{ if(confirm(state.lang==='it'?'Svuotare la lista giocatori?':'Clear players list?')){ state.players=[]; savePlayers(); renderPlayers(); } };
 
-    $('#addPlayer').onclick=addPlayer; $('#playerInput').addEventListener('keydown',e=>{if(e.key==='Enter') addPlayer();});
-    $('#shufflePlayers').onclick=()=>{state.players.sort(()=>Math.random()-.5); savePlayers(); renderPlayers();};
-    $('#clearPlayers').onclick=()=>{ modalInfo(`<p>${state.lang==='it'?'Svuotare la lista giocatori?':'Clear players list?'}</p>`,[
-      {label: state.lang==='it'?'Annulla':'Cancel', kind:'ghost'},
-      {label: state.lang==='it'?'Svuota':'Clear', kind:'danger', onClick:()=>{ state.players=[]; savePlayers(); renderPlayers(); }}
-    ]); };
+  $('#categorySelect').onchange=e=>{state.category=e.target.value; LS.set('category',state.category); updateSelectedCatView();};
+  $('#openCats').onclick=()=>showView('view-cats');
+  $('#backHomeFromCats').onclick=()=>showView('view-home');
+  $('#saveCategory').onclick=saveNewCategory;
 
-    $('#categorySelect').onchange=e=>{state.category=e.target.value; LS.set('category',state.category); updateSelectedCatView();};
-    $('#openCats').onclick=()=>showView('view-cats'); $('#saveCategory').onclick=saveNewCategory; $('#backHomeFromCats').onclick=()=>showView('view-home');
-    $$('[data-step]').forEach(btn=> btn.onclick=()=>{const id=btn.getAttribute('data-step'); const delta=Number(btn.getAttribute('data-delta')); const el=document.getElementById(id); el.value=clamp(Number(el.value)+delta, Number(el.min), Number(el.max)); renderSummaryPill();});
-    $('#saveSettings').onclick=saveSettings;
-    $('#helpBtn').onclick=()=>$('#modalHelp').showModal(); $('#closeHelp').onclick=()=>$('#modalHelp').close(); $('#modalClose').onclick=()=>$('#modal').close();
-    $('#startGameMain').onclick=startGame; $('#howToBtn').onclick=()=>$('#modalHelp').showModal(); $('#pauseTimer').onclick=pauseTimer; $('#endRound').onclick=()=>onTimeUp(); $('#seeResults').onclick=showResults; $('#revealAll').onclick=revealAll; $('#restart').onclick=restart;
+  $$('[data-step]').forEach(btn=> btn.onclick=()=>{const id=btn.getAttribute('data-step'); const delta=Number(btn.getAttribute('data-delta')); const el=document.getElementById(id); el.value=Math.max(Number(el.min||0), Number(el.value||0)+delta); renderSummaryPill();});
+  $('#saveSettings').onclick=saveSettings;
 
-    // Init
-    (function init(){
-      setTimeout(()=>$('#splash').classList.add('hide'), 600);
-      $('#themeBtn').textContent=state.theme==='auto'?'🌓':state.theme==='light'?'☀️':'🌙';
-      applyTheme(); loadCustomForLang(state.lang); $('#lang').value=state.lang; writeSettings(state.settings);
-      i18nRefresh(); addRipples(); showView('view-landing'); registerPWA();
-      // Default: giocatori e impostazioni aperti, categorie aperte
-      ['players','cats','settings'].forEach(k=>$('#acc-'+k).classList.remove('collapsed'));
-    })();
+  $('#startGameMain').onclick=startGame; $('#howToBtn').onclick=()=>$('#modalHelp').showModal();
+  $('#pauseTimer').onclick=pauseTimer; $('#endRound').onclick=()=>onTimeUp();
+  $('#seeResults').onclick=showResults; $('#restart').onclick=restart;
+
+  function addRipples(){document.body.addEventListener('click',e=>{const b=e.target.closest('.btn'); if(!b) return; const r=b.getBoundingClientRect(); const d=document.createElement('span'); const size=Math.max(r.width,r.height); d.style.cssText=`position:absolute;left:${e.clientX-r.left-size/2}px;top:${e.clientY-r.top-size/2}px;width:${size}px;height:${size}px;border-radius:50%;background:rgba(255,255,255,.25);transform:scale(0);opacity:.7;pointer-events:none;transition:transform .4s ease,opacity .6s;`; b.appendChild(d); requestAnimationFrame(()=>d.style.transform='scale(1.6)'); setTimeout(()=>{d.style.opacity='0'; setTimeout(()=>d.remove(),300);},250);});}
+
+  /* ====== Init ====== */
+  (function init(){
+    setTimeout(hideSplash, 600); // il splash sparisce e viene rimosso
+    $('#themeBtn').textContent=state.theme==='auto'?'🌓':state.theme==='light'?'☀️':'🌙';
+    applyTheme(); registerPWA();
+    $('#lang').value=state.lang;
+    i18nRefresh(); writeSettings(state.settings); setupCollapsibles(); addRipples();
+    showView('view-landing');
+  })();
   </script>
 
   <!--
-    ====== PWA files da aggiungere alla root del sito ======
-    1) /manifest.webmanifest
-    2) /sw.js
-    3) /icons/icon-192.png, /icons/icon-512.png, /icons/maskable-512.png (usa le tue icone brand)
-
-    --- manifest.webmanifest ---
-    {
-      "name": "Gioco Spia",
-      "short_name": "Spia",
-      "description": "Party game mobile con Spia, Finta Spia, Avvocato.",
-      "start_url": "/index.html",
-      "scope": "/",
-      "display": "standalone",
-      "background_color": "#0d0f1a",
-      "theme_color": "#0d0f1a",
-      "icons": [
-        { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-        { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
-        { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
-      ]
-    }
-
-    --- sw.js ---
-    const CACHE_NAME='spia-v1';
-    const ASSETS=['/','/index.html'];
-    self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()))});
-    self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k))))); self.clients.claim()});
-    self.addEventListener('fetch',e=>{const req=e.request; e.respondWith(caches.match(req).then(res=>res||fetch(req).then(r=>{const copy=r.clone(); caches.open(CACHE_NAME).then(c=>c.put(req,copy)); return r;}).catch(()=>caches.match('/index.html'))))});
+    ====== PWA files da aggiungere alla root del sito (facoltativi) ======
+    /manifest.webmanifest
+    /sw.js
   -->
 </body>
 </html>
