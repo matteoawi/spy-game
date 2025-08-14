@@ -3,421 +3,1399 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0d0f1a" id="metaTheme" />
+  <meta name="theme-color" content="#0a0b14" id="metaTheme" />
   <title>Spia — Edizione Pro</title>
   <meta name="description" content="Party game mobile. Ruoli: Spia, Finta Spia, Avvocato, Civile. Timer, votazioni multi-turno, categorie personalizzate. PWA." />
 
   <style>
-    /* ====== Reset & Tokens ====== */
-    *,*::before,*::after{box-sizing:border-box}
-    :root{
-      --bg:#0d0f1a; --surface:#111425; --surface-2:#0b1020; --line:rgba(255,255,255,.08);
-      --fg:#e8edf7; --muted:#a9b2c7; --primary:#60a5fa; --accent:#67e8f9; --ok:#34d399; --danger:#ef476f;
-      --shadow:0 10px 30px rgba(0,0,0,.45); --ring:0 0 0 3px rgba(96,165,250,.35);
-      --r-lg:22px; --r-md:14px; --r-sm:10px; --space:clamp(16px,4vw,24px);
-      --content:min(100vw - 2*var(--space), 880px);
-      /* Colori ruoli */
-      --c-spy:#ef476f;   --c-fake:#f59e0b;  --c-law:#34d399;  --c-civ:#60a5fa;
+    /* ====== Modern Reset & Design Tokens ====== */
+    *, *::before, *::after {
+      box-sizing: border-box;
     }
-    [data-theme="light"]:root{
-      --bg:#f8fafc; --surface:#ffffff; --surface-2:#eef2ff; --line:rgba(13,15,26,.08);
-      --fg:#0d1224; --muted:#64748b; --primary:#2563eb; --accent:#06b6d4; --ok:#16a34a; --danger:#dc2626;
-      --shadow:0 8px 28px rgba(2,6,23,.08); --ring:0 0 0 3px rgba(37,99,235,.22);
-      --c-spy:#dc2626; --c-fake:#d97706; --c-law:#16a34a; --c-civ:#2563eb;
+    
+    :root {
+      /* Dark theme (default) */
+      --bg: #0a0b14;
+      --bg-secondary: #0f1019;
+      --surface: #151621;
+      --surface-elevated: #1a1b26;
+      --surface-glass: rgba(21, 22, 33, 0.8);
+      --line: rgba(255, 255, 255, 0.06);
+      --line-strong: rgba(255, 255, 255, 0.12);
+      
+      --text-primary: #e8edf7;
+      --text-secondary: #a9b2c7;
+      --text-muted: #6b7280;
+      
+      --primary: #60a5fa;
+      --primary-hover: #3b82f6;
+      --accent: #67e8f9;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      
+      /* Role colors */
+      --role-spy: #ef4444;
+      --role-fake: #f59e0b;
+      --role-lawyer: #10b981;
+      --role-civilian: #60a5fa;
+      
+      /* Advanced shadows */
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
+      --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.25);
+      --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.35);
+      --shadow-xl: 0 24px 96px rgba(0, 0, 0, 0.45);
+      
+      /* Glass effects */
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --glass-blur: blur(12px);
+      
+      /* Spacing & sizing */
+      --space-xs: 0.5rem;
+      --space-sm: 0.75rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --space-2xl: 3rem;
+      
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-full: 9999px;
+      
+      --content-max: 900px;
+      
+      /* Animation easing */
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
-    html,body{height:100%}
-    body{margin:0;color:var(--fg);background:var(--bg);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;line-height:1.5;-webkit-font-smoothing:antialiased}
-
-    /* Background FX */
-    .bg{position:fixed;inset:0;pointer-events:none;z-index:-2;
-      background:
-        radial-gradient(800px 420px at 120% -10%, rgba(103,232,249,.12), transparent 60%),
-        radial-gradient(700px 400px at -20% 110%, rgba(96,165,250,.16), transparent 60%),
-        linear-gradient(180deg, var(--bg), var(--surface-2) 35%, var(--bg) 85%);
+    
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-secondary: #f1f5f9;
+      --surface: #ffffff;
+      --surface-elevated: #ffffff;
+      --surface-glass: rgba(255, 255, 255, 0.8);
+      --line: rgba(0, 0, 0, 0.06);
+      --line-strong: rgba(0, 0, 0, 0.12);
+      
+      --text-primary: #1e293b;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      
+      --glass-bg: rgba(255, 255, 255, 0.6);
+      --glass-border: rgba(0, 0, 0, 0.1);
+      
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.12);
+      --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.16);
+      --shadow-xl: 0 24px 96px rgba(0, 0, 0, 0.2);
+      
+      --role-spy: #dc2626;
+      --role-fake: #d97706;
+      --role-lawyer: #059669;
+      --role-civilian: #2563eb;
     }
-    .grain{position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.2;mix-blend-mode:soft-light;
-      background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 40 40"><g fill="%23ffffff" fill-opacity="0.03"><circle cx="2" cy="2" r="1"/><circle cx="6" cy="18" r="1"/><circle cx="14" cy="6" r="1"/><circle cx="22" cy="30" r="1"/><circle cx="36" cy="12" r="1"/></g></svg>');
+
+    /* ====== Base Styles ====== */
+    html, body {
+      height: 100%;
+      overflow-x: hidden;
+    }
+    
+    body {
+      margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      color: var(--text-primary);
+      background: var(--bg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+      scroll-behavior: smooth;
     }
 
-    /* Header */
-    header{position:relative;z-index:20;border-bottom:1px solid var(--line);backdrop-filter:saturate(1.2) blur(6px);
-      background:color-mix(in oklab, var(--surface), transparent 28%);
+    /* ====== Advanced Background ====== */
+    .bg-effects {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -10;
+      overflow: hidden;
     }
-    .bar{max-width:var(--content);margin:0 auto;padding:12px var(--space);display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:nowrap}
-    .brand{display:flex;align-items:center;gap:12px;min-width:0;cursor:pointer}
-    .brand .logo{flex:0 0 auto;width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;background:transparent;box-shadow:none}
-    #appTitle{font-size:18px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .controls{display:flex;align-items:center;gap:10px;flex:0 0 auto}
-    .controls select{min-width:74px}
+    
+    .bg-gradient {
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse 120% 80% at 50% -20%, rgba(96, 165, 250, 0.15), transparent 60%),
+        radial-gradient(ellipse 120% 80% at 80% 120%, rgba(103, 232, 249, 0.1), transparent 60%),
+        radial-gradient(ellipse 120% 80% at 20% 120%, rgba(168, 85, 247, 0.08), transparent 60%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-secondary) 50%, var(--bg) 100%);
+      animation: gradientShift 20s ease-in-out infinite;
+    }
+    
+    @keyframes gradientShift {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.1) rotate(1deg); }
+    }
+    
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 50px 50px;
+      opacity: 0.3;
+      animation: gridMove 30s linear infinite;
+    }
+    
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+    
+    .bg-orbs {
+      position: absolute;
+      inset: 0;
+    }
+    
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(45deg, rgba(96, 165, 250, 0.1), rgba(103, 232, 249, 0.1));
+      filter: blur(40px);
+      animation: float 8s ease-in-out infinite;
+    }
+    
+    .orb:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      top: 10%;
+      left: 10%;
+      animation-delay: -2s;
+    }
+    
+    .orb:nth-child(2) {
+      width: 200px;
+      height: 200px;
+      top: 60%;
+      right: 20%;
+      animation-delay: -4s;
+    }
+    
+    .orb:nth-child(3) {
+      width: 150px;
+      height: 150px;
+      bottom: 20%;
+      left: 30%;
+      animation-delay: -6s;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -30px) scale(1.1); }
+      66% { transform: translate(-20px, 20px) scale(0.9); }
+    }
 
-    /* Splash (sparisce davvero) */
-    .splash{position:fixed;inset:0;display:grid;place-items:center;z-index:100;background:radial-gradient(1200px 600px at 50% -10%,color-mix(in srgb,var(--primary),transparent 68%),transparent),var(--bg);transition:opacity .6s ease, visibility .6s ease}
-    .splash.hide{opacity:0;visibility:hidden;pointer-events:none}
+    /* ====== Glass Header ====== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--surface-glass);
+      backdrop-filter: var(--glass-blur) saturate(150%);
+      border-bottom: 1px solid var(--glass-border);
+      animation: slideDown 0.8s var(--ease-spring);
+    }
+    
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    .header-content {
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      cursor: pointer;
+      transition: transform 0.2s var(--ease-smooth);
+    }
+    
+    .brand:hover {
+      transform: scale(1.02);
+    }
+    
+    .brand:active {
+      transform: scale(0.98);
+    }
+    
+    .logo {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .logo::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1));
+      transition: opacity 0.3s var(--ease-smooth);
+      opacity: 0;
+    }
+    
+    .logo:hover::before {
+      opacity: 1;
+    }
+    
+    .app-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0;
+      background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
 
-    /* Layout */
-    .wrap{max-width:var(--content);margin:0 auto;padding:calc(var(--space) + env(safe-area-inset-top)) var(--space) calc(120px + env(safe-area-inset-bottom));}
+    /* ====== Enhanced Splash Screen ====== */
+    .splash {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: 
+        radial-gradient(ellipse 80% 50% at 50% 50%, rgba(96, 165, 250, 0.15), transparent),
+        var(--bg);
+      transition: all 0.8s var(--ease-smooth);
+    }
+    
+    .splash.hide {
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(1.1);
+    }
+    
+    .splash-content {
+      text-align: center;
+      animation: splashPulse 2s var(--ease-spring);
+    }
+    
+    @keyframes splashPulse {
+      0% {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    .splash-logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto var(--space-md);
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: var(--radius-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      box-shadow: var(--shadow-xl);
+      animation: logoSpin 3s var(--ease-smooth) infinite;
+    }
+    
+    @keyframes logoSpin {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(5deg) scale(1.05); }
+    }
 
-    /* Controls */
-    select,input[type=text],input[type=number],textarea{width:100%;padding:16px;background:var(--surface-2);color:var(--fg);border:1px solid var(--line);border-radius:var(--r-md);font-size:16px;outline:none;margin-bottom:8px}
-    input::placeholder, textarea::placeholder{opacity:.7}
-    select:focus,input:focus,textarea:focus{box-shadow:var(--ring);border-color:color-mix(in srgb,var(--primary),transparent 50%)}
-    .btn{appearance:none;-webkit-tap-highlight-color:transparent;cursor:pointer;border:none;border-radius:999px;padding:14px 18px;font-weight:800;letter-spacing:.2px;box-shadow:var(--shadow);background:var(--primary);color:#0d0f1a;position:relative;overflow:hidden;margin:4px}
-    .btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}
-    .btn.danger{background:var(--danger);color:#fff}
-    .btn.ok{background:var(--ok);color:#0d0f1a}
-    .btn.secondary{background:color-mix(in srgb,var(--primary),var(--accent) 40%)}
-    .btn.small{padding:8px 12px;font-size:14px}
+    /* ====== Modern Cards ====== */
+    .container {
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: var(--space-xl) var(--space-lg) 120px;
+    }
+    
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-xl);
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s var(--ease-smooth);
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent 50%);
+      pointer-events: none;
+      transition: opacity 0.3s var(--ease-smooth);
+      opacity: 0;
+    }
+    
+    .card:hover::before {
+      opacity: 1;
+    }
+    
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--line-strong);
+    }
+    
+    .card.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .card.hero {
+      background: linear-gradient(135deg, var(--surface), var(--surface-elevated));
+      border: 1px solid var(--glass-border);
+      text-align: center;
+      position: relative;
+    }
+    
+    .card.hero::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: var(--radius-xl);
+      z-index: -1;
+      opacity: 0.1;
+    }
 
-    /* Cards */
-    .card{background:linear-gradient(180deg,var(--surface),var(--surface-2));border:1px solid var(--line);border-radius:var(--r-lg);padding:24px;box-shadow:var(--shadow);transform:translateY(6px) scale(.985);opacity:0;transition:transform .5s cubic-bezier(.2,.7,.2,1),opacity .5s;margin-bottom:24px}
-    .card.in{transform:translateY(0) scale(1);opacity:1}
-    .section-title{display:flex;align-items:center;gap:10px;margin:0 0 16px;font-size:1.1rem}
+    /* ====== Typography ====== */
+    .hero-title {
+      font-size: clamp(1.75rem, 4vw, 2.25rem);
+      font-weight: 800;
+      margin: 0 0 var(--space-md);
+      background: linear-gradient(135deg, var(--text-primary), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin: 0 0 var(--space-xl);
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0 0 var(--space-lg);
+      color: var(--text-primary);
+    }
+    
+    .section-title .emoji {
+      font-size: 1.5rem;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-3px); }
+      60% { transform: translateY(-1px); }
+    }
 
-    /* Collapsible (partono nascosti) */
-    [data-collapsible] .card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
-    [data-collapsible] .card-body{overflow:hidden;max-height:0;transition:max-height .35s ease}
-    [data-collapsible].open .card-body{max-height:2000px} /* grow animato */
-    /* Riassunto impostazioni visibile sempre */
-    #settingsSummary{display:inline-flex;gap:8px;align-items:center}
+    /* ====== Enhanced Buttons ====== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      padding: var(--space-md) var(--space-lg);
+      border: none;
+      border-radius: var(--radius-full);
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s var(--ease-smooth);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent 50%);
+      transition: opacity 0.2s var(--ease-smooth);
+      opacity: 0;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn:hover::before {
+      opacity: 1;
+    }
+    
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .btn.secondary {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+    }
+    
+    .btn.ghost {
+      background: var(--glass-bg);
+      color: var(--text-primary);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: var(--glass-blur);
+    }
+    
+    .btn.ghost:hover {
+      background: var(--glass-border);
+    }
+    
+    .btn.danger {
+      background: linear-gradient(135deg, var(--danger), #dc2626);
+    }
+    
+    .btn.success {
+      background: linear-gradient(135deg, var(--success), #059669);
+    }
+    
+    .btn.small {
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.875rem;
+    }
+    
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
 
-    .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
-    .grow{flex:1 1 auto}
-    .list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-    .list li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;background:var(--surface-2);border:1px solid var(--line);border-radius:14px}
+    /* ====== Form Controls ====== */
+    .form-group {
+      margin-bottom: var(--space-lg);
+    }
+    
+    .form-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: var(--space-md);
+      background: var(--surface-elevated);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-family: inherit;
+      color: var(--text-primary);
+      transition: all 0.2s var(--ease-smooth);
+      outline: none;
+    }
+    
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+      transform: translateY(-1px);
+    }
+    
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: var(--text-muted);
+    }
 
-    /* Role card */
-    .role-card{display:grid;place-items:center;min-height:320px;border-radius:var(--r-lg);background:var(--surface-2);border:1px dashed var(--line);user-select:none;transform-style:preserve-3d;transition:transform .12s ease;padding:32px;margin:16px 0}
-    .role-card.revealed{border-style:solid}
-    .role-name{font-size:1.35rem;font-weight:900}
-    .role-word,.role-strong{font-weight:900}
+    /* ====== Enhanced Stats Section ====== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+    
+    .stat-card {
+      background: var(--surface-elevated);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      text-align: center;
+      transition: all 0.3s var(--ease-smooth);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent);
+      transition: opacity 0.3s var(--ease-smooth);
+      opacity: 0;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .stat-card:hover::before {
+      opacity: 1;
+    }
+    
+    .stat-icon {
+      font-size: 2rem;
+      margin-bottom: var(--space-sm);
+      display: block;
+    }
+    
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: var(--space-xs);
+    }
+    
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
 
-    /* Badges ruoli */
-    .badge{display:inline-flex;align-items:center;font-weight:800;padding:8px 12px;border-radius:999px;margin:4px}
-    .b-spy{background:var(--c-spy);color:#fff}
-    .b-fake{background:var(--c-fake);color:#0d0f1a}
-    .b-law{background:var(--c-law);color:#0d0f1a}
-    .b-civ{background:var(--c-civ);color:#0d0f1a}
+    /* ====== Role Badges ====== */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-full);
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin: var(--space-xs);
+      transition: all 0.2s var(--ease-smooth);
+    }
+    
+    .badge:hover {
+      transform: scale(1.05);
+    }
+    
+    .badge.role-spy {
+      background: linear-gradient(135deg, var(--role-spy), #dc2626);
+      color: white;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+    
+    .badge.role-fake {
+      background: linear-gradient(135deg, var(--role-fake), #d97706);
+      color: white;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    }
+    
+    .badge.role-lawyer {
+      background: linear-gradient(135deg, var(--role-lawyer), #059669);
+      color: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    
+    .badge.role-civilian {
+      background: linear-gradient(135deg, var(--role-civilian), #2563eb);
+      color: white;
+      box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
+    }
+    
+    .badge.neutral {
+      background: var(--surface-elevated);
+      color: var(--text-secondary);
+      border: 1px solid var(--line);
+    }
 
-    /* Timer */
-    .timer{font-variant-numeric:tabular-nums;font-weight:900;font-size:clamp(42px,14vw,86px);line-height:1;margin:16px 0}
+    /* ====== Role Card Animation ====== */
+    .role-card {
+      min-height: 320px;
+      background: var(--surface-elevated);
+      border: 2px dashed var(--line);
+      border-radius: var(--radius-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s var(--ease-smooth);
+      position: relative;
+      overflow: hidden;
+      perspective: 1000px;
+    }
+    
+    .role-card:hover {
+      transform: rotateY(5deg) rotateX(5deg);
+      box-shadow: var(--shadow-xl);
+    }
+    
+    .role-card.revealed {
+      border-style: solid;
+      border-color: var(--primary);
+      background: linear-gradient(135deg, var(--surface), var(--surface-elevated));
+    }
+    
+    .role-card.revealed::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: var(--radius-xl);
+      z-index: -1;
+      animation: roleGlow 2s ease-in-out infinite alternate;
+    }
+    
+    @keyframes roleGlow {
+      0% { opacity: 0.3; }
+      100% { opacity: 0.6; }
+    }
 
-    /* Views */
-    [data-view]{display:none}
-    [data-view].show{display:block}
+    /* ====== Timer Enhancement ====== */
+    .timer {
+      font-size: clamp(3rem, 12vw, 5rem);
+      font-weight: 900;
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: center;
+      margin: var(--space-xl) 0;
+      position: relative;
+      animation: timerPulse 1s ease-in-out infinite;
+    }
+    
+    @keyframes timerPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+    
+    .timer.warning {
+      animation: timerWarning 0.5s ease-in-out infinite;
+    }
+    
+    @keyframes timerWarning {
+      0%, 100% { 
+        background: linear-gradient(135deg, var(--warning), var(--danger));
+        transform: scale(1);
+      }
+      50% { 
+        background: linear-gradient(135deg, var(--danger), var(--warning));
+        transform: scale(1.05);
+      }
+    }
 
-    /* FX */
-    #fxConfetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+    /* ====== Collapsible Sections ====== */
+    .collapsible-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      padding: var(--space-md);
+      margin: calc(-1 * var(--space-md));
+      border-radius: var(--radius-lg);
+      transition: all 0.2s var(--ease-smooth);
+    }
+    
+    .collapsible-header:hover {
+      background: var(--glass-bg);
+    }
+    
+    .collapsible-toggle {
+      transition: transform 0.3s var(--ease-spring);
+    }
+    
+    .collapsible.open .collapsible-toggle {
+      transform: rotate(180deg);
+    }
+    
+    .collapsible-content {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.4s var(--ease-smooth);
+    }
+    
+    .collapsible.open .collapsible-content {
+      max-height: 2000px;
+    }
 
-    footer{opacity:.85;padding:24px;text-align:center;font-size:.92rem}
+    /* ====== Lists Enhancement ====== */
+    .enhanced-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: var(--space-md);
+    }
+    
+    .enhanced-list li {
+      background: var(--surface-elevated);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      transition: all 0.2s var(--ease-smooth);
+    }
+    
+    .enhanced-list li:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--line-strong);
+    }
 
-    /* Stats with better spacing */
-    #statsRow{gap:8px;margin-bottom:8px}
-    #statsRow .badge{margin:2px}
+    /* ====== Utility Classes ====== */
+    .flex {
+      display: flex;
+    }
+    
+    .flex-col {
+      flex-direction: column;
+    }
+    
+    .items-center {
+      align-items: center;
+    }
+    
+    .justify-center {
+      justify-content: center;
+    }
+    
+    .justify-between {
+      justify-content: space-between;
+    }
+    
+    .gap-sm {
+      gap: var(--space-sm);
+    }
+    
+    .gap-md {
+      gap: var(--space-md);
+    }
+    
+    .gap-lg {
+      gap: var(--space-lg);
+    }
+    
+    .text-center {
+      text-align: center;
+    }
+    
+    .text-muted {
+      color: var(--text-muted);
+    }
+    
+    .text-secondary {
+      color: var(--text-secondary);
+    }
+    
+    .mb-0 { margin-bottom: 0; }
+    .mb-sm { margin-bottom: var(--space-sm); }
+    .mb-md { margin-bottom: var(--space-md); }
+    .mb-lg { margin-bottom: var(--space-lg); }
+    .mb-xl { margin-bottom: var(--space-xl); }
+    
+    .mt-0 { margin-top: 0; }
+    .mt-sm { margin-top: var(--space-sm); }
+    .mt-md { margin-top: var(--space-md); }
+    .mt-lg { margin-top: var(--space-lg); }
+    .mt-xl { margin-top: var(--space-xl); }
 
-    /* Category management improvements */
-    .cat-input-row{display:flex;gap:8px;align-items:center;margin-bottom:12px}
-    .cat-input-row input{margin-bottom:0;flex:1}
-    .cat-editor{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-md);padding:16px;margin-top:12px}
-    .cat-words-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-    .word-chip{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:6px;font-size:14px}
+    /* ====== View Transitions ====== */
+    [data-view] {
+      display: none;
+      animation: fadeInUp 0.6s var(--ease-spring);
+    }
+    
+    [data-view].show {
+      display: block;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-    /* Vote counter improvements */
-    .vote-controls{display:flex;align-items:center;gap:8px}
-    .vote-count{min-width:40px;text-align:center;font-weight:bold;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
+    /* ====== Responsive Design ====== */
+    @media (max-width: 768px) {
+      .container {
+        padding: var(--space-lg) var(--space-md) 100px;
+      }
+      
+      .card {
+        padding: var(--space-lg);
+        margin-bottom: var(--space-lg);
+      }
+      
+      .header-content {
+        padding: var(--space-sm) var(--space-md);
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .btn {
+        padding: var(--space-md) var(--space-lg);
+      }
+      
+      .hero-title {
+        font-size: 1.75rem;
+      }
+    }
 
-    /* Mobile header: tutto su una riga */
-    @media (max-width:480px){
-      .controls select{min-width:64px}
-      .btn{padding:12px 14px;margin:2px}
-      .card{padding:20px;margin-bottom:20px}
-      .row{gap:8px;margin-bottom:10px}
-      .list{gap:10px}
-      .list li{padding:12px}
+    /* ====== Modal Styling ====== */
+    dialog {
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
+      padding: 0;
+      max-width: 90vw;
+      width: 500px;
+      backdrop-filter: var(--glass-blur);
+    }
+    
+    dialog::backdrop {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+    }
+    
+    .modal-header {
+      padding: var(--space-lg);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0;
+    }
+    
+    .modal-body {
+      padding: var(--space-lg);
+    }
+    
+    .modal-actions {
+      padding: var(--space-lg);
+      border-top: 1px solid var(--line);
+      display: flex;
+      gap: var(--space-md);
+      justify-content: flex-end;
+    }
+
+    /* ====== Confetti Canvas ====== */
+    #fxConfetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 200;
+    }
+
+    /* ====== Footer ====== */
+    footer {
+      text-align: center;
+      padding: var(--space-xl);
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    /* ====== Special Effects ====== */
+    .glow {
+      position: relative;
+    }
+    
+    .glow::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(45deg, var(--primary), var(--accent), var(--primary));
+      border-radius: inherit;
+      z-index: -1;
+      filter: blur(8px);
+      opacity: 0;
+      transition: opacity 0.3s var(--ease-smooth);
+    }
+    
+    .glow:hover::before {
+      opacity: 0.7;
+    }
+
+    /* ====== Scroll Reveal Animation ====== */
+    .reveal {
+      transition: all 0.6s var(--ease-spring);
+    }
+    
+    /* Settings summary enhancement */
+    .settings-summary {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-full);
+      font-size: 0.875rem;
+      font-weight: 600;
+      backdrop-filter: var(--glass-blur);
+    }
+
+    /* Vote controls enhancement */
+    .vote-controls {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    
+    .vote-count {
+      min-width: 40px;
+      padding: var(--space-xs) var(--space-sm);
+      background: var(--surface-elevated);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      text-align: center;
+      font-weight: 700;
+      transition: all 0.2s var(--ease-smooth);
+    }
+    
+    .vote-count.has-votes {
+      background: var(--primary);
+      color: white;
+      transform: scale(1.1);
     }
   </style>
 </head>
 <body>
-  <div class="bg"></div>
-  <div class="grain"></div>
+  <!-- Background Effects -->
+  <div class="bg-effects">
+    <div class="bg-gradient"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-orbs">
+      <div class="orb"></div>
+      <div class="orb"></div>
+      <div class="orb"></div>
+    </div>
+  </div>
 
-  <!-- Splash -->
-  <div class="splash" id="splash" aria-hidden="true">
-    <div class="card in" style="text-align:center;max-width:320px">
-      <div class="logo" style="width:64px;height:64px;margin-inline:auto;font-size:42px;display:flex;align-items:center;justify-content:center">🕵️‍♂️</div>
-      <h2 style="margin:8px 0 4px">Spia</h2>
-      <p class="muted" style="margin:0">Ready • Set • Suspect</p>
+  <!-- Splash Screen -->
+  <div class="splash" id="splash">
+    <div class="splash-content">
+      <div class="splash-logo">🕵️‍♂️</div>
+      <h2 style="margin: 0 0 var(--space-sm); font-size: 1.5rem;">Spia</h2>
+      <p class="text-muted" style="margin: 0;">Ready • Set • Suspect</p>
     </div>
   </div>
 
   <!-- Header -->
   <header>
-    <div class="bar">
-      <div class="brand" id="titleBtn" title="Vai alla home">
-        <div class="logo" aria-hidden="true">🕵️‍♂️</div>
-        <h1 id="appTitle">Spia</h1>
+    <div class="header-content">
+      <div class="brand" id="titleBtn">
+        <div class="logo">🕵️‍♂️</div>
+        <h1 class="app-title" id="appTitle">Spia</h1>
       </div>
-      <div class="controls">
-        <button id="themeBtn" class="btn ghost" title="Tema">🌓</button>
-        <select id="lang" aria-label="Lingua">
+      <div class="header-controls">
+        <button id="themeBtn" class="btn ghost small">🌓</button>
+        <select id="lang" class="form-select" style="width: auto; padding: var(--space-sm) var(--space-md);">
           <option value="it">🇮🇹 IT</option>
           <option value="en">🇬🇧 EN</option>
         </select>
-        <button id="helpBtn" class="btn ghost" title="Regole">❓</button>
+        <button id="helpBtn" class="btn ghost small">❓</button>
       </div>
     </div>
   </header>
 
   <canvas id="fxConfetti"></canvas>
 
-  <main class="wrap">
-    <!-- Landing -->
+  <main class="container">
+    <!-- Landing Page -->
     <section data-view id="view-landing" class="show">
-      <div class="card in hero" style="text-align:center">
-        <h2 id="heroTitle">Il party game in tasca</h2>
-        <p id="heroDesc">Spie, Finte Spie e Avvocati. UI moderna, salvataggio locale, nessun account.</p>
-        <div class="row" style="justify-content:center">
-          <button id="goStart" class="btn secondary">🚀 <span data-i="startNow">Inizia</span></button>
+      <div class="card hero visible">
+        <h2 class="hero-title" id="heroTitle">Il party game in tasca</h2>
+        <p class="hero-desc" id="heroDesc">Spie, Finte Spie e Avvocati. UI moderna, salvataggio locale, nessun account.</p>
+        <div class="flex justify-center gap-md">
+          <button id="goStart" class="btn secondary glow">🚀 <span data-i="startNow">Inizia</span></button>
           <button id="goHow" class="btn ghost">📜 <span data-i="rules">Istruzioni</span></button>
         </div>
       </div>
 
-      <!-- Counters & storico -->
-      <div class="card in" id="statsCard" style="cursor:pointer">
-        <h3 class="section-title">📈 Andamento partite</h3>
-        <div class="row" id="statsRow" style="flex-wrap:wrap">
-          <span class="badge" style="background:var(--surface-2);border:1px solid var(--line)">🎮 <b id="s_games">0</b> partite</span>
-          <span class="badge b-civ">👤 Civili <b id="s_civ">0</b>%</span>
-          <span class="badge b-spy">🕵️ Spie <b id="s_spy">0</b>%</span>
-          <span class="badge b-fake">🎭 Finte Spie <b id="s_fake">0</b>%</span>
-          <span class="badge b-law">⚖️ Avvocati <b id="s_law">0</b>%</span>
+      <!-- Enhanced Stats -->
+      <div class="card visible" id="statsCard" style="cursor: pointer;">
+        <h3 class="section-title">
+          <span class="emoji">📈</span>
+          Andamento partite
+        </h3>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-icon">🎮</span>
+            <div class="stat-value" id="s_games">0</div>
+            <div class="stat-label">Partite</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">👤</span>
+            <div class="stat-value" id="s_civ">0<span style="font-size: 0.8em;">%</span></div>
+            <div class="stat-label">Civili</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">🕵️</span>
+            <div class="stat-value" id="s_spy">0<span style="font-size: 0.8em;">%</span></div>
+            <div class="stat-label">Spie</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">🎭</span>
+            <div class="stat-value" id="s_fake">0<span style="font-size: 0.8em;">%</span></div>
+            <div class="stat-label">Finte Spie</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">⚖️</span>
+            <div class="stat-value" id="s_law">0<span style="font-size: 0.8em;">%</span></div>
+            <div class="stat-label">Avvocati</div>
+          </div>
         </div>
-        <p class="muted" style="margin-top:12px">Tocca per aprire lo <b>storico</b> delle partite.</p>
+        <p class="text-muted text-center mb-0">Tocca per aprire lo <strong>storico</strong> delle partite.</p>
       </div>
 
       <div class="card">
-        <h3 class="section-title">🧠 Ruoli speciali</h3>
-        <p class="muted" style="margin-bottom:12px">Spia, Finta Spia, Avvocato, Civile. Votazione a turni (una per Spia), timer con suono, categorie personalizzate.</p>
-        <p class="muted">💾 Salvataggio <b>automatico</b>: giocatori, impostazioni, categorie e storico restano nel tuo browser.</p>
+        <h3 class="section-title">
+          <span class="emoji">🧠</span>
+          Ruoli speciali
+        </h3>
+        <p class="text-muted mb-md">Spia, Finta Spia, Avvocato, Civile. Votazione a turni (una per Spia), timer con suono, categorie personalizzate.</p>
+        <p class="text-muted mb-0">💾 Salvataggio <strong>automatico</strong>: giocatori, impostazioni, categorie e storico restano nel tuo browser.</p>
       </div>
     </section>
 
     <!-- Home / Setup -->
     <section data-view id="view-home">
-      <!-- Giocatori -->
-      <div class="card" id="card-players" data-collapsible>
-        <div class="card-head">
-          <h2 class="section-title">👥 <span data-i="players">Giocatori</span> (<span id="playersCount">0</span>)</h2>
-          <button class="btn ghost" data-toggle>▾</button>
+      <!-- Players Section -->
+      <div class="card collapsible" id="card-players">
+        <div class="collapsible-header" data-toggle>
+          <h2 class="section-title mb-0">
+            <span class="emoji">👥</span>
+            <span data-i="players">Giocatori</span> (<span id="playersCount">0</span>)
+          </h2>
+          <span class="collapsible-toggle">▾</span>
         </div>
-        <div class="card-body">
-          <div class="row">
-            <input id="playerInput" class="grow" type="text" maxlength="24" placeholder="Nome giocatore" />
-            <button id="addPlayer" class="btn" aria-label="Aggiungi giocatore">➕ Aggiungi</button>
+        <div class="collapsible-content">
+          <div class="flex gap-md items-center mb-lg">
+            <input id="playerInput" class="form-input" type="text" maxlength="24" placeholder="Nome giocatore" style="flex: 1; margin-bottom: 0;" />
+            <button id="addPlayer" class="btn">➕ Aggiungi</button>
           </div>
-          <ul id="playersList" class="list" aria-label="Lista giocatori"></ul>
-          <div class="row">
+          <ul id="playersList" class="enhanced-list"></ul>
+          <div class="flex gap-md mt-lg">
             <button id="shufflePlayers" class="btn ghost">🔀 <span data-i="shuffle">Mescola</span></button>
             <button id="clearPlayers" class="btn danger">🗑️ <span data-i="clear">Svuota</span></button>
           </div>
-          <p class="muted" style="margin-top:12px">💾 Salvataggio automatico dei nomi.</p>
+          <p class="text-muted mt-md mb-0">💾 Salvataggio automatico dei nomi.</p>
         </div>
       </div>
 
-      <!-- Categorie -->
-      <div class="card" id="card-categories" data-collapsible>
-        <div class="card-head">
-          <h2 class="section-title">📚 <span data-i="categories">Categorie</span></h2>
-          <button class="btn ghost" data-toggle>▾</button>
+      <!-- Categories Section -->
+      <div class="card collapsible" id="card-categories">
+        <div class="collapsible-header" data-toggle>
+          <h2 class="section-title mb-0">
+            <span class="emoji">📚</span>
+            <span data-i="categories">Categorie</span>
+          </h2>
+          <span class="collapsible-toggle">▾</span>
         </div>
-        <div class="card-body">
-          <div class="row">
-            <select id="categorySelect" class="grow" aria-label="Categoria"></select>
+        <div class="collapsible-content">
+          <div class="flex gap-md items-center mb-lg">
+            <select id="categorySelect" class="form-select" style="flex: 1;"></select>
             <button id="openCats" class="btn ghost">🔧 <span data-i="manage">Gestisci</span></button>
           </div>
-          <p class="muted" id="selectedCategoryView">📌 <span data-i="selectedCat">Categoria selezionata</span>: <strong id="selCatTxt">—</strong></p>
+          <p class="text-muted mb-0" id="selectedCategoryView">📌 <span data-i="selectedCat">Categoria selezionata</span>: <strong id="selCatTxt">—</strong></p>
         </div>
       </div>
 
-      <!-- Impostazioni -->
-      <div class="card" id="card-settings" data-collapsible>
-        <div class="card-head">
-          <h2 class="section-title">⚙️ <span data-i="gameSettings">Impostazioni</span></h2>
-          <!-- Riassunto sempre fuori -->
-          <span id="settingsSummary" class="chip" aria-live="polite"></span>
-          <button class="btn ghost" data-toggle>▾</button>
+      <!-- Settings Section -->
+      <div class="card collapsible" id="card-settings">
+        <div class="collapsible-header" data-toggle>
+          <h2 class="section-title mb-0">
+            <span class="emoji">⚙️</span>
+            <span data-i="gameSettings">Impostazioni</span>
+          </h2>
+          <span id="settingsSummary" class="settings-summary"></span>
+          <span class="collapsible-toggle">▾</span>
         </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="grow">
-              <label for="numSpies">🕵️ Spie</label>
-              <div class="row">
-                <input id="numSpies" type="number" min="1" max="6" step="1" value="1" />
+        <div class="collapsible-content">
+          <div class="flex gap-md mb-lg">
+            <div style="flex: 1;">
+              <label class="form-label" for="numSpies">🕵️ Spie</label>
+              <div class="flex gap-sm items-center">
+                <input id="numSpies" class="form-input" type="number" min="1" max="6" step="1" value="1" style="margin-bottom: 0;" />
                 <button class="btn ghost small" data-step="numSpies" data-delta="-1">–</button>
                 <button class="btn ghost small" data-step="numSpies" data-delta="1">+</button>
               </div>
             </div>
-            <div class="grow">
-              <label for="numFakeSpies">🎭 Finte spie</label>
-              <div class="row">
-                <input id="numFakeSpies" type="number" min="0" max="6" step="1" value="0" />
+            <div style="flex: 1;">
+              <label class="form-label" for="numFakeSpies">🎭 Finte spie</label>
+              <div class="flex gap-sm items-center">
+                <input id="numFakeSpies" class="form-input" type="number" min="0" max="6" step="1" value="0" style="margin-bottom: 0;" />
                 <button class="btn ghost small" data-step="numFakeSpies" data-delta="-1">–</button>
                 <button class="btn ghost small" data-step="numFakeSpies" data-delta="1">+</button>
               </div>
             </div>
           </div>
 
-          <div class="row">
-            <div class="grow">
-              <label for="numLawyers">⚖️ Avvocati</label>
-              <div class="row">
-                <input id="numLawyers" type="number" min="0" max="6" step="1" value="0" />
+          <div class="flex gap-md mb-lg">
+            <div style="flex: 1;">
+              <label class="form-label" for="numLawyers">⚖️ Avvocati</label>
+              <div class="flex gap-sm items-center">
+                <input id="numLawyers" class="form-input" type="number" min="0" max="6" step="1" value="0" style="margin-bottom: 0;" />
                 <button class="btn ghost small" data-step="numLawyers" data-delta="-1">–</button>
                 <button class="btn ghost small" data-step="numLawyers" data-delta="1">+</button>
               </div>
             </div>
-            <div class="grow">
-              <label for="roundMinutes">⏱️ Minuti</label>
-              <div class="row">
-                <input id="roundMinutes" type="number" min="1" max="99" step="1" value="5" />
+            <div style="flex: 1;">
+              <label class="form-label" for="roundMinutes">⏱️ Minuti</label>
+              <div class="flex gap-sm items-center">
+                <input id="roundMinutes" class="form-input" type="number" min="1" max="99" step="1" value="5" style="margin-bottom: 0;" />
                 <button class="btn ghost small" data-step="roundMinutes" data-delta="-1">–</button>
                 <button class="btn ghost small" data-step="roundMinutes" data-delta="1">+</button>
               </div>
             </div>
           </div>
 
-          <div style="margin:16px 0">
-            <label class="chip" style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-              <input type="checkbox" id="optElimNoVote" /> 🚫 Gli eliminati non votano più
+          <div class="mb-lg">
+            <label class="flex items-center gap-sm mb-md" style="cursor: pointer;">
+              <input type="checkbox" id="optElimNoVote" />
+              <span>🚫 Gli eliminati non votano più</span>
             </label>
-            <label class="chip" style="display:flex;align-items:center;gap:8px">
-              <input type="checkbox" id="optSpiesKnow" /> 🕵️‍➡️ Le spie si conoscono (tra loro, non le Finte)
+            <label class="flex items-center gap-sm" style="cursor: pointer;">
+              <input type="checkbox" id="optSpiesKnow" />
+              <span>🕵️‍➡️ Le spie si conoscono (tra loro, non le Finte)</span>
             </label>
           </div>
 
-          <p class="muted" style="margin:16px 0">💡 I ruoli speciali totali devono essere <b>minori</b> dei giocatori.</p>
-          <div class="row">
-            <button id="saveSettings" class="btn ok">💾 Salva</button>
-          </div>
+          <p class="text-muted mb-lg">💡 I ruoli speciali totali devono essere <strong>minori</strong> dei giocatori.</p>
+          <button id="saveSettings" class="btn success">💾 Salva</button>
         </div>
       </div>
 
-      <!-- Avvio -->
+      <!-- Start Game -->
       <div class="card">
-        <h2 class="section-title">🚀 Avvia partita</h2>
-        <p class="muted" style="margin-bottom:16px">Serve almeno 1 Spia, 3 giocatori e una categoria con parole.</p>
-        <div class="row">
-          <button id="startGameMain" class="btn secondary">▶️ Inizia ora</button>
+        <h2 class="section-title">
+          <span class="emoji">🚀</span>
+          Avvia partita
+        </h2>
+        <p class="text-muted mb-lg">Serve almeno 1 Spia, 3 giocatori e una categoria con parole.</p>
+        <div class="flex gap-md">
+          <button id="startGameMain" class="btn secondary glow">▶️ Inizia ora</button>
           <button id="howToBtn" class="btn ghost">📜 Regole</button>
         </div>
       </div>
     </section>
 
-    <!-- Gestione categorie -->
+    <!-- Category Management -->
     <section data-view id="view-cats">
       <div class="card">
-        <h2 class="section-title">📚 Gestisci categorie</h2>
-        <div class="row">
-          <button id="backHomeFromCats" class="btn ghost">← Indietro</button>
-        </div>
+        <h2 class="section-title">
+          <span class="emoji">📚</span>
+          Gestisci categorie
+        </h2>
+        <button id="backHomeFromCats" class="btn ghost">← Indietro</button>
       </div>
       
       <div class="card">
-        <h3 class="section-title">🧩 Le tue categorie</h3>
-        <ul id="customCatsList" class="list"></ul>
+        <h3 class="section-title">
+          <span class="emoji">🧩</span>
+          Le tue categorie
+        </h3>
+        <ul id="customCatsList" class="enhanced-list"></ul>
       </div>
       
       <div class="card">
-        <h3 class="section-title">➕ Nuova categoria</h3>
-        <div style="margin-bottom:16px">
-          <label for="catName">Nome categoria</label>
-          <input id="catName" type="text" placeholder="Nome categoria (es. Film)" />
+        <h3 class="section-title">
+          <span class="emoji">➕</span>
+          Nuova categoria
+        </h3>
+        <div class="form-group">
+          <label class="form-label" for="catName">Nome categoria</label>
+          <input id="catName" class="form-input" type="text" placeholder="Nome categoria (es. Film)" />
         </div>
-        <div style="margin-bottom:16px">
-          <label for="catWords">Parole</label>
-          <textarea id="catWords" rows="3" placeholder="Parole separate da virgola o a capo"></textarea>
+        <div class="form-group">
+          <label class="form-label" for="catWords">Parole</label>
+          <textarea id="catWords" class="form-textarea" rows="3" placeholder="Parole separate da virgola o a capo"></textarea>
         </div>
-        <div class="row">
-          <button id="saveCategory" class="btn ok">💾 Salva categoria</button>
-        </div>
-        <p class="muted" style="margin-top:12px">💾 Salvataggio automatico per lingua.</p>
+        <button id="saveCategory" class="btn success">💾 Salva categoria</button>
+        <p class="text-muted mt-md mb-0">💾 Salvataggio automatico per lingua.</p>
       </div>
       
       <div class="card">
-        <h3 class="section-title">📦 Categorie predefinite</h3>
-        <ul id="stockCatsList" class="list"></ul>
+        <h3 class="section-title">
+          <span class="emoji">📦</span>
+          Categorie predefinite
+        </h3>
+        <ul id="stockCatsList" class="enhanced-list"></ul>
       </div>
     </section>
 
-    <!-- Ruoli -->
+    <!-- Role Assignment -->
     <section data-view id="view-roles">
       <div class="card">
-        <h2 class="section-title">🪪 Assegnazione ruoli</h2>
-        <p class="muted" style="margin-bottom:16px">Nome del giocatore: <span id="currentPlayer" class="role-name"></span></p>
+        <h2 class="section-title">
+          <span class="emoji">🪪</span>
+          Assegnazione ruoli
+        </h2>
+        <p class="text-muted mb-lg">Nome del giocatore: <span id="currentPlayer" class="text-primary" style="font-weight: 700;"></span></p>
 
-        <!-- Legenda ruoli fuori dalla card -->
-        <div class="row" style="gap:8px;flex-wrap:wrap;margin-bottom:16px">
-          <span class="badge b-spy">🕵️ Spia</span>
-          <span class="badge b-fake">🎭 Finta Spia</span>
-          <span class="badge b-law">⚖️ Avvocato</span>
-          <span class="badge b-civ">👤 Civile</span>
+        <!-- Role Legend -->
+        <div class="flex gap-sm mb-lg" style="flex-wrap: wrap;">
+          <span class="badge role-spy">🕵️ Spia</span>
+          <span class="badge role-fake">🎭 Finta Spia</span>
+          <span class="badge role-lawyer">⚖️ Avvocato</span>
+          <span class="badge role-civilian">👤 Civile</span>
         </div>
 
-        <div class="role-card" id="roleCard" tabindex="0" aria-live="polite" aria-label="Carta ruolo">
-          <span class="muted">Tocca o premi Invio per vedere il tuo ruolo</span>
+        <div class="role-card" id="roleCard" tabindex="0">
+          <span class="text-muted">Tocca o premi Invio per vedere il tuo ruolo</span>
         </div>
-        <div class="row" style="margin-top:16px">
+        <div class="flex justify-center mt-lg">
           <button id="nextPlayer" class="btn secondary" disabled>➡️ Prossimo</button>
         </div>
       </div>
     </section>
 
-    <!-- Gioco -->
+    <!-- Game -->
     <section data-view id="view-game">
-      <div class="card" style="text-align:center">
-        <h2 class="section-title" style="justify-content:center">🎮 Gioco in corso</h2>
-        <p id="firstQuestionHint" class="muted" style="margin-top:0;margin-bottom:16px"></p>
+      <div class="card text-center">
+        <h2 class="section-title justify-center">
+          <span class="emoji">🎮</span>
+          Gioco in corso
+        </h2>
+        <p id="firstQuestionHint" class="text-muted mb-lg"></p>
         <div class="timer" id="timer">05:00</div>
-        <div class="row" style="justify-content:center;gap:12px;margin-top:16px">
+        <div class="flex justify-center gap-md mt-lg">
           <button id="pauseTimer" class="btn ghost">⏸️ Pausa</button>
           <button id="endRound" class="btn danger">⏰ Termina round</button>
         </div>
       </div>
     </section>
 
-    <!-- Voto -->
+    <!-- Voting -->
     <section data-view id="view-vote">
       <div class="card">
-        <h2 class="section-title" id="voteTitle">🗳️ Votate la spia 1/1</h2>
-        <p class="muted" id="voteHint" style="margin-bottom:16px">Tocca "Vota" accanto a un nome per assegnargli un voto. In caso di parità dovete prendere una decisione!</p>
-        <p class="muted" id="voteSubHint" style="margin-bottom:16px"></p>
-        <ul id="voteList" class="list" aria-label="Votazione"></ul>
-        <div style="margin:16px 0;padding:12px;background:var(--surface-2);border-radius:var(--r-md)">
-          <p class="muted" style="margin:0" id="voteStatus">Voti assegnati: <strong id="totalVotes">0</strong></p>
+        <h2 class="section-title" id="voteTitle">
+          <span class="emoji">🗳️</span>
+          Votate la spia 1/1
+        </h2>
+        <p class="text-muted mb-md" id="voteHint">Tocca "Vota" accanto a un nome per assegnargli un voto. In caso di parità dovete prendere una decisione!</p>
+        <p class="text-muted mb-lg" id="voteSubHint"></p>
+        <ul id="voteList" class="enhanced-list"></ul>
+        <div class="mb-lg" style="padding: var(--space-lg); background: var(--surface-elevated); border-radius: var(--radius-lg);">
+          <p class="text-muted mb-0" id="voteStatus">Voti assegnati: <strong id="totalVotes">0</strong></p>
         </div>
-        <div class="row">
-          <button id="seeRoundResult" class="btn secondary">📊 Concludi votazione</button>
-        </div>
+        <button id="seeRoundResult" class="btn secondary">📊 Concludi votazione</button>
       </div>
     </section>
 
-    <!-- Risultati -->
+    <!-- Results -->
     <section data-view id="view-results">
       <div class="card">
-        <h2 class="section-title">📈 Esito</h2>
+        <h2 class="section-title">
+          <span class="emoji">📈</span>
+          Esito
+        </h2>
         <div id="resultsBox"></div>
-        <div class="row" style="margin-top:16px">
+        <div class="flex gap-md mt-lg">
           <button id="revealAll" class="btn ghost">🃏 Rivela tutti i ruoli</button>
-          <button id="restart" class="btn ok">🔄 Gioca di nuovo</button>
+          <button id="restart" class="btn success glow">🔄 Gioca di nuovo</button>
         </div>
       </div>
     </section>
 
-    <!-- Storico -->
+    <!-- History -->
     <section data-view id="view-history">
       <div class="card">
-        <h2 class="section-title">🗂️ Storico partite</h2>
+        <h2 class="section-title">
+          <span class="emoji">🗂️</span>
+          Storico partite
+        </h2>
         <div id="historyList"></div>
-        <div class="row" style="margin-top:16px">
+        <div class="flex gap-md mt-lg">
           <button id="clearHistory" class="btn danger">🗑️ Svuota storico</button>
           <button id="backFromHistory" class="btn ghost">← Indietro</button>
         </div>
@@ -425,21 +1403,23 @@
     </section>
   </main>
 
-  <footer class="wrap">
-    <span style="font-size:.9rem">© 2025 • Dati <b>locali</b> nel tuo browser.</span>
+  <footer>
+    <span>© 2025 • Dati <strong>locali</strong> nel tuo browser.</span>
   </footer>
 
-  <!-- Modale generica (niente alert di sistema) -->
-  <dialog id="modal" aria-live="polite">
-    <div class="modal-head"><strong id="modalTitle">Info</strong><button class="btn ghost" id="modalClose" aria-label="Chiudi">✕</button></div>
+  <!-- Modal -->
+  <dialog id="modal">
+    <div class="modal-header">
+      <strong class="modal-title" id="modalTitle">Info</strong>
+      <button class="btn ghost small" id="modalClose">✕</button>
+    </div>
     <div class="modal-body" id="modalBody"></div>
-    <div class="modal-actions" id="modalActions" style="display:flex;gap:10px;justify-content:flex-end;padding:0 18px 16px"></div>
+    <div class="modal-actions" id="modalActions"></div>
   </dialog>
 
-  <!-- Audio fine timer -->
+  <!-- Audio -->
   <audio id="beep" preload="auto">
     <source src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAA..." type="audio/mp3">
-    <!-- usa un tuo suono se preferisci -->
   </audio>
 
   <script>
@@ -450,7 +1430,7 @@
   const $=s=>document.querySelector(s); const $$=s=>[...document.querySelectorAll(s)];
 
   const Role={spy:"spy",fake:"fake",law:"law",civ:"civ"};
-  const roleBadgeCls=r=> r===Role.spy?'b-spy':r===Role.fake?'b-fake':r===Role.law?'b-law':'b-civ';
+  const roleBadgeCls=r=> r===Role.spy?'role-spy':r===Role.fake?'role-fake':r===Role.law?'role-lawyer':'role-civilian';
   const roleLabel=r=> (r===Role.spy?'Spia':r===Role.fake?'Finta Spia':r===Role.law?'Avvocato':'Civile');
 
   const STOCK={
@@ -469,411 +1449,802 @@
     game: null
   };
 
-  /* ====== Theme ====== */
-  function metaThemeSync(){const meta=document.getElementById('metaTheme');meta.content=getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();}
-  function applyTheme(){const root=document.documentElement; if(state.theme==='auto'){const dark=matchMedia('(prefers-color-scheme: dark)').matches; root.setAttribute('data-theme',dark?'dark':'light');} else root.setAttribute('data-theme',state.theme); metaThemeSync();}
-  function cycleTheme(){state.theme=state.theme==='auto'?'light':state.theme==='light'?'dark':'auto'; LS.set('theme',state.theme); document.getElementById('themeBtn').textContent=state.theme==='auto'?'🌓':state.theme==='light'?'☀️':'🌙'; applyTheme();}
-  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{if(state.theme==='auto') applyTheme();});
-
-  /* ====== Modal (no alert di sistema) ====== */
-  function modal(html,{title='',actions=[]}={}){
-    const d=$('#modal'); if(!d||!d.showModal) return;
-    $('#modalTitle').textContent=title;
-    $('#modalBody').innerHTML=html;
-    const act=$('#modalActions'); act.innerHTML='';
-    actions.forEach(a=>{
-      const b=document.createElement('button'); b.className='btn '+(a.kind||'secondary'); b.textContent=a.label;
-      b.onclick=()=>{a.onClick?.(); d.close();};
-      act.appendChild(b);
+  /* ====== Enhanced Animations ====== */
+  function revealOnScroll(){
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          // Add staggered delay for multiple cards
+          const siblings = entry.target.parentElement.children;
+          const delay = [...siblings].indexOf(entry.target) * 100;
+          entry.target.style.transitionDelay = `${delay}ms`;
+        }
+      });
+    }, {
+      rootMargin: '0px 0px -10% 0px',
+      threshold: 0.1
     });
+
+    $('.card').forEach(card => {
+      if (!card.classList.contains('visible')) {
+        observer.observe(card);
+      }
+    });
+  }
+
+  /* ====== Theme ====== */
+  function metaThemeSync(){
+    const meta = $('#metaTheme');
+    if (meta) {
+      meta.content = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+    }
+  }
+  
+  function applyTheme(){
+    const root = document.documentElement;
+    if(state.theme === 'auto') {
+      const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+      root.setAttribute('data-theme', dark ? 'dark' : 'light');
+    } else {
+      root.setAttribute('data-theme', state.theme);
+    }
+    metaThemeSync();
+  }
+  
+  function cycleTheme(){
+    state.theme = state.theme === 'auto' ? 'light' : state.theme === 'light' ? 'dark' : 'auto';
+    LS.set('theme', state.theme);
+    const btn = $('#themeBtn');
+    btn.textContent = state.theme === 'auto' ? '🌓' : state.theme === 'light' ? '☀️' : '🌙';
+    applyTheme();
+  }
+
+  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => {
+    if(state.theme === 'auto') applyTheme();
+  });
+
+  /* ====== Modal ====== */
+  function modal(html, {title='', actions=[]}={}){
+    const d = $('#modal');
+    if(!d || !d.showModal) return;
+    
+    $('#modalTitle').textContent = title;
+    $('#modalBody').innerHTML = html;
+    
+    const actionsEl = $('#modalActions');
+    actionsEl.innerHTML = '';
+    
+    actions.forEach(a => {
+      const btn = document.createElement('button');
+      btn.className = 'btn ' + (a.kind || 'secondary');
+      btn.textContent = a.label;
+      btn.onclick = () => {
+        a.onClick?.();
+        d.close();
+      };
+      actionsEl.appendChild(btn);
+    });
+    
     d.showModal();
   }
-  $('#modalClose').onclick=()=>$('#modal').close();
 
-  /* ====== i18n basica (IT/EN) ====== */
+  $('#modalClose').onclick = () => $('#modal').close();
+
+  /* ====== i18n ====== */
   function i18nRefresh(){
-    $('#appTitle').textContent = state.lang==='it'?'Spia':'Spy Game';
-    $('#heroTitle').textContent = state.lang==='it'?'Il party game in tasca':'The party game in your pocket';
-    $('#heroDesc').textContent  = state.lang==='it'?'Spie, Finte Spie e Avvocati. UI moderna, salvataggio locale, nessun account.':'Spies, Fake Spies and Lawyers. Modern UI, local save, no account.';
-    $('#playerInput').placeholder = state.lang==='it'?'Nome giocatore':'Player name';
-    $('#catName').placeholder = state.lang==='it'?'Nome categoria (es. Film)':'Category name (e.g., Movies)';
-    $('#catWords').placeholder = state.lang==='it'?'Parole separate da virgola o a capo':'Words separated by comma or newline';
+    $('#appTitle').textContent = state.lang === 'it' ? 'Spia' : 'Spy Game';
+    $('#heroTitle').textContent = state.lang === 'it' ? 'Il party game in tasca' : 'The party game in your pocket';
+    $('#heroDesc').textContent = state.lang === 'it' ? 'Spie, Finte Spie e Avvocati. UI moderna, salvataggio locale, nessun account.' : 'Spies, Fake Spies and Lawyers. Modern UI, local save, no account.';
+    $('#playerInput').placeholder = state.lang === 'it' ? 'Nome giocatore' : 'Player name';
+    $('#catName').placeholder = state.lang === 'it' ? 'Nome categoria (es. Film)' : 'Category name (e.g., Movies)';
+    $('#catWords').placeholder = state.lang === 'it' ? 'Parole separate da virgola o a capo' : 'Words separated by comma or newline';
     $('#lang').value = state.lang;
-    renderCategories(); updateSelectedCat(); renderPlayers(); renderCatsPage(); renderStats();
+    
+    renderCategories();
+    updateSelectedCat();
+    renderPlayers();
+    renderCatsPage();
+    renderStats();
     renderSettingsSummary();
   }
 
-  /* ====== Splash out ====== */
-  setTimeout(()=>{ const s=$('#splash'); s?.classList.add('hide'); setTimeout(()=>s?.remove(),650); }, 650);
+  /* ====== Splash ====== */
+  setTimeout(() => {
+    const splash = $('#splash');
+    if (splash) {
+      splash.classList.add('hide');
+      setTimeout(() => splash.remove(), 800);
+    }
+  }, 1000);
 
-  /* ====== Nav helpers ====== */
+  /* ====== Navigation ====== */
   function showView(id){
-    // stop timer when leaving game
-    if(state.game?.timer){clearInterval(state.game.timer); state.game.timer=null;}
-    $$('[data-view]').forEach(s=>s.classList.remove('show'));
-    document.getElementById(id)?.classList.add('show');
-    window.scrollTo({top:0,behavior:'smooth'});
+    if(state.game?.timer){
+      clearInterval(state.game.timer);
+      state.game.timer = null;
+    }
+    
+    $$('[data-view]').forEach(view => view.classList.remove('show'));
+    const targetView = document.getElementById(id);
+    if (targetView) {
+      targetView.classList.add('show');
+      // Trigger scroll reveal for new cards
+      setTimeout(revealOnScroll, 100);
+    }
+    
+    window.scrollTo({top: 0, behavior: 'smooth'});
   }
-  $('#titleBtn').onclick=()=>showView('view-landing');
 
-  /* ====== Cards appear on scroll ====== */
-  function revealOnScroll(){
-    const cards=$$('.card'); if(!('IntersectionObserver' in window)){cards.forEach(c=>c.classList.add('in')); return;}
-    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{rootMargin:'0px 0px -10% 0px',threshold:.1});
-    cards.forEach(c=>io.observe(c));
-  }
-  revealOnScroll();
+  $('#titleBtn').onclick = () => showView('view-landing');
 
-  /* ====== Collapsible ====== */
-  $$('[data-collapsible]').forEach(card=>{
-    const btn=card.querySelector('[data-toggle]');
-    btn.addEventListener('click',()=>{card.classList.toggle('open')});
+  /* ====== Collapsible Enhancement ====== */
+  $('[data-toggle]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const collapsible = btn.closest('.collapsible');
+      if (collapsible) {
+        collapsible.classList.toggle('open');
+      }
+    });
   });
 
   /* ====== Players ====== */
   function renderPlayers(){
-    const ul=$('#playersList'); ul.innerHTML='';
-    state.players.forEach((p,idx)=>{
-      const li=document.createElement('li');
-      li.innerHTML=`<span>${p}</span>
-      <span class="row">
-        <button class="btn ghost small" data-move="-1" title="Su">⬆️</button>
-        <button class="btn ghost small" data-move="1" title="Giù">⬇️</button>
-        <button class="btn danger small" title="Rimuovi">✕</button>
-      </span>`;
-      li.querySelector('[data-move="-1"]').onclick=()=>{ if(idx>0){ [state.players[idx-1],state.players[idx]]=[state.players[idx],state.players[idx-1]]; savePlayers(); renderPlayers(); } };
-      li.querySelector('[data-move="1"]').onclick=()=>{ if(idx<state.players.length-1){ [state.players[idx+1],state.players[idx]]=[state.players[idx],state.players[idx+1]]; savePlayers(); renderPlayers(); } };
-      li.querySelector('.btn.danger').onclick=()=>{ state.players.splice(idx,1); savePlayers(); renderPlayers(); };
+    const ul = $('#playersList');
+    ul.innerHTML = '';
+    
+    state.players.forEach((player, idx) => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <span style="font-weight: 600;">${player}</span>
+        <div class="flex gap-sm">
+          <button class="btn ghost small" data-move="-1" title="Su">⬆️</button>
+          <button class="btn ghost small" data-move="1" title="Giù">⬇️</button>
+          <button class="btn danger small" title="Rimuovi">✕</button>
+        </div>`;
+      
+      li.querySelector('[data-move="-1"]').onclick = () => {
+        if(idx > 0) {
+          [state.players[idx-1], state.players[idx]] = [state.players[idx], state.players[idx-1]];
+          savePlayers();
+          renderPlayers();
+        }
+      };
+      
+      li.querySelector('[data-move="1"]').onclick = () => {
+        if(idx < state.players.length - 1) {
+          [state.players[idx+1], state.players[idx]] = [state.players[idx], state.players[idx+1]];
+          savePlayers();
+          renderPlayers();
+        }
+      };
+      
+      li.querySelector('.btn.danger').onclick = () => {
+        state.players.splice(idx, 1);
+        savePlayers();
+        renderPlayers();
+      };
+      
       ul.appendChild(li);
     });
-    $('#playersCount').textContent=state.players.length;
+    
+    $('#playersCount').textContent = state.players.length;
   }
-  function addPlayer(){ const v=$('#playerInput').value.trim(); if(!v) return; if(state.players.includes(v)){ $('#playerInput').value=''; return; } state.players.push(v); $('#playerInput').value=''; savePlayers(); renderPlayers(); }
-  function savePlayers(){ LS.set('players',state.players); }
 
-  $('#addPlayer').onclick=addPlayer;
-  $('#playerInput').addEventListener('keydown',e=>{ if(e.key==='Enter') addPlayer(); });
-  $('#shufflePlayers').onclick=()=>{ state.players.sort(()=>Math.random()-.5); savePlayers(); renderPlayers(); };
-  $('#clearPlayers').onclick=()=> modal(`Svuotare la lista giocatori?`,{title:'Conferma',actions:[
-    {label:'Annulla',kind:'ghost'},
-    {label:'Svuota',kind:'danger',onClick:()=>{state.players=[]; savePlayers(); renderPlayers();}}
-  ]});
+  function addPlayer(){
+    const input = $('#playerInput');
+    const value = input.value.trim();
+    
+    if(!value) return;
+    
+    if(state.players.includes(value)) {
+      input.value = '';
+      return;
+    }
+    
+    state.players.push(value);
+    input.value = '';
+    savePlayers();
+    renderPlayers();
+  }
+
+  function savePlayers(){
+    LS.set('players', state.players);
+  }
+
+  $('#addPlayer').onclick = addPlayer;
+  $('#playerInput').addEventListener('keydown', e => {
+    if(e.key === 'Enter') addPlayer();
+  });
+
+  $('#shufflePlayers').onclick = () => {
+    state.players.sort(() => Math.random() - 0.5);
+    savePlayers();
+    renderPlayers();
+  };
+
+  $('#clearPlayers').onclick = () => {
+    modal('Svuotare la lista giocatori?', {
+      title: 'Conferma',
+      actions: [
+        {label: 'Annulla', kind: 'ghost'},
+        {label: 'Svuota', kind: 'danger', onClick: () => {
+          state.players = [];
+          savePlayers();
+          renderPlayers();
+        }}
+      ]
+    });
+  };
 
   /* ====== Categories ====== */
-  function allCategories(){ return {...STOCK[state.lang], ...(state.custom||{})} }
+  function allCategories(){
+    return {...STOCK[state.lang], ...(state.custom || {})};
+  }
+
   function renderCategories(){
-    const sel=$('#categorySelect'); sel.innerHTML='';
-    const ph=document.createElement('option'); ph.disabled=true; ph.selected=!state.category; ph.textContent=state.lang==='it'?'Seleziona una categoria':'Select a category'; sel.appendChild(ph);
-    const cats=allCategories(); Object.keys(cats).sort().forEach(cat=>{
-      const o=document.createElement('option'); o.value=cat; o.textContent=`${cat} (${cats[cat].length} parole)`; if(cat===state.category) o.selected=true; sel.appendChild(o);
+    const select = $('#categorySelect');
+    select.innerHTML = '';
+    
+    const placeholder = document.createElement('option');
+    placeholder.disabled = true;
+    placeholder.selected = !state.category;
+    placeholder.textContent = state.lang === 'it' ? 'Seleziona una categoria' : 'Select a category';
+    select.appendChild(placeholder);
+    
+    const categories = allCategories();
+    Object.keys(categories).sort().forEach(cat => {
+      const option = document.createElement('option');
+      option.value = cat;
+      option.textContent = `${cat} (${categories[cat].length} parole)`;
+      if(cat === state.category) option.selected = true;
+      select.appendChild(option);
     });
   }
-  function updateSelectedCat(){ $('#selCatTxt').textContent=state.category||'—'; }
-  $('#categorySelect').onchange=e=>{ state.category=e.target.value; LS.set('category',state.category); updateSelectedCat(); };
+
+  function updateSelectedCat(){
+    $('#selCatTxt').textContent = state.category || '—';
+  }
+
+  $('#categorySelect').onchange = e => {
+    state.category = e.target.value;
+    LS.set('category', state.category);
+    updateSelectedCat();
+  };
 
   function renderCatsPage(){
-    const customUl=$('#customCatsList'); const stockUl=$('#stockCatsList');
-    customUl.innerHTML=''; stockUl.innerHTML='';
-    const custom=state.custom||{}; const stock=STOCK[state.lang];
-    Object.keys(custom).sort().forEach(cat=>{
-      const li=document.createElement('li');
-      li.innerHTML=`<span>${cat} <span class="muted">(${custom[cat].length})</span></span>
-        <span class="row"><button class="btn ghost small" data-edit>✏️</button><button class="btn danger small" data-del>✕</button></span>`;
-      li.querySelector('[data-edit]').onclick=()=>openEditor(cat, li);
-      li.querySelector('[data-del]').onclick=()=> modal(`Eliminare la categoria "<b>${cat}</b>"?`,{title:'Conferma',actions:[
-        {label:'Annulla',kind:'ghost'},
-        {label:'Elimina',kind:'danger',onClick:()=>{ delete custom[cat]; state.custom=custom; LS.set('custom_'+state.lang,custom); if(state.category===cat) state.category=''; renderCategories(); renderCatsPage(); updateSelectedCat(); }}
-      ]});
+    const customUl = $('#customCatsList');
+    const stockUl = $('#stockCatsList');
+    
+    customUl.innerHTML = '';
+    stockUl.innerHTML = '';
+    
+    const custom = state.custom || {};
+    const stock = STOCK[state.lang];
+    
+    Object.keys(custom).sort().forEach(cat => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <span><strong>${cat}</strong> <span class="text-muted">(${custom[cat].length} parole)</span></span>
+        <div class="flex gap-sm">
+          <button class="btn ghost small" data-edit>✏️</button>
+          <button class="btn danger small" data-del>✕</button>
+        </div>`;
+      
+      li.querySelector('[data-edit]').onclick = () => openEditor(cat, li);
+      li.querySelector('[data-del]').onclick = () => {
+        modal(`Eliminare la categoria "<strong>${cat}</strong>"?`, {
+          title: 'Conferma',
+          actions: [
+            {label: 'Annulla', kind: 'ghost'},
+            {label: 'Elimina', kind: 'danger', onClick: () => {
+              delete custom[cat];
+              state.custom = custom;
+              LS.set('custom_' + state.lang, custom);
+              if(state.category === cat) state.category = '';
+              renderCategories();
+              renderCatsPage();
+              updateSelectedCat();
+            }}
+          ]
+        });
+      };
+      
       customUl.appendChild(li);
     });
-    Object.keys(stock).sort().forEach(cat=>{
-      const li=document.createElement('li'); li.innerHTML=`<span>${cat} <span class="muted">(${stock[cat].length})</span></span><span class="chip">Predefinita</span>`; stockUl.appendChild(li);
+    
+    Object.keys(stock).sort().forEach(cat => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <span><strong>${cat}</strong> <span class="text-muted">(${stock[cat].length} parole)</span></span>
+        <span class="badge neutral">Predefinita</span>`;
+      stockUl.appendChild(li);
     });
   }
-  function parseWords(txt){ return [...new Set(txt.split(/[\n,;]+/).map(s=>s.trim()).filter(Boolean))] }
-  function saveNewCategory(){
-    const name=$('#catName').value.trim(); if(!name) return modal('Inserisci un nome categoria.');
-    const words=parseWords($('#catWords').value); if(words.length===0) return modal('Aggiungi almeno una parola.');
-    if(!state.custom) state.custom={};
-    state.custom[name]=[...(state.custom[name]||[]), ...words].filter((w,i,a)=>a.indexOf(w)===i);
-    LS.set('custom_'+state.lang,state.custom);
-    $('#catName').value=''; $('#catWords').value='';
-    renderCategories(); renderCatsPage(); modal('Categoria salvata!');
+
+  function parseWords(text){
+    return [...new Set(text.split(/[\n,;]+/).map(s => s.trim()).filter(Boolean))];
   }
-  $('#openCats').onclick=()=>showView('view-cats');
-  $('#backHomeFromCats').onclick=()=>showView('view-home');
-  $('#saveCategory').onclick=saveNewCategory;
-  
+
+  function saveNewCategory(){
+    const name = $('#catName').value.trim();
+    if(!name) return modal('Inserisci un nome categoria.');
+    
+    const words = parseWords($('#catWords').value);
+    if(words.length === 0) return modal('Aggiungi almeno una parola.');
+    
+    if(!state.custom) state.custom = {};
+    
+    state.custom[name] = [...(state.custom[name] || []), ...words]
+      .filter((w, i, a) => a.indexOf(w) === i);
+    
+    LS.set('custom_' + state.lang, state.custom);
+    
+    $('#catName').value = '';
+    $('#catWords').value = '';
+    
+    renderCategories();
+    renderCatsPage();
+    modal('Categoria salvata!');
+  }
+
+  $('#openCats').onclick = () => showView('view-cats');
+  $('#backHomeFromCats').onclick = () => showView('view-home');
+  $('#saveCategory').onclick = saveNewCategory;
+
   function openEditor(cat, li){
-    [...$('#customCatsList').children].forEach(x=>x.classList.remove('editing'));
+    [...$('#customCatsList').children].forEach(x => x.classList.remove('editing'));
     li.classList.add('editing');
-    const box=document.createElement('div'); 
-    box.className='cat-editor';
-    box.innerHTML=`
-      <div class="cat-input-row">
-        <input id="wInput" type="text" placeholder="Aggiungi parola"/>
-        <button id="addWordBtn" class="btn ok small">✓</button>
+    
+    const editor = document.createElement('div');
+    editor.className = 'mt-md';
+    editor.style.padding = 'var(--space-md)';
+    editor.style.background = 'var(--surface-elevated)';
+    editor.style.borderRadius = 'var(--radius-md)';
+    editor.style.border = '1px solid var(--line)';
+    
+    editor.innerHTML = `
+      <div class="flex gap-sm mb-md">
+        <input id="wInput" class="form-input" type="text" placeholder="Aggiungi parola" style="flex: 1; margin-bottom: 0;"/>
+        <button id="addWordBtn" class="btn success small">✓</button>
       </div>
-      <div id="wChips" class="cat-words-grid"></div>`;
-    li.appendChild(box);
-    const chips=box.querySelector('#wChips');
-    const input=box.querySelector('#wInput');
-    const addBtn=box.querySelector('#addWordBtn');
+      <div id="wChips" class="flex gap-sm" style="flex-wrap: wrap;"></div>`;
+    
+    li.appendChild(editor);
+    
+    const chips = editor.querySelector('#wChips');
+    const input = editor.querySelector('#wInput');
+    const addBtn = editor.querySelector('#addWordBtn');
     
     function addWord(){
-      const v=input.value.trim(); 
-      if(!v) return;
-      if(!state.custom[cat]) state.custom[cat]=[];
-      if(!state.custom[cat].includes(v)) {
-        state.custom[cat].push(v);
-        LS.set('custom_'+state.lang,state.custom); 
-        draw(); 
+      const value = input.value.trim();
+      if(!value) return;
+      
+      if(!state.custom[cat]) state.custom[cat] = [];
+      
+      if(!state.custom[cat].includes(value)) {
+        state.custom[cat].push(value);
+        LS.set('custom_' + state.lang, state.custom);
+        drawChips();
         renderCategories();
       }
-      input.value=''; 
+      
+      input.value = '';
     }
     
-    function draw(){
-      chips.innerHTML='';
-      (state.custom[cat]||[]).forEach((w,i)=>{
-        const c=document.createElement('span'); 
-        c.className='word-chip'; 
-        c.innerHTML=`${w} <button class="btn danger small">×</button>`;
-        c.querySelector('button').onclick=()=>{ 
-          state.custom[cat].splice(i,1); 
-          LS.set('custom_'+state.lang,state.custom); 
-          draw(); 
-          renderCategories(); 
+    function drawChips(){
+      chips.innerHTML = '';
+      (state.custom[cat] || []).forEach((word, i) => {
+        const chip = document.createElement('div');
+        chip.className = 'badge neutral';
+        chip.innerHTML = `${word} <button class="btn danger small" style="margin-left: var(--space-xs);">×</button>`;
+        
+        chip.querySelector('button').onclick = () => {
+          state.custom[cat].splice(i, 1);
+          LS.set('custom_' + state.lang, state.custom);
+          drawChips();
+          renderCategories();
         };
-        chips.appendChild(c);
+        
+        chips.appendChild(chip);
       });
     }
-    draw();
-    input.addEventListener('keydown',e=>{ if(e.key==='Enter') addWord(); });
-    addBtn.onclick=addWord;
+    
+    drawChips();
+    input.addEventListener('keydown', e => {
+      if(e.key === 'Enter') addWord();
+    });
+    addBtn.onclick = addWord;
   }
 
   /* ====== Settings ====== */
-  const clamp=(n,min,max)=>Math.max(min,Math.min(max,Number(n||0)));
+  const clamp = (n, min, max) => Math.max(min, Math.min(max, Number(n) || 0));
+
   function readSettings(){
     return {
-      spies: clamp($('#numSpies').value,1,6),
-      fakes: clamp($('#numFakeSpies').value,0,6),
-      laws:  clamp($('#numLawyers').value,0,6),
-      minutes: clamp($('#roundMinutes').value,1,99),
+      spies: clamp($('#numSpies').value, 1, 6),
+      fakes: clamp($('#numFakeSpies').value, 0, 6),
+      laws: clamp($('#numLawyers').value, 0, 6),
+      minutes: clamp($('#roundMinutes').value, 1, 99),
       optElimNoVote: $('#optElimNoVote').checked,
-      optSpiesKnow:  $('#optSpiesKnow').checked
+      optSpiesKnow: $('#optSpiesKnow').checked
     };
   }
-  function writeSettings(s){
-    $('#numSpies').value=s.spies; $('#numFakeSpies').value=s.fakes; $('#numLawyers').value=s.laws; $('#roundMinutes').value=s.minutes;
-    $('#optElimNoVote').checked=s.optElimNoVote; $('#optSpiesKnow').checked=s.optSpiesKnow;
+
+  function writeSettings(settings){
+    $('#numSpies').value = settings.spies;
+    $('#numFakeSpies').value = settings.fakes;
+    $('#numLawyers').value = settings.laws;
+    $('#roundMinutes').value = settings.minutes;
+    $('#optElimNoVote').checked = settings.optElimNoVote;
+    $('#optSpiesKnow').checked = settings.optSpiesKnow;
     renderSettingsSummary();
   }
-  function saveSettings(){ state.settings=readSettings(); LS.set('settings',state.settings); modal('Impostazioni salvate!'); renderSettingsSummary(); }
-  $('#saveSettings').onclick=saveSettings;
-  $$('[data-step]').forEach(b=> b.onclick=()=>{ const id=b.getAttribute('data-step'); const delta=Number(b.getAttribute('data-delta')); const el=document.getElementById(id); el.value=clamp(Number(el.value)+delta, Number(el.min), Number(el.max)); renderSettingsSummary(); });
+
+  function saveSettings(){
+    state.settings = readSettings();
+    LS.set('settings', state.settings);
+    modal('Impostazioni salvate!');
+    renderSettingsSummary();
+  }
 
   function renderSettingsSummary(){
-    const s=readSettings();
+    const s = readSettings();
     $('#settingsSummary').textContent = `🕵️ ${s.spies} · 🎭 ${s.fakes} · ⚖️ ${s.laws} · ⏱️ ${s.minutes}′`;
   }
 
+  $('#saveSettings').onclick = saveSettings;
+
   /* ====== Stats & History ====== */
-  $('#statsCard').onclick=()=>{ renderHistory(); showView('view-history'); };
-  $('#backFromHistory').onclick=()=>showView('view-landing');
-  $('#clearHistory').onclick=()=> modal('Svuotare lo storico partite?',{title:'Conferma',actions:[
-    {label:'Annulla',kind:'ghost'},
-    {label:'Svuota',kind:'danger',onClick:()=>{ state.history=[]; LS.set('history',state.history); renderHistory(); renderStats(); }}
-  ]});
+  $('#statsCard').onclick = () => {
+    renderHistory();
+    showView('view-history');
+  };
+
+  $('#backFromHistory').onclick = () => showView('view-landing');
+
+  $('#clearHistory').onclick = () => {
+    modal('Svuotare lo storico partite?', {
+      title: 'Conferma',
+      actions: [
+        {label: 'Annulla', kind: 'ghost'},
+        {label: 'Svuota', kind: 'danger', onClick: () => {
+          state.history = [];
+          LS.set('history', state.history);
+          renderHistory();
+          renderStats();
+        }}
+      ]
+    });
+  };
 
   function renderStats(){
-    const h=state.history; const n=h.length||0;
-    const winCount=(k)=> h.filter(x=>x.winner===k).length;
-    const pct=v=> n? Math.round(v*100/n):0;
-    $('#s_games').textContent=n;
-    $('#s_civ').textContent=pct(winCount('civ'));
-    $('#s_spy').textContent=pct(winCount('spy'));
-    $('#s_fake').textContent=pct(winCount('fake'));
-    $('#s_law').textContent=pct(winCount('law'));
+    const history = state.history;
+    const total = history.length || 0;
+    
+    const winCount = (key) => history.filter(x => x.winner === key).length;
+    const percentage = value => total ? Math.round(value * 100 / total) : 0;
+    
+    $('#s_games').textContent = total;
+    $('#s_civ').textContent = percentage(winCount('civ'));
+    $('#s_spy').textContent = percentage(winCount('spy'));
+    $('#s_fake').textContent = percentage(winCount('fake'));
+    $('#s_law').textContent = percentage(winCount('law'));
   }
+
   function renderHistory(){
-    const box=$('#historyList'); const h=[...state.history].reverse();
-    if(h.length===0){ box.innerHTML='<p class="muted">Ancora nessuna partita salvata.</p>'; return; }
-    box.innerHTML = h.map(item=>{
-      const ts=new Date(item.time).toLocaleString();
-      const elim = item.eliminations.map(x=>`<li><span>${x.name}</span><span class="chip ${roleBadgeCls(x.role)}">${roleLabel(x.role)}</span></li>`).join('');
-      const winners = item.winDetailHtml;
-      return `<div class="card in" style="margin-bottom:16px">
-        <p class="muted" style="margin:0 0 12px">${ts} • Cat: <b>${item.category||'—'}</b> • Parola: <b>${item.secret||'—'}</b></p>
-        <p style="margin:.5rem 0">Eliminazioni:</p>
-        <ul class="list">${elim}</ul>
-        <div style="margin-top:12px">${winners}</div>
+    const container = $('#historyList');
+    const history = [...state.history].reverse();
+    
+    if(history.length === 0) {
+      container.innerHTML = '<p class="text-muted text-center">Ancora nessuna partita salvata.</p>';
+      return;
+    }
+    
+    container.innerHTML = history.map(item => {
+      const timestamp = new Date(item.time).toLocaleString();
+      const eliminations = item.eliminations.map(x => 
+        `<li><span>${x.name}</span><span class="badge ${roleBadgeCls(x.role)}">${roleLabel(x.role)}</span></li>`
+      ).join('');
+      
+      return `<div class="card visible" style="margin-bottom: var(--space-lg);">
+        <p class="text-muted mb-md">${timestamp} • Cat: <strong>${item.category || '—'}</strong> • Parola: <strong>${item.secret || '—'}</strong></p>
+        <h4 style="margin: var(--space-sm) 0;">Eliminazioni:</h4>
+        <ul class="enhanced-list">${eliminations}</ul>
+        <div class="mt-md">${item.winDetailHtml}</div>
       </div>`;
     }).join('');
   }
 
-  /* ====== Game ====== */
+  /* ====== Game Logic ====== */
   function startGame(){
-    const s=readSettings();
-    const cats=allCategories(); const words=(state.category && cats[state.category])?cats[state.category]:[];
-    if(state.players.length<3) return modal('Devi avere almeno 3 giocatori.');
-    if(s.spies<1) return modal('Serve almeno 1 Spia.');
-    if(s.spies+s.fakes+s.laws>=state.players.length) return modal('I ruoli speciali totali devono essere minori dei giocatori.');
-    if(!state.category||words.length===0) return modal('Seleziona una categoria con almeno una parola.');
+    const settings = readSettings();
+    const categories = allCategories();
+    const words = (state.category && categories[state.category]) ? categories[state.category] : [];
+    
+    if(state.players.length < 3) return modal('Devi avere almeno 3 giocatori.');
+    if(settings.spies < 1) return modal('Serve almeno 1 Spia.');
+    if(settings.spies + settings.fakes + settings.laws >= state.players.length) {
+      return modal('I ruoli speciali totali devono essere minori dei giocatori.');
+    }
+    if(!state.category || words.length === 0) {
+      return modal('Seleziona una categoria con almeno una parola.');
+    }
 
-    // setup
-    LS.set('settings',s); LS.set('category',state.category);
+    LS.set('settings', settings);
+    LS.set('category', state.category);
 
-    const secret = words[Math.floor(Math.random()*words.length)];
-    const order=[...state.players]; for(let i=order.length-1;i>0;i--){const j=(Math.random()*(i+1))|0; [order[i],order[j]]=[order[j],order[i]]}
+    const secret = words[Math.floor(Math.random() * words.length)];
+    const order = [...state.players];
+    
+    // Shuffle players
+    for(let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
 
-    // roles pool
-    const roles=[]; for(let i=0;i<s.spies;i++) roles.push(Role.spy);
-    for(let i=0;i<s.fakes;i++) roles.push(Role.fake);
-    for(let i=0;i<s.laws;i++) roles.push(Role.law);
-    while(roles.length<order.length) roles.push(Role.civ);
-    for(let i=roles.length-1;i>0;i--){const j=(Math.random()*(i+1))|0; [roles[i],roles[j]]=[roles[j],roles[i]]}
+    // Create roles
+    const roles = [];
+    for(let i = 0; i < settings.spies; i++) roles.push(Role.spy);
+    for(let i = 0; i < settings.fakes; i++) roles.push(Role.fake);
+    for(let i = 0; i < settings.laws; i++) roles.push(Role.law);
+    while(roles.length < order.length) roles.push(Role.civ);
+    
+    // Shuffle roles
+    for(let i = roles.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [roles[i], roles[j]] = [roles[j], roles[i]];
+    }
 
-    // build lawyer assignment: one lawyer per spy (round-robin)
-    const spyIdxs=roles.map((r,i)=>r===Role.spy?i:-1).filter(i=>i>=0);
-    const lawIdxs=roles.map((r,i)=>r===Role.law?i:-1).filter(i=>i>=0);
-    const lawForSpy={}; spyIdxs.forEach((si,k)=>{const li = lawIdxs[k%lawIdxs.length]; if(li!=null && lawIdxs.length>0) lawForSpy[si]=li;});
-    const spyNames = spyIdxs.map(i=>order[i]);
+    // Assign lawyers to spies
+    const spyIndices = roles.map((r, i) => r === Role.spy ? i : -1).filter(i => i >= 0);
+    const lawyerIndices = roles.map((r, i) => r === Role.law ? i : -1).filter(i => i >= 0);
+    const lawyerForSpy = {};
+    
+    spyIndices.forEach((spyIdx, k) => {
+      const lawyerIdx = lawyerIndices[k % lawyerIndices.length];
+      if(lawyerIdx != null && lawyerIndices.length > 0) {
+        lawyerForSpy[spyIdx] = lawyerIdx;
+      }
+    });
 
-    state.game={
-      order, roles, secret,
-      lawForSpy, // mapping spyIndex -> lawyerIndex (if any)
-      spiesKnow: s.optSpiesKnow,
-      index:0, revealed:false,
-      minutes:s.minutes, time:s.minutes*60, timer:null,
-      voteRound:1, voteMaxRounds: spyIdxs.length || 1,
-      eliminated:[], // array of {index,name,role}
-      canVoteMask: order.map(()=>true), // chi può ancora votare
-      optElimNoVote: s.optElimNoVote
+    state.game = {
+      order,
+      roles,
+      secret,
+      lawyerForSpy,
+      spiesKnow: settings.optSpiesKnow,
+      index: 0,
+      revealed: false,
+      minutes: settings.minutes,
+      time: settings.minutes * 60,
+      timer: null,
+      voteRound: 1,
+      voteMaxRounds: spyIndices.length || 1,
+      eliminated: [],
+      canVoteMask: order.map(() => true),
+      optElimNoVote: settings.optElimNoVote
     };
 
-    showView('view-roles'); showNextRole();
+    showView('view-roles');
+    showNextRole();
   }
 
-  $('#startGameMain').onclick=startGame;
+  $('#startGameMain').onclick = startGame;
 
-  function roleRevealText(i){
-    const g=state.game, role=g.roles[i];
-    if(role===Role.civ) return `Sei un <span class="role-strong">Civile</span>! La parola è: <span class="role-word">${g.secret}</span>`;
-    if(role===Role.fake) return `Sei la <span class="role-strong">Finta Spia</span>! Parola: <span class="role-word">${g.secret}</span>`;
-    if(role===Role.law){
-      // sa parola e NOME delle Spie vere
-      const spies=g.roles.map((r,k)=> r===Role.spy ? g.order[k] : null).filter(Boolean);
-      return `Sei l'<span class="role-strong">Avvocato</span>! La parola è "<span class="role-word">${g.secret}</span>". Le Spie sono: <b>${spies.join(', ')||'—'}</b>.`;
+  function roleRevealText(index){
+    const game = state.game;
+    const role = game.roles[index];
+    
+    if(role === Role.civ) {
+      return `Sei un <span style="font-weight: 700;">Civile</span>! La parola è: <span style="font-weight: 700; color: var(--primary);">${game.secret}</span>`;
     }
-    if(role===Role.spy){
-      const spiesOther = g.spiesKnow
-        ? g.roles.map((r,k)=> (r===Role.spy && k!==i)? g.order[k] : null).filter(Boolean)
+    
+    if(role === Role.fake) {
+      return `Sei la <span style="font-weight: 700;">Finta Spia</span>! Parola: <span style="font-weight: 700; color: var(--primary);">${game.secret}</span>`;
+    }
+    
+    if(role === Role.law) {
+      const spies = game.roles.map((r, k) => r === Role.spy ? game.order[k] : null).filter(Boolean);
+      return `Sei l'<span style="font-weight: 700;">Avvocato</span>! La parola è "<span style="font-weight: 700; color: var(--primary);">${game.secret}</span>". Le Spie sono: <strong>${spies.join(', ') || '—'}</strong>.`;
+    }
+    
+    if(role === Role.spy) {
+      const otherSpies = game.spiesKnow
+        ? game.roles.map((r, k) => (r === Role.spy && k !== index) ? game.order[k] : null).filter(Boolean)
         : [];
-      const know = spiesOther.length? `<br><small>Conosci anche: <b>${spiesOther.join(', ')}</b>.</small>` : '';
-      return `Sei la <span class="role-strong">Spia</span>! <small>Gioca con il tuo avvocato, se te ne è stato fornito uno d'ufficio.</small>${know}`;
+      const knowText = otherSpies.length ? `<br><small>Conosci anche: <strong>${otherSpies.join(', ')}</strong>.</small>` : '';
+      return `Sei la <span style="font-weight: 700;">Spia</span>! <small>Gioca con il tuo avvocato, se te ne è stato fornito uno d'ufficio.</small>${knowText}`;
     }
   }
 
   function showNextRole(){
-    const g=state.game; if(!g) return;
-    if(g.index>=g.order.length){ showView('view-game'); startTimer(); setFirstQuestion(); return; }
-    const name=g.order[g.index];
-    $('#currentPlayer').textContent=name;
-    const card=$('#roleCard'); card.classList.remove('revealed'); g.revealed=false;
-    card.innerHTML = `<p class="muted">Tocca o premi Invio per vedere il tuo ruolo</p>`;
-    $('#nextPlayer').disabled=true;
+    const game = state.game;
+    if(!game) return;
+    
+    if(game.index >= game.order.length) {
+      showView('view-game');
+      startTimer();
+      setFirstQuestion();
+      return;
+    }
+    
+    const name = game.order[game.index];
+    $('#currentPlayer').textContent = name;
+    
+    const card = $('#roleCard');
+    card.classList.remove('revealed');
+    game.revealed = false;
+    card.innerHTML = '<p class="text-muted">Tocca o premi Invio per vedere il tuo ruolo</p>';
+    $('#nextPlayer').disabled = true;
 
     function reveal(){
-      if(g.revealed) return; g.revealed=true; card.classList.add('revealed');
-      const role=g.roles[g.index];
+      if(game.revealed) return;
+      
+      game.revealed = true;
+      card.classList.add('revealed');
+      
+      const role = game.roles[game.index];
       card.innerHTML = `
-        <div style="text-align:center">
-          <div class="badge ${roleBadgeCls(role)}" style="margin-bottom:12px">${roleLabel(role)}</div>
-          <p style="font-size:1.12rem">${roleRevealText(g.index)}</p>
+        <div class="text-center">
+          <div class="badge ${roleBadgeCls(role)} mb-md">${roleLabel(role)}</div>
+          <div style="font-size: 1.1rem;">${roleRevealText(game.index)}</div>
         </div>`;
-      $('#nextPlayer').disabled=false;
+      
+      $('#nextPlayer').disabled = false;
     }
-    card.onclick=reveal; card.onkeydown=e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); reveal(); } };
-    card.onmousemove=e=>{const r=card.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width*2-1; const y=(e.clientY-r.top)/r.height*2-1; card.style.transform=`rotateX(${(-y*6).toFixed(2)}deg) rotateY(${(x*6).toFixed(2)}deg)`};
-    card.onmouseleave=()=> card.style.transform='rotateX(0) rotateY(0)';
-    $('#nextPlayer').onclick=()=>{ if(!g.revealed) return modal('Prima leggi il tuo ruolo.'); g.index++; showNextRole(); };
+
+    card.onclick = reveal;
+    card.onkeydown = e => {
+      if(e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        reveal();
+      }
+    };
+
+    $('#nextPlayer').onclick = () => {
+      if(!game.revealed) return modal('Prima leggi il tuo ruolo.');
+      game.index++;
+      showNextRole();
+    };
   }
 
   /* ====== Timer ====== */
-  const fmt=s=>{const m=Math.floor(s/60).toString().padStart(2,'0'); const sec=(s%60).toString().padStart(2,'0'); return `${m}:${sec}`};
+  function formatTime(seconds){
+    const minutes = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const secs = (seconds % 60).toString().padStart(2, '0');
+    return `${minutes}:${secs}`;
+  }
+
   function startTimer(){
-    const g=state.game; if(!g) return;
-    g.time=g.minutes*60; $('#timer').textContent=fmt(g.time);
-    if(g.timer) {clearInterval(g.timer); g.timer=null;}
-    g.timer=setInterval(()=>{ g.time=Math.max(0,g.time-1); $('#timer').textContent=fmt(g.time);
-      if(g.time<=0){ clearInterval(g.timer); g.timer=null; try{$('#beep').currentTime=0; $('#beep').play().catch(()=>{});}catch{}; onTimeUp();}
-    },1000);
+    const game = state.game;
+    if(!game) return;
+    
+    game.time = game.minutes * 60;
+    const timerEl = $('#timer');
+    timerEl.textContent = formatTime(game.time);
+    timerEl.classList.remove('warning');
+    
+    if(game.timer) {
+      clearInterval(game.timer);
+      game.timer = null;
+    }
+    
+    game.timer = setInterval(() => {
+      game.time = Math.max(0, game.time - 1);
+      timerEl.textContent = formatTime(game.time);
+      
+      // Warning animation for last 30 seconds
+      if(game.time <= 30 && !timerEl.classList.contains('warning')) {
+        timerEl.classList.add('warning');
+      }
+      
+      if(game.time <= 0) {
+        clearInterval(game.timer);
+        game.timer = null;
+        try {
+          const beep = $('#beep');
+          beep.currentTime = 0;
+          beep.play().catch(() => {});
+        } catch(e) {}
+        onTimeUp();
+      }
+    }, 1000);
   }
+
   function pauseTimer(){
-    const g=state.game; if(!g) return;
-    if(g.timer){ clearInterval(g.timer); g.timer=null; $('#pauseTimer').innerHTML='▶️ Riprendi'; }
-    else { startTimer(); $('#pauseTimer').innerHTML='⏸️ Pausa'; }
+    const game = state.game;
+    if(!game) return;
+    
+    const pauseBtn = $('#pauseTimer');
+    
+    if(game.timer) {
+      clearInterval(game.timer);
+      game.timer = null;
+      pauseBtn.innerHTML = '▶️ Riprendi';
+    } else {
+      startTimer();
+      pauseBtn.innerHTML = '⏸️ Pausa';
+    }
   }
-  $('#pauseTimer').onclick=pauseTimer;
-  $('#endRound').onclick=()=>onTimeUp();
+
+  $('#pauseTimer').onclick = pauseTimer;
+  $('#endRound').onclick = () => onTimeUp();
 
   function setFirstQuestion(){
-    const g=state.game; const pick=g.order[(Math.random()*g.order.length)|0];
-    $('#firstQuestionHint').innerHTML = `La prima domanda la fa: <b>${pick}</b><br><small>Iniziate a fare domande per scoprire chi è la spia.</small>`;
+    const game = state.game;
+    const randomPlayer = game.order[Math.floor(Math.random() * game.order.length)];
+    $('#firstQuestionHint').innerHTML = `La prima domanda la fa: <strong>${randomPlayer}</strong><br><small>Iniziate a fare domande per scoprire chi è la spia.</small>`;
   }
 
-  function onTimeUp(){ modal('Tempo scaduto! Si va al voto.',{actions:[{label:'OK',kind:'ok',onClick:goVote}]}); }
+  function onTimeUp(){
+    modal('Tempo scaduto! Si va al voto.', {
+      actions: [{label: 'OK', kind: 'success', onClick: goVote}]
+    });
+  }
 
-  /* ====== VOTAZIONE multi-turno con validazione ====== */
+  /* ====== Voting ====== */
   function updateVoteStatus(){
-    const g=state.game;
-    const totalVotes = Object.values(g.votes||{}).reduce((sum,v)=>sum+v,0);
+    const game = state.game;
+    const totalVotes = Object.values(game.votes || {}).reduce((sum, v) => sum + v, 0);
     $('#totalVotes').textContent = totalVotes;
   }
 
   function goVote(){
-    const g=state.game;
-    g.votes = {}; // reset per round
-    $('#voteTitle').textContent = `🗳️ Votate la spia ${g.voteRound}/${g.voteMaxRounds}`;
-    const maxVoters = g.optElimNoVote ? g.canVoteMask.filter(Boolean).length : g.order.length;
-    $('#voteSubHint').textContent = `Turno ${g.voteRound} di ${g.voteMaxRounds} • Votanti disponibili: ${maxVoters}`;
+    const game = state.game;
+    game.votes = {};
+    
+    $('#voteTitle').innerHTML = `<span class="emoji">🗳️</span> Votate la spia ${game.voteRound}/${game.voteMaxRounds}`;
+    
+    const maxVoters = game.optElimNoVote 
+      ? game.canVoteMask.filter(Boolean).length 
+      : game.order.length;
+    
+    $('#voteSubHint').textContent = `Turno ${game.voteRound} di ${game.voteMaxRounds} • Votanti disponibili: ${maxVoters}`;
 
-    const ul=$('#voteList'); ul.innerHTML='';
-    g.order.forEach((name,idx)=>{
-      const alreadyEliminated = g.eliminated.some(x=>x.index===idx);
-      const canVote = g.optElimNoVote ? g.canVoteMask[idx] : true;
+    const ul = $('#voteList');
+    ul.innerHTML = '';
+    
+    game.order.forEach((name, idx) => {
+      const alreadyEliminated = game.eliminated.some(x => x.index === idx);
+      const canVote = game.optElimNoVote ? game.canVoteMask[idx] : true;
 
-      const li=document.createElement('li');
+      const li = document.createElement('li');
       li.innerHTML = `
-        <span style="${alreadyEliminated?'text-decoration:line-through;opacity:.6':''}">${name}</span>
+        <span style="${alreadyEliminated ? 'text-decoration: line-through; opacity: 0.6;' : 'font-weight: 600;'}">${name}</span>
         <div class="vote-controls">
           <button class="btn ghost small" data-dec>−</button>
           <div class="vote-count" data-count>0</div>
-          <button class="btn secondary small" data-inc ${alreadyEliminated?'disabled':''}>Vota</button>
+          <button class="btn secondary small" data-inc ${alreadyEliminated ? 'disabled' : ''}>Vota</button>
         </div>`;
-      const count=li.querySelector('[data-count]');
-      g.votes[name]=0;
+      
+      const countEl = li.querySelector('[data-count]');
+      game.votes[name] = 0;
 
-      li.querySelector('[data-inc]').onclick=()=>{ 
-        const totalVotes = Object.values(g.votes||{}).reduce((sum,v)=>sum+v,0);
-        if(totalVotes >= maxVoters){
+      li.querySelector('[data-inc]').onclick = () => {
+        const totalVotes = Object.values(game.votes || {}).reduce((sum, v) => sum + v, 0);
+        if(totalVotes >= maxVoters) {
           modal('Hai raggiunto il numero massimo di voti disponibili!');
           return;
         }
-        g.votes[name]++; 
-        count.textContent=g.votes[name]; 
+        game.votes[name]++;
+        countEl.textContent = game.votes[name];
+        countEl.classList.toggle('has-votes', game.votes[name] > 0);
         updateVoteStatus();
       };
-      li.querySelector('[data-dec]').onclick=()=>{ 
-        g.votes[name]=Math.max(0,g.votes[name]-1); 
-        count.textContent=g.votes[name]; 
+      
+      li.querySelector('[data-dec]').onclick = () => {
+        game.votes[name] = Math.max(0, game.votes[name] - 1);
+        countEl.textContent = game.votes[name];
+        countEl.classList.toggle('has-votes', game.votes[name] > 0);
         updateVoteStatus();
       };
 
-      // se eliminato, non può votare (opzionale)
-      if(!canVote){ li.style.opacity=.6; li.title='Eliminato: non vota'; }
+      if(!canVote) {
+        li.style.opacity = '0.6';
+        li.title = 'Eliminato: non vota';
+      }
 
       ul.appendChild(li);
     });
@@ -882,194 +2253,315 @@
     showView('view-vote');
   }
 
-  // calcolo eliminazione del round (no parità ammessa)
-  $('#seeRoundResult').onclick=()=>{
-    const g=state.game;
-    const totalVotes = Object.values(g.votes||{}).reduce((sum,v)=>sum+v,0);
-    if(totalVotes === 0){ return modal('Nessun voto espresso. Assegnate almeno un voto.'); }
+  $('#seeRoundResult').onclick = () => {
+    const game = state.game;
+    const totalVotes = Object.values(game.votes || {}).reduce((sum, v) => sum + v, 0);
     
-    const entries=Object.entries(g.votes||{}).sort((a,b)=>b[1]-a[1]);
-    const top=entries[0][1];
-    if(top === 0){ return modal('Nessun voto espresso. Assegnate almeno un voto.'); }
+    if(totalVotes === 0) {
+      return modal('Nessun voto espresso. Assegnate almeno un voto.');
+    }
     
-    const tied=entries.filter(e=>e[1]===top).map(e=>e[0]);
-    if(tied.length!==1){
+    const entries = Object.entries(game.votes || {}).sort((a, b) => b[1] - a[1]);
+    const topVotes = entries[0][1];
+    
+    if(topVotes === 0) {
+      return modal('Nessun voto espresso. Assegnate almeno un voto.');
+    }
+    
+    const tied = entries.filter(e => e[1] === topVotes).map(e => e[0]);
+    
+    if(tied.length !== 1) {
       return modal('⚠️ Parità rilevata. Dovete prendere una decisione prima di procedere!');
     }
-    const name=tied[0];
-    const idx=g.order.indexOf(name);
-    const role=g.roles[idx];
+    
+    const eliminatedName = tied[0];
+    const eliminatedIndex = game.order.indexOf(eliminatedName);
+    const eliminatedRole = game.roles[eliminatedIndex];
 
-    // registra eliminato
-    g.eliminated.push({index:idx,name,role});
-    if(g.optElimNoVote) g.canVoteMask[idx]=false;
+    game.eliminated.push({
+      index: eliminatedIndex,
+      name: eliminatedName,
+      role: eliminatedRole
+    });
+    
+    if(game.optElimNoVote) {
+      game.canVoteMask[eliminatedIndex] = false;
+    }
 
-    // mostra info round
-    modal(`Eliminato <b>${name}</b> — era <b>${roleLabel(role)}</b>.`,{
-      actions:[{label:'Continua',kind:'ok',onClick:afterElimination}]
+    modal(`Eliminato <strong>${eliminatedName}</strong> — era <strong>${roleLabel(eliminatedRole)}</strong>.`, {
+      actions: [{label: 'Continua', kind: 'success', onClick: afterElimination}]
     });
   };
 
   function afterElimination(){
-    const g=state.game;
-    // se abbiamo raggiunto il numero di turni richiesto -> esito finale
-    if(g.voteRound>=g.voteMaxRounds){ finalizeGame(); return; }
+    const game = state.game;
+    
+    if(game.voteRound >= game.voteMaxRounds) {
+      finalizeGame();
+      return;
+    }
 
-    // aggiorna round e riparti (barrando gli eliminati)
-    g.voteRound++;
+    game.voteRound++;
     goVote();
   }
 
-  /* ====== Regole di vittoria ====== */
+  /* ====== Game Results ====== */
   function finalizeGame(){
-    const g=state.game;
-    // comodi
-    const spyIdxs = g.roles.map((r,i)=> r===Role.spy?i:-1).filter(i=>i>=0);
-    const fakeIdxs= g.roles.map((r,i)=> r===Role.fake?i:-1).filter(i=>i>=0);
+    const game = state.game;
+    const spyIndices = game.roles.map((r, i) => r === Role.spy ? i : -1).filter(i => i >= 0);
+    const eliminatedIndices = new Set(game.eliminated.map(x => x.index));
 
-    const eliminatedIdxs = new Set(g.eliminated.map(x=>x.index));
-
-    // 1) se è stata eliminata una Finta Spia -> quella (o quelle) vince da sola
-    const eliminatedFakes = g.eliminated.filter(x=>x.role===Role.fake);
-    if(eliminatedFakes.length){
-      const lines = eliminatedFakes.map(x=>`<p>🎭 <b>${x.name}</b> ha vinto <i>come Finta Spia</i>.</p>`).join('');
-      const html = lines + `<p class="muted">Tutti gli altri perdono (incluse le Spie vere e gli Avvocati).</p>`;
-      endAndSave({winner:'fake', html});
+    // Check for eliminated fake spies (they win alone)
+    const eliminatedFakes = game.eliminated.filter(x => x.role === Role.fake);
+    if(eliminatedFakes.length) {
+      const lines = eliminatedFakes.map(x => 
+        `<p>🎭 <strong>${x.name}</strong> ha vinto <em>come Finta Spia</em>.</p>`
+      ).join('');
+      const html = lines + '<p class="text-muted">Tutti gli altri perdono (incluse le Spie vere e gli Avvocati).</p>';
+      endAndSave({winner: 'fake', html});
       return;
     }
 
-    // 2) Spie vive?
-    const spiesAliveIdxs = spyIdxs.filter(i=>!eliminatedIdxs.has(i));
-    if(spiesAliveIdxs.length){
-      // vincono le Spie vive + i loro Avvocati (se assegnati)
-      const aliveSpiesNames = spiesAliveIdxs.map(i=>g.order[i]);
-      const lawyerWinners = spiesAliveIdxs.map(si=> g.lawForSpy[si]).filter(i=> Number.isInteger(i) && !eliminatedIdxs.has(i));
-      const lawyerNames = [...new Set(lawyerWinners.map(i=>g.order[i]))];
-
-      let html='';
-      aliveSpiesNames.forEach(n=>{
-        const si = g.order.indexOf(n);
-        const li = g.lawForSpy[si];
-        const lawName = Number.isInteger(li)? g.order[li] : null;
-        if(lawName && !eliminatedIdxs.has(li)){
-          html+=`<p>🕵️ <b>${n}</b> ha vinto <b>insieme al suo Avvocato</b> <b>${lawName}</b>.</p>`;
-        }else{
-          html+=`<p>🕵️ <b>${n}</b> ha vinto.</p>`;
+    // Check for surviving spies
+    const survivingSpies = spyIndices.filter(i => !eliminatedIndices.has(i));
+    if(survivingSpies.length) {
+      const spyNames = survivingSpies.map(i => game.order[i]);
+      const lawyerWinners = survivingSpies
+        .map(si => game.lawyerForSpy[si])
+        .filter(i => Number.isInteger(i) && !eliminatedIndices.has(i));
+      
+      let html = '';
+      survivingSpies.forEach(si => {
+        const spyName = game.order[si];
+        const lawyerIndex = game.lawyerForSpy[si];
+        
+        if(Number.isInteger(lawyerIndex) && !eliminatedIndices.has(lawyerIndex)) {
+          const lawyerName = game.order[lawyerIndex];
+          html += `<p>🕵️ <strong>${spyName}</strong> ha vinto <strong>insieme al suo Avvocato</strong> <strong>${lawyerName}</strong>.</p>`;
+        } else {
+          html += `<p>🕵️ <strong>${spyName}</strong> ha vinto.</p>`;
         }
       });
-      if(aliveSpiesNames.length>1) html+=`<p class="muted">Le Spie hanno prevalso.</p>`;
-      endAndSave({winner:'spy', html});
+      
+      if(spyNames.length > 1) {
+        html += '<p class="text-muted">Le Spie hanno prevalso.</p>';
+      }
+      
+      endAndSave({winner: 'spy', html});
       return;
     }
 
-    // 3) Nessuna Spia viva e nessuna Finta Spia eliminata => vincono i Civili
-    const html = `<p>👤 <b>I Civili vincono</b>! Avete identificato correttamente tutte le Spie.</p>`;
-    endAndSave({winner:'civ', html});
+    // Civilians win
+    const html = '<p>👤 <strong>I Civili vincono</strong>! Avete identificato correttamente tutte le Spie.</p>';
+    endAndSave({winner: 'civ', html});
   }
 
   function endAndSave({winner, html}){
     showView('view-results');
-    const g=state.game;
-    // riepilogo voti/eliminazioni
-    const elimHtml = g.eliminated.map(o=>`<li><span>${o.name}</span><span class="chip ${roleBadgeCls(o.role)}">${roleLabel(o.role)}</span></li>`).join('');
-    const box = `
+    const game = state.game;
+    
+    const eliminationsList = game.eliminated.map(o => 
+      `<li><span>${o.name}</span><span class="badge ${roleBadgeCls(o.role)}">${roleLabel(o.role)}</span></li>`
+    ).join('');
+    
+    const resultsHtml = `
       <h3 class="section-title">Esito partita</h3>
       ${html}
-      <h4 class="section-title" style="margin-top:16px">Eliminazioni</h4>
-      <ul class="list">${elimHtml}</ul>`;
-    $('#resultsBox').innerHTML = box;
+      <h4 class="section-title mt-lg">Eliminazioni</h4>
+      <ul class="enhanced-list">${eliminationsList}</ul>`;
+    
+    $('#resultsBox').innerHTML = resultsHtml;
 
-    // pulsante "rivela tutti i ruoli" una sola volta
-    let revealed=false;
-    $('#revealAll').onclick=()=>{ if(revealed) return; revealed=true;
-      const rows = g.order.map((p,i)=>`<li><span>${p}</span><span class="chip ${roleBadgeCls(g.roles[i])}">${roleLabel(g.roles[i])}</span></li>`).join('');
-      $('#resultsBox').innerHTML += `<div style="margin-top:16px"><ul class="list">${rows}</ul></div>`;
-      $('#revealAll').style.display='none';
+    let rolesRevealed = false;
+    $('#revealAll').onclick = () => {
+      if(rolesRevealed) return;
+      rolesRevealed = true;
+      
+      const allRoles = game.order.map((player, i) => 
+        `<li><span>${player}</span><span class="badge ${roleBadgeCls(game.roles[i])}">${roleLabel(game.roles[i])}</span></li>`
+      ).join('');
+      
+      $('#resultsBox').innerHTML += `
+        <div class="mt-lg">
+          <h4 class="section-title">Tutti i ruoli</h4>
+          <ul class="enhanced-list">${allRoles}</ul>
+        </div>`;
+      
+      $('#revealAll').style.display = 'none';
     };
 
-    // confetti lato civile vs spie vs fake
-    confetti(winner==='civ'?'civ': winner==='fake'?'fake':'spy');
+    // Confetti animation
+    triggerConfetti(winner);
 
-    // salva storico
-    const winDetailHtml = html;
+    // Save to history
     state.history.push({
       time: Date.now(),
       winner,
-      winDetailHtml,
-      eliminations: g.eliminated,
+      winDetailHtml: html,
+      eliminations: game.eliminated,
       category: state.category,
-      secret: g.secret
+      secret: game.secret
     });
-    LS.set('history',state.history);
+    
+    LS.set('history', state.history);
     renderStats();
   }
 
-  // Fix per il pulsante "Gioca di nuovo"
-  $('#restart').onclick=()=>{
+  $('#restart').onclick = () => {
     state.game = null;
     showView('view-home');
   };
 
-  function confetti(type){
-    const cvs=document.getElementById('fxConfetti'); const ctx=cvs.getContext('2d');
-    const W=cvs.width=innerWidth, H=cvs.height=innerHeight;
-    const pal = type==='civ'?['#67e8f9','#60a5fa','#a78bfa','#ffffff'] : type==='fake'?['#f59e0b','#ffe08a','#ffd27d','#ffffff'] : ['#ef476f','#ff9aa5','#ffd1d6','#ffffff'];
-    const parts=Array.from({length:110},()=>({x:Math.random()*W,y:-20,vx:(Math.random()-.5)*2,vy:2+Math.random()*2,size:4+Math.random()*6,rot:Math.random()*360,color:pal[(Math.random()*pal.length)|0],life:60+Math.random()*60}));
-    let anim;
-    function frame(){ ctx.clearRect(0,0,W,H);
-      parts.forEach(p=>{p.x+=p.vx; p.y+=p.vy; p.vy+=.02; p.rot+=3; p.life--; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180); ctx.fillStyle=p.color; ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size); ctx.restore();});
-      if(parts.some(p=>p.life>0 && p.y<H+20)) anim=requestAnimationFrame(frame); else cancelAnimationFrame(anim);
-    } frame(); setTimeout(()=>ctx.clearRect(0,0,W,H),2500);
+  /* ====== Confetti Animation ====== */
+  function triggerConfetti(type){
+    const canvas = $('#fxConfetti');
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width = window.innerWidth;
+    const height = canvas.height = window.innerHeight;
+    
+    const colors = type === 'civ' 
+      ? ['#67e8f9', '#60a5fa', '#a78bfa', '#ffffff']
+      : type === 'fake'
+      ? ['#f59e0b', '#ffe08a', '#ffd27d', '#ffffff']
+      : ['#ef476f', '#ff9aa5', '#ffd1d6', '#ffffff'];
+    
+    const particles = Array.from({length: 150}, () => ({
+      x: Math.random() * width,
+      y: -20,
+      vx: (Math.random() - 0.5) * 3,
+      vy: 2 + Math.random() * 3,
+      size: 4 + Math.random() * 8,
+      rotation: Math.random() * 360,
+      rotationSpeed: (Math.random() - 0.5) * 6,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      life: 80 + Math.random() * 40,
+      maxLife: 80 + Math.random() * 40
+    }));
+    
+    let animationId;
+    
+    function animate(){
+      ctx.clearRect(0, 0, width, height);
+      
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.03; // gravity
+        p.rotation += p.rotationSpeed;
+        p.life--;
+        
+        const alpha = p.life / p.maxLife;
+        
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation * Math.PI / 180);
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+        ctx.restore();
+      });
+      
+      if(particles.some(p => p.life > 0 && p.y < height + 50)) {
+        animationId = requestAnimationFrame(animate);
+      } else {
+        cancelAnimationFrame(animationId);
+        ctx.clearRect(0, 0, width, height);
+      }
+    }
+    
+    animate();
+    
+    setTimeout(() => {
+      if(animationId) {
+        cancelAnimationFrame(animationId);
+        ctx.clearRect(0, 0, width, height);
+      }
+    }, 4000);
   }
 
-  /* ====== Lang/Theme/Init ====== */
-  function loadCustomForLang(lang){ state.custom = LS.get('custom_'+lang,{}); }
-  function switchLang(lang){ state.lang=lang; LS.set('lang',lang); loadCustomForLang(lang); i18nRefresh(); }
+  /* ====== Language & Theme ====== */
+  function loadCustomForLang(lang){
+    state.custom = LS.get('custom_' + lang, {});
+  }
 
-  document.getElementById('lang').onchange=e=>switchLang(e.target.value);
-  document.getElementById('themeBtn').onclick=cycleTheme;
-  document.getElementById('howToBtn').onclick=()=>showRules();
+  function switchLang(lang){
+    state.lang = lang;
+    LS.set('lang', lang);
+    loadCustomForLang(lang);
+    i18nRefresh();
+  }
 
+  $('#lang').onchange = e => switchLang(e.target.value);
+  $('#themeBtn').onclick = cycleTheme;
+
+  /* ====== Rules Modal ====== */
   function showRules(){
-    const html=`
-    <h3>🎲 Scopo del gioco</h3>
-    <p>I <b>Civili</b> devono <b>eliminare la/ le Spie vere</b> entro i turni di voto disponibili.<br>
-    La <b>Spia</b> vince se <b>non viene votata</b> (basta che ne sopravviva almeno una).</p>
+    const rulesHtml = `
+      <h3>🎲 Scopo del gioco</h3>
+      <p>I <strong>Civili</strong> devono <strong>eliminare le Spie vere</strong> entro i turni di voto disponibili.<br>
+      La <strong>Spia</strong> vince se <strong>non viene votata</strong> (basta che ne sopravviva almeno una).</p>
 
-    <h3>🧩 Ruoli</h3>
-    <ul>
-      <li>🕵️ <b>Spia</b>: non conosce la parola. <u>Vince se non viene eliminata</u>. In reveal: "gioca con il tuo avvocato, se te ne è stato fornito uno d'ufficio". Le spie possono <b>conoscersi</b> tra loro (opzione), <b>escluse</b> le Finte Spie.</li>
-      <li>🎭 <b>Finta Spia</b>: <i>conosce</i> la parola. <u>Vince solo se viene eliminata</u> (passando per Spia). Se succede, <b>perdono tutti gli altri</b>, comprese le Spie.</li>
-      <li>⚖️ <b>Avvocato</b>: conosce parola e Spie vere. È <i>assegnato</i> a una Spia; se quella Spia <b>vince</b>, <b>vince anche il suo Avvocato</b> (anche se durante i turni è stato eliminato).</li>
-      <li>👤 <b>Civile</b>: conosce la parola e prova a smascherare le Spie.</li>
-    </ul>
+      <h3>🧩 Ruoli</h3>
+      <ul style="margin: var(--space-md) 0; padding-left: var(--space-lg);">
+        <li>🕵️ <strong>Spia</strong>: non conosce la parola. <u>Vince se non viene eliminata</u>. Le spie possono <strong>conoscersi</strong> tra loro (opzione), <strong>escluse</strong> le Finte Spie.</li>
+        <li>🎭 <strong>Finta Spia</strong>: <em>conosce</em> la parola. <u>Vince solo se viene eliminata</u> (passando per Spia). Se succede, <strong>perdono tutti gli altri</strong>, comprese le Spie.</li>
+        <li>⚖️ <strong>Avvocato</strong>: conosce parola e Spie vere. È <em>assegnato</em> a una Spia; se quella Spia <strong>vince</strong>, <strong>vince anche il suo Avvocato</strong>.</li>
+        <li>👤 <strong>Civile</strong>: conosce la parola e prova a smascherare le Spie.</li>
+      </ul>
 
-    <h3>⏳ Round</h3>
-    <ol>
-      <li>Assegnazione ruoli (reveal uno alla volta).</li>
-      <li>Discussione a tempo.</li>
-      <li><b>Voto a turni</b>: numero turni = numero di Spie. A ogni turno si elimina una persona. Gli eliminati possono <b>non votare più</b> se attivi l'opzione.</li>
-      <li>Esito finale secondo le regole sopra.</li>
-    </ol>
+      <h3>⏳ Come si gioca</h3>
+      <ol style="margin: var(--space-md) 0; padding-left: var(--space-lg);">
+        <li>Assegnazione ruoli (reveal uno alla volta).</li>
+        <li>Discussione a tempo con domande e risposte.</li>
+        <li><strong>Voto a turni</strong>: numero turni = numero di Spie. A ogni turno si elimina una persona.</li>
+        <li>Esito finale secondo le regole di vittoria.</li>
+      </ol>
 
-    <h3>⚠️ Parità</h3>
-    <p>Le votazioni <b>non possono finire in parità</b>: se succede, il gioco vi chiede di decidere prima di procedere.</p>`;
-    modal(html,{title:'Regole',actions:[{label:'OK',kind:'ok'}]});
+      <h3>⚠️ Regole speciali</h3>
+      <p>Le votazioni <strong>non possono finire in parità</strong>: se succede, dovete decidere prima di procedere. Gli eliminati possono non votare più se attivate l'opzione nelle impostazioni.</p>`;
+    
+    modal(rulesHtml, {
+      title: 'Regole del gioco',
+      actions: [{label: 'Ho capito', kind: 'success'}]
+    });
   }
-  $('#helpBtn').onclick=showRules;
 
-  // Init
-  (function init(){
+  $('#helpBtn').onclick = showRules;
+  $('#howToBtn').onclick = showRules;
+
+  /* ====== Initialization ====== */
+  function initializeApp(){
+    // Apply theme
     applyTheme();
-    $('#themeBtn').textContent=state.theme==='auto'?'🌓':state.theme==='light'?'☀️':'🌙';
+    $('#themeBtn').textContent = state.theme === 'auto' ? '🌓' : state.theme === 'light' ? '☀️' : '🌙';
+    
+    // Load custom categories for current language
     loadCustomForLang(state.lang);
-    i18nRefresh(); writeSettings(state.settings);
-    // chiude di default i collapsible
-    $$('[data-collapsible]').forEach(c=>c.classList.remove('open'));
-    document.getElementById('goStart').onclick=()=>showView('view-home');
-    document.getElementById('goHow').onclick=showRules;
+    
+    // Update UI
+    i18nRefresh();
+    writeSettings(state.settings);
+    
+    // Setup collapsibles (start closed)
+    $('.collapsible').forEach(c => c.classList.remove('open'));
+    
+    // Setup navigation
+    $('#goStart').onclick = () => showView('view-home');
+    $('#goHow').onclick = showRules;
+    
+    // Trigger scroll reveals
+    revealOnScroll();
+    
+    // Render initial stats
     renderStats();
-  })();
+    
+    console.log('🕵️‍♂️ Spia Game initialized successfully!');
+  }
+
+  // Initialize when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    initializeApp();
+  });
   </script>
 </body>
 </html>
