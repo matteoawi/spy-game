@@ -368,7 +368,7 @@
             </label>
             <label class="flex items-center gap-sm" style="cursor:pointer;">
               <input type="checkbox" id="optSpiesKnow" />
-              <span>🕵️‍➡️ Le spie si conoscono (tra loro, non le Finte)</span>
+              <span>🕵️‍➡️ Le vere spie si conoscono tra loro (se abilitato, meglio giocare con 0 avvocati)</span>
             </label>
           </div>
 
@@ -913,8 +913,8 @@
     }
     if(role === Role.spy){
       const otherSpies = g.spiesKnow ? g.roles.map((r,k)=>(r===Role.spy && k!==index) ? g.order[k] : null).filter(Boolean) : [];
-      const knowText = otherSpies.length ? `<br><small>Conosci anche: <strong>${otherSpies.join(', ')}</strong>.</small>` : '';
-      return `Sei la <span style="font-weight:700;">Spia</span>! <small>Gioca con il tuo Avvocato, se te ne è stato assegnato uno.</small>${knowText}`;
+      const knowText = otherSpies.length ? `<br><small>Le altre spie sono: <strong>${otherSpies.join(', ')}</strong>.</small>` : '';
+      return `Sei la <span style="font-weight:700;">Spia</span>! <small>Gioca con il tuo Avvocato, se ne hai uno.</small>${knowText}`;
     }
   }
 
