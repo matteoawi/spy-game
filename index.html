@@ -159,9 +159,13 @@
     .enhanced-list li{ background:var(--surface-elevated); border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--space-lg); display:flex; align-items:center; justify-content:space-between; gap:var(--space-md); transition:all .2s var(--ease-smooth); }
     .enhanced-list li:hover{ transform:translateX(4px); box-shadow:var(--shadow-md); border-color:var(--line-strong); }
 
+    /* >>> Mobile-friendly editor inside list item <<< */
+    .enhanced-list li.editing{ flex-direction:column; align-items:stretch; }
+
     .flex{ display:flex; } .flex-col{ flex-direction:column; } .items-center{ align-items:center; } .justify-center{ justify-content:center; } .justify-between{ justify-content:space-between; }
     .gap-sm{ gap:var(--space-sm); } .gap-md{ gap:var(--space-md); } .gap-lg{ gap:var(--space-lg); }
     .text-center{ text-align:center; } .text-muted{ color:var(--text-muted); } .text-secondary{ color:var(--text-secondary); }
+    .text-primary{ color:var(--text-primary); } /* for elements that explicitly need primary text color */
     .mb-0{margin-bottom:0} .mb-sm{margin-bottom:var(--space-sm)} .mb-md{margin-bottom:var(--space-md)} .mb-lg{margin-bottom:var(--space-lg)} .mb-xl{margin-bottom:var(--space-xl)}
     .mt-0{margin-top:0} .mt-sm{margin-top:var(--space-sm)} .mt-md{margin-top:var(--space-md)} .mt-lg{margin-top:var(--space-lg)} .mt-xl{margin-top:var(--space-xl)}
 
@@ -199,6 +203,9 @@
     .vote-controls{ display:flex; align-items:center; gap:var(--space-sm); }
     .vote-count{ min-width:40px; padding:var(--space-xs) var(--space-sm); background:var(--surface-elevated); border:1px solid var(--line); border-radius:var(--radius-md); text-align:center; font-weight:700; transition:all .2s var(--ease-smooth); }
     .vote-count.has-votes{ background:var(--primary); color:#fff; transform:scale(1.1); }
+
+    /* Better contrast for muted text in dark */
+    html[data-theme="dark"] .text-muted{ color:#b7c2d6; }
   </style>
 </head>
 <body>
@@ -409,14 +416,17 @@
       <div class="card">
         <h2 class="section-title"><span class="emoji">🪪</span> Assegnazione ruoli</h2>
         <p class="text-muted mb-lg">Nome del giocatore: <span id="currentPlayer" class="text-primary" style="font-weight:700;"></span></p>
-        <div class="flex gap-sm mb-lg" style="flex-wrap:wrap;">
-          <span class="badge role-spy">🕵️ Spia</span>
-          <span class="badge role-fake">🎭 Finta Spia</span>
-          <span class="badge role-lawyer">⚖️ Avvocato</span>
-          <span class="badge role-civilian">👤 Civile</span>
-        </div>
+
         <div class="role-card" id="roleCard" tabindex="0"><span class="text-muted">Tocca o premi Invio per vedere il tuo ruolo</span></div>
         <div class="flex justify-center mt-lg"><button id="nextPlayer" class="btn secondary" disabled>➡️ Prossimo</button></div>
+
+        <!-- Legend moved below with short descriptions -->
+        <div id="roleLegend" class="mt-lg">
+          <div class="flex items-center gap-sm mb-sm"><span class="badge role-spy">🕵️ Spia</span><small class="text-muted">Non conosce la parola.</small></div>
+          <div class="flex items-center gap-sm mb-sm"><span class="badge role-fake">🎭 Finta Spia</span><small class="text-muted">Conosce la parola, vince se viene eliminata.</small></div>
+          <div class="flex items-center gap-sm mb-sm"><span class="badge role-lawyer">⚖️ Avvocato</span><small class="text-muted">Conosce parola e Spie; vince con la sua Spia.</small></div>
+          <div class="flex items-center gap-sm"><span class="badge role-civilian">👤 Civile</span><small class="text-muted">Conosce la parola, smaschera le Spie.</small></div>
+        </div>
       </div>
     </section>
 
@@ -499,7 +509,7 @@
     del: k => { try { localStorage.removeItem(k); } catch {} }
   };
 
-  /* ====== DOM Helpers (FIX) ====== */
+  /* ====== DOM Helpers (no conflicts) ====== */
   const $  = (s, root = document) => root.querySelector(s);
   const $$ = (s, root = document) => Array.from(root.querySelectorAll(s));
 
@@ -671,10 +681,11 @@
     const custom = state.custom || {};
     const stock = STOCK[state.lang];
 
+    // Custom
     Object.keys(custom).sort().forEach(cat=>{
       const li = document.createElement('li');
       li.innerHTML = `
-        <span><strong>${cat}</strong> <span class="text-muted">(${custom[cat].length} parole)</span></span>
+        <span><strong>${cat}</strong> <span class="text-muted" data-count>(${custom[cat].length} parole)</span></span>
         <div class="flex gap-sm">
           <button class="btn ghost small" data-edit>✏️</button>
           <button class="btn danger small" data-del>✕</button>
@@ -698,13 +709,22 @@
       customUl.appendChild(li);
     });
 
+    // Stock (now editable)
     Object.keys(stock).sort().forEach(cat=>{
       const li = document.createElement('li');
-      li.innerHTML = `<span><strong>${cat}</strong> <span class="text-muted">(${stock[cat].length} parole)</span></span><span class="badge neutral">Predefinita</span>`;
+      li.innerHTML = `
+        <span><strong>${cat}</strong> <span class="text-muted" data-count>(${(custom[cat]?.length ?? stock[cat].length)} parole)</span></span>
+        <div class="flex gap-sm">
+          <button class="btn ghost small" data-edit>✏️</button>
+          <span class="badge neutral">Predefinita</span>
+        </div>`;
+      li.querySelector('[data-edit]').onclick = ()=> openStockEditor(cat, li);
       stockUl.appendChild(li);
     });
   }
+
   const parseWords = text => [...new Set(text.split(/[\n,;]+/).map(s=>s.trim()).filter(Boolean))];
+
   function saveNewCategory(){
     const name = $('#catName').value.trim();
     if(!name) return modal('Inserisci un nome categoria.');
@@ -716,11 +736,25 @@
     $('#catName').value=''; $('#catWords').value='';
     renderCategories(); renderCatsPage(); modal('Categoria salvata!');
   }
+
+  function openStockEditor(cat, li){
+    // Promote stock category to editable custom copy (keeps same name, overrides in merge)
+    if(!state.custom[cat]){
+      state.custom[cat] = [...STOCK[state.lang][cat]];
+      LS.set('custom_'+state.lang, state.custom);
+    }
+    openEditor(cat, li);
+  }
+
   function openEditor(cat, li){
+    // Close any other inline editor to avoid duplicate IDs
+    $$('.cat-inline-editor').forEach(n=>n.remove());
     [...$('#customCatsList').children].forEach(x=>x.classList.remove('editing'));
+    [...$('#stockCatsList').children].forEach(x=>x.classList.remove('editing'));
     li.classList.add('editing');
+
     const editor = document.createElement('div');
-    editor.className = 'mt-md';
+    editor.className = 'mt-md cat-inline-editor';
     editor.style.cssText = 'padding:var(--space-md); background:var(--surface-elevated); border-radius:var(--radius-md); border:1px solid var(--line);';
     editor.innerHTML = `
       <div class="flex gap-sm mb-md">
@@ -729,30 +763,43 @@
       </div>
       <div id="wChips" class="flex gap-sm" style="flex-wrap:wrap;"></div>`;
     li.appendChild(editor);
+
     const chips = editor.querySelector('#wChips');
     const input = editor.querySelector('#wInput');
     const addBtn = editor.querySelector('#addWordBtn');
+
+    function refreshCount(){
+      const cnt = li.querySelector('[data-count]');
+      if(cnt) cnt.textContent = `(${(state.custom[cat] || []).length} parole)`;
+    }
+
     function addWord(){
       const value = input.value.trim(); if(!value) return;
       if(!state.custom[cat]) state.custom[cat] = [];
       if(!state.custom[cat].includes(value)){
         state.custom[cat].push(value);
         LS.set('custom_'+state.lang, state.custom);
-        drawChips(); renderCategories();
+        drawChips(); renderCategories(); refreshCount();
       }
       input.value='';
+      input.focus();
     }
+
     function drawChips(){
-      chips.innerHTML=''; (state.custom[cat] || []).forEach((word,i)=>{
+      chips.innerHTML='';
+      (state.custom[cat] || []).forEach((word,i)=>{
         const chip = document.createElement('div');
         chip.className = 'badge neutral';
         chip.innerHTML = `${word} <button class="btn danger small" style="margin-left:var(--space-xs);">×</button>`;
         chip.querySelector('button').onclick = ()=>{
-          state.custom[cat].splice(i,1); LS.set('custom_'+state.lang, state.custom); drawChips(); renderCategories();
+          state.custom[cat].splice(i,1);
+          LS.set('custom_'+state.lang, state.custom);
+          drawChips(); renderCategories(); refreshCount();
         };
         chips.appendChild(chip);
       });
     }
+
     drawChips();
     input.addEventListener('keydown', e=>{ if(e.key==='Enter') addWord(); });
     addBtn.onclick = addWord;
