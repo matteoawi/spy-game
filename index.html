@@ -1065,7 +1065,7 @@
 
   function showNextRole(){
     const g = state.game; if(!g) return;
-    if(g.index >= g.order.length){ showView('view-game'); startTimer(); setFirstQuestion(); return; }
+    if (g.index >= g.order.length){ showView('view-game'); startTimer({reset:true}); setFirstQuestion(); return; }
     const name = g.order[g.index];
     $('#currentPlayer').textContent = name;
     const card = $('#roleCard');
@@ -1088,33 +1088,51 @@
   }
 
   /* ====== Timer ====== */
-  const formatTime = s => `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
-  function startTimer(){
-    const g = state.game; if(!g) return;
-    g.time = g.minutes*60; const el = $('#timer'); el.textContent = formatTime(g.time); el.classList.remove('warning');
-    if(g.timer){ clearInterval(g.timer); g.timer = null; }
-    g.timer = setInterval(()=>{
-      g.time = Math.max(0, g.time-1); el.textContent = formatTime(g.time);
-      if(g.time<=30 && !el.classList.contains('warning')) el.classList.add('warning');
-      if(g.time<=0){
-        clearInterval(g.timer); g.timer=null;
-        try{ const beep = $('#beep'); beep.currentTime=0; beep.play().catch(()=>{});}catch(e){}
-        onTimeUp();
-      }
-    },1000);
+/* ====== Timer ====== */
+const formatTime = s =>
+  `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
+
+function startTimer({ reset = false } = {}) {
+  const g = state.game; if (!g) return;
+  const el = $('#timer');
+
+  // SOLO se reset esplicito (o g.time non è definito) si ricarica il tempo iniziale
+  if (reset || typeof g.time !== 'number') g.time = g.minutes * 60;
+
+  // UI immediata coerente con il tempo residuo
+  el.textContent = formatTime(g.time);
+  el.classList.toggle('warning', g.time <= 30);
+
+  // previeni doppio interval
+  if (g.timer) { clearInterval(g.timer); g.timer = null; }
+
+  g.timer = setInterval(() => {
+    g.time = Math.max(0, g.time - 1);
+    el.textContent = formatTime(g.time);
+    el.classList.toggle('warning', g.time <= 30);
+
+    if (g.time <= 0) {
+      clearInterval(g.timer); g.timer = null;
+      try { const beep = $('#beep'); beep.currentTime = 0; beep.play().catch(()=>{}); } catch(e){}
+      onTimeUp();
+    }
+  }, 1000);
+}
+
+function pauseTimer() {
+  const g = state.game; if (!g) return;
+  const btn = $('#pauseTimer');
+
+  if (g.timer) {
+    clearInterval(g.timer);
+    g.timer = null;
+    btn.innerHTML = '▶️ Riprendi';
+  } else {
+    // riprendi SENZA reset
+    startTimer({ reset: false });
+    btn.innerHTML = '⏸️ Pausa';
   }
-  function pauseTimer(){
-    const g = state.game; if(!g) return;
-    const btn = $('#pauseTimer');
-    if(g.timer){ clearInterval(g.timer); g.timer=null; btn.innerHTML='▶️ Riprendi'; }
-    else { startTimer(); btn.innerHTML='⏸️ Pausa'; }
-  }
-  function setFirstQuestion(){
-    const g = state.game;
-    const randomPlayer = g.order[Math.floor(Math.random()*g.order.length)];
-    $('#firstQuestionHint').innerHTML = `La prima domanda la fa: <strong>${randomPlayer}</strong><br><small>Iniziate a fare domande per scoprire chi è la spia.</small>`;
-  }
-  const onTimeUp = ()=> modal('Tempo scaduto! Si va al voto.', { actions:[{label:'OK', kind:'success', onClick: goVote}] });
+}
 
   /* ====== Voting ====== */
   function updateVoteStatus(){
