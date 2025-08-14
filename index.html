@@ -114,7 +114,7 @@
     .form-group{ margin-bottom:var(--space-lg); }
     .form-label{ display:block; font-size:.875rem; font-weight:600; color:var(--text-secondary); margin-bottom:var(--space-sm); }
     .form-input,.form-select,.form-textarea{
-      width:100%; padding:var(--space-md); background:var(--surface-elevated); border:1px solid var(--line); border-radius:var(--radius-md);
+      width:100%; padding:var(--space-sm) var(--space-md); background:var(--surface-elevated); border:1px solid var(--line); border-radius:var(--radius-md);
       font-size:1rem; font-family:inherit; color:var(--text-primary); transition:all .2s var(--ease-smooth); outline:none;
     }
     .form-input:focus,.form-select:focus,.form-textarea:focus{ border-color:var(--primary); box-shadow:0 0 0 3px rgba(96,165,250,.1); transform:translateY(-1px); }
@@ -159,13 +159,13 @@
     .enhanced-list li{ background:var(--surface-elevated); border:1px solid var(--line); border-radius:var(--radius-lg); padding:var(--space-lg); display:flex; align-items:center; justify-content:space-between; gap:var(--space-md); transition:all .2s var(--ease-smooth); }
     .enhanced-list li:hover{ transform:translateX(4px); box-shadow:var(--shadow-md); border-color:var(--line-strong); }
 
-    /* >>> Mobile-friendly editor inside list item <<< */
+    /* Mobile-friendly editor inside list item */
     .enhanced-list li.editing{ flex-direction:column; align-items:stretch; }
 
     .flex{ display:flex; } .flex-col{ flex-direction:column; } .items-center{ align-items:center; } .justify-center{ justify-content:center; } .justify-between{ justify-content:space-between; }
     .gap-sm{ gap:var(--space-sm); } .gap-md{ gap:var(--space-md); } .gap-lg{ gap:var(--space-lg); }
     .text-center{ text-align:center; } .text-muted{ color:var(--text-muted); } .text-secondary{ color:var(--text-secondary); }
-    .text-primary{ color:var(--text-primary); } /* for elements that explicitly need primary text color */
+    .text-primary{ color:var(--text-primary); }
     .mb-0{margin-bottom:0} .mb-sm{margin-bottom:var(--space-sm)} .mb-md{margin-bottom:var(--space-md)} .mb-lg{margin-bottom:var(--space-lg)} .mb-xl{margin-bottom:var(--space-xl)}
     .mt-0{margin-top:0} .mt-sm{margin-top:var(--space-sm)} .mt-md{margin-top:var(--space-md)} .mt-lg{margin-top:var(--space-lg)} .mt-xl{margin-top:var(--space-xl)}
 
@@ -173,20 +173,22 @@
     [data-view].show{ display:block; }
     @keyframes fadeInUp{ from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:translateY(0)} }
 
-    @media (max-width:768px){
-      .container{ padding:var(--space-lg) var(--space-md) 100px; }
-      .card{ padding:var(--space-lg); margin-bottom:var(--space-lg); }
-      .header-content{ padding:var(--space-sm) var(--space-md); }
-      .stats-grid{ grid-template-columns:1fr; }
-      .btn{ padding:var(--space-md) var(--space-lg); }
-      .hero-title{ font-size:1.75rem; }
-    }
+    /* Settings summary responsive layout */
+    .settings-summary{ display:inline-flex; align-items:center; gap:var(--space-sm); padding:var(--space-sm) var(--space-md); background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:var(--radius-full); font-size:.875rem; font-weight:600; backdrop-filter:var(--glass-blur); }
 
-    dialog{ background:var(--surface); border:1px solid var(--line-strong); border-radius:var(--radius-xl); box-shadow:var(--shadow-xl); padding:0; max-width:90vw; width:500px; backdrop-filter:var(--glass-blur); }
+    .vote-controls{ display:flex; align-items:center; gap:var(--space-sm); }
+    .vote-count{ min-width:40px; padding:var(--space-xs) var(--space-sm); background:var(--surface-elevated); border:1px solid var(--line); border-radius:var(--radius-md); text-align:center; font-weight:700; transition:all .2s var(--ease-smooth); }
+    .vote-count.has-votes{ background:var(--primary); color:#fff; transform:scale(1.1); }
+
+    /* Fixed modal text colors */
+    dialog{ background:var(--surface); border:1px solid var(--line-strong); border-radius:var(--radius-xl); box-shadow:var(--shadow-xl); padding:0; max-width:90vw; width:500px; backdrop-filter:var(--glass-blur); color:var(--text-primary); }
     dialog::backdrop{ background:rgba(0,0,0,.5); backdrop-filter:blur(8px); }
     .modal-header{ padding:var(--space-lg); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; }
-    .modal-title{ font-size:1.25rem; font-weight:700; margin:0; }
-    .modal-body{ padding:var(--space-lg); }
+    .modal-title{ font-size:1.25rem; font-weight:700; margin:0; color:var(--text-primary); }
+    .modal-body{ padding:var(--space-lg); color:var(--text-primary); }
+    .modal-body h3{ color:var(--text-primary); }
+    .modal-body p{ color:var(--text-secondary); }
+    .modal-body strong{ color:var(--text-primary); }
     .modal-actions{ padding:var(--space-lg); border-top:1px solid var(--line); display:flex; gap:var(--space-md); justify-content:flex-end; }
 
     #fxConfetti{ position:fixed; inset:0; pointer-events:none; z-index:200; }
@@ -198,14 +200,32 @@
 
     .reveal{ transition:all .6s var(--ease-spring); }
 
-    .settings-summary{ display:inline-flex; align-items:center; gap:var(--space-sm); padding:var(--space-sm) var(--space-md); background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:var(--radius-full); font-size:.875rem; font-weight:600; backdrop-filter:var(--glass-blur); }
-
-    .vote-controls{ display:flex; align-items:center; gap:var(--space-sm); }
-    .vote-count{ min-width:40px; padding:var(--space-xs) var(--space-sm); background:var(--surface-elevated); border:1px solid var(--line); border-radius:var(--radius-md); text-align:center; font-weight:700; transition:all .2s var(--ease-smooth); }
-    .vote-count.has-votes{ background:var(--primary); color:#fff; transform:scale(1.1); }
-
     /* Better contrast for muted text in dark */
     html[data-theme="dark"] .text-muted{ color:#b7c2d6; }
+
+    /* Responsive settings layout */
+    @media (max-width:768px){
+      .container{ padding:var(--space-lg) var(--space-md) 100px; }
+      .card{ padding:var(--space-lg); margin-bottom:var(--space-lg); }
+      .header-content{ padding:var(--space-sm) var(--space-md); }
+      .stats-grid{ grid-template-columns:1fr; }
+      .btn{ padding:var(--space-md) var(--space-lg); }
+      .hero-title{ font-size:1.75rem; }
+      
+      /* Settings responsive layout */
+      .settings-wrapper{ display:flex; flex-direction:column; gap:var(--space-md); }
+      .settings-row{ display:flex; flex-direction:column; gap:var(--space-md); }
+      .settings-item{ flex:1; }
+      .number-control{ display:flex; flex-direction:column; gap:var(--space-sm); }
+      .number-control .flex{ flex-wrap:wrap; }
+      
+      /* Settings summary goes below title on mobile */
+      .collapsible-header{ flex-direction:column; align-items:flex-start; gap:var(--space-sm); }
+      .settings-summary{ align-self:flex-start; margin-top:var(--space-xs); }
+    }
+
+    /* Ensure number inputs have enough space */
+    .number-control input[type="number"]{ min-width:60px; text-align:center; }
   </style>
 </head>
 <body>
@@ -260,21 +280,21 @@
       </div>
 
       <div class="card visible" id="statsCard" style="cursor:pointer;">
-        <h3 class="section-title"><span class="emoji">📈</span> Andamento partite</h3>
+        <h3 class="section-title"><span class="emoji">📈</span> <span data-i="gameStats">Andamento partite</span></h3>
         <div class="stats-grid">
-          <div class="stat-card"><span class="stat-icon">🎮</span><div class="stat-value" id="s_games">0</div><div class="stat-label">Partite</div></div>
-          <div class="stat-card"><span class="stat-icon">👤</span><div class="stat-value" id="s_civ">0<span style="font-size:.8em;">%</span></div><div class="stat-label">Civili</div></div>
-          <div class="stat-card"><span class="stat-icon">🕵️</span><div class="stat-value" id="s_spy">0<span style="font-size:.8em;">%</span></div><div class="stat-label">Spie</div></div>
-          <div class="stat-card"><span class="stat-icon">🎭</span><div class="stat-value" id="s_fake">0<span style="font-size:.8em;">%</span></div><div class="stat-label">Finte Spie</div></div>
-          <div class="stat-card"><span class="stat-icon">⚖️</span><div class="stat-value" id="s_law">0<span style="font-size:.8em;">%</span></div><div class="stat-label">Avvocati</div></div>
+          <div class="stat-card"><span class="stat-icon">🎮</span><div class="stat-value" id="s_games">0</div><div class="stat-label" data-i="gamesPlayed">Partite</div></div>
+          <div class="stat-card"><span class="stat-icon">👤</span><div class="stat-value" id="s_civ">0<span style="font-size:.8em;">%</span></div><div class="stat-label" data-i="civilians">Civili</div></div>
+          <div class="stat-card"><span class="stat-icon">🕵️</span><div class="stat-value" id="s_spy">0<span style="font-size:.8em;">%</span></div><div class="stat-label" data-i="spies">Spie</div></div>
+          <div class="stat-card"><span class="stat-icon">🎭</span><div class="stat-value" id="s_fake">0<span style="font-size:.8em;">%</span></div><div class="stat-label" data-i="fakeSpies">Finte Spie</div></div>
+          <div class="stat-card"><span class="stat-icon">⚖️</span><div class="stat-value" id="s_law">0<span style="font-size:.8em;">%</span></div><div class="stat-label" data-i="lawyers">Avvocati</div></div>
         </div>
-        <p class="text-muted text-center mb-0">Tocca per aprire lo <strong>storico</strong> delle partite.</p>
+        <p class="text-muted text-center mb-0" data-i="clickForHistory">Tocca per aprire lo <strong>storico</strong> delle partite.</p>
       </div>
 
       <div class="card">
-        <h3 class="section-title"><span class="emoji">🧠</span> Ruoli speciali</h3>
-        <p class="text-muted mb-md">Spia, Finta Spia, Avvocato, Civile. Votazione a turni (una per Spia), timer con suono, categorie personalizzate.</p>
-        <p class="text-muted mb-0">💾 Salvataggio <strong>automatico</strong>: giocatori, impostazioni, categorie e storico restano nel tuo browser.</p>
+        <h3 class="section-title"><span class="emoji">🧠</span> <span data-i="specialRoles">Ruoli speciali</span></h3>
+        <p class="text-muted mb-md" data-i="rolesDesc">Spia, Finta Spia, Avvocato, Civile. Votazione a turni (una per Spia), timer con suono, categorie personalizzate.</p>
+        <p class="text-muted mb-0" data-i="autoSave">💾 Salvataggio <strong>automatico</strong>: giocatori, impostazioni, categorie e storico restano nel tuo browser.</p>
       </div>
     </section>
 
@@ -289,14 +309,14 @@
         <div class="collapsible-content">
           <div class="flex gap-md items-center mb-lg">
             <input id="playerInput" class="form-input" type="text" maxlength="24" placeholder="Nome giocatore" style="flex:1; margin-bottom:0;" />
-            <button id="addPlayer" class="btn">➕ Aggiungi</button>
+            <button id="addPlayer" class="btn">➕ <span data-i="add">Aggiungi</span></button>
           </div>
           <ul id="playersList" class="enhanced-list"></ul>
           <div class="flex gap-md mt-lg">
             <button id="shufflePlayers" class="btn ghost">🔀 <span data-i="shuffle">Mescola</span></button>
             <button id="clearPlayers" class="btn danger">🗑️ <span data-i="clear">Svuota</span></button>
           </div>
-          <p class="text-muted mt-md mb-0">💾 Salvataggio automatico dei nomi.</p>
+          <p class="text-muted mt-md mb-0" data-i="autoSaveNames">💾 Salvataggio automatico dei nomi.</p>
         </div>
       </div>
 
@@ -318,45 +338,57 @@
       <!-- Settings -->
       <div class="card collapsible" id="card-settings">
         <div class="collapsible-header" data-toggle>
-          <h2 class="section-title mb-0"><span class="emoji">⚙️</span> <span data-i="gameSettings">Impostazioni</span></h2>
-          <span id="settingsSummary" class="settings-summary"></span>
+          <div>
+            <h2 class="section-title mb-0"><span class="emoji">⚙️</span> <span data-i="gameSettings">Impostazioni</span></h2>
+            <span id="settingsSummary" class="settings-summary"></span>
+          </div>
           <span class="collapsible-toggle">▾</span>
         </div>
         <div class="collapsible-content">
-          <div class="flex gap-md mb-lg">
-            <div style="flex:1;">
-              <label class="form-label" for="numSpies">🕵️ Spie</label>
-              <div class="flex gap-sm items-center">
-                <input id="numSpies" class="form-input" type="number" min="1" max="6" step="1" value="1" style="margin-bottom:0;" />
-                <button class="btn ghost small" data-step="numSpies" data-delta="-1">–</button>
-                <button class="btn ghost small" data-step="numSpies" data-delta="1">+</button>
+          <div class="settings-wrapper">
+            <div class="settings-row">
+              <div class="settings-item">
+                <label class="form-label" for="numSpies">🕵️ <span data-i="spies">Spie</span></label>
+                <div class="number-control">
+                  <div class="flex gap-sm items-center">
+                    <button class="btn ghost small" data-step="numSpies" data-delta="-1">–</button>
+                    <input id="numSpies" class="form-input" type="number" min="1" max="6" step="1" value="1" style="margin-bottom:0;" />
+                    <button class="btn ghost small" data-step="numSpies" data-delta="1">+</button>
+                  </div>
+                </div>
+              </div>
+              <div class="settings-item">
+                <label class="form-label" for="numFakeSpies">🎭 <span data-i="fakeSpies">Finte spie</span></label>
+                <div class="number-control">
+                  <div class="flex gap-sm items-center">
+                    <button class="btn ghost small" data-step="numFakeSpies" data-delta="-1">–</button>
+                    <input id="numFakeSpies" class="form-input" type="number" min="0" max="6" step="1" value="0" style="margin-bottom:0;" />
+                    <button class="btn ghost small" data-step="numFakeSpies" data-delta="1">+</button>
+                  </div>
+                </div>
               </div>
             </div>
-            <div style="flex:1;">
-              <label class="form-label" for="numFakeSpies">🎭 Finte spie</label>
-              <div class="flex gap-sm items-center">
-                <input id="numFakeSpies" class="form-input" type="number" min="0" max="6" step="1" value="0" style="margin-bottom:0;" />
-                <button class="btn ghost small" data-step="numFakeSpies" data-delta="-1">–</button>
-                <button class="btn ghost small" data-step="numFakeSpies" data-delta="1">+</button>
-              </div>
-            </div>
-          </div>
 
-          <div class="flex gap-md mb-lg">
-            <div style="flex:1;">
-              <label class="form-label" for="numLawyers">⚖️ Avvocati</label>
-              <div class="flex gap-sm items-center">
-                <input id="numLawyers" class="form-input" type="number" min="0" max="6" step="1" value="0" style="margin-bottom:0;" />
-                <button class="btn ghost small" data-step="numLawyers" data-delta="-1">–</button>
-                <button class="btn ghost small" data-step="numLawyers" data-delta="1">+</button>
+            <div class="settings-row">
+              <div class="settings-item">
+                <label class="form-label" for="numLawyers">⚖️ <span data-i="lawyers">Avvocati</span></label>
+                <div class="number-control">
+                  <div class="flex gap-sm items-center">
+                    <button class="btn ghost small" data-step="numLawyers" data-delta="-1">–</button>
+                    <input id="numLawyers" class="form-input" type="number" min="0" max="6" step="1" value="0" style="margin-bottom:0;" />
+                    <button class="btn ghost small" data-step="numLawyers" data-delta="1">+</button>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div style="flex:1;">
-              <label class="form-label" for="roundMinutes">⏱️ Minuti</label>
-              <div class="flex gap-sm items-center">
-                <input id="roundMinutes" class="form-input" type="number" min="1" max="99" step="1" value="5" style="margin-bottom:0;" />
-                <button class="btn ghost small" data-step="roundMinutes" data-delta="-1">–</button>
-                <button class="btn ghost small" data-step="roundMinutes" data-delta="1">+</button>
+              <div class="settings-item">
+                <label class="form-label" for="roundMinutes">⏱️ <span data-i="minutes">Minuti</span></label>
+                <div class="number-control">
+                  <div class="flex gap-sm items-center">
+                    <button class="btn ghost small" data-step="roundMinutes" data-delta="-1">–</button>
+                    <input id="roundMinutes" class="form-input" type="number" min="1" max="99" step="1" value="5" style="margin-bottom:0;" />
+                    <button class="btn ghost small" data-step="roundMinutes" data-delta="1">+</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -364,26 +396,30 @@
           <div class="mb-lg">
             <label class="flex items-center gap-sm mb-md" style="cursor:pointer;">
               <input type="checkbox" id="optElimNoVote" />
-              <span>🚫 Gli eliminati non votano più</span>
+              <span data-i="elimNoVote">🚫 Gli eliminati non votano più</span>
+            </label>
+            <label class="flex items-center gap-sm mb-md" style="cursor:pointer;">
+              <input type="checkbox" id="optSpiesKnow" />
+              <span data-i="spiesKnow">🕵️‍➡️ Le vere spie si conoscono tra loro (se abilitato, meglio giocare con 0 avvocati)</span>
             </label>
             <label class="flex items-center gap-sm" style="cursor:pointer;">
-              <input type="checkbox" id="optSpiesKnow" />
-              <span>🕵️‍➡️ Le vere spie si conoscono tra loro (se abilitato, meglio giocare con 0 avvocati)</span>
+              <input type="checkbox" id="optLawyersKnowAll" />
+              <span data-i="lawyersKnowAll">⚖️🔍 Gli avvocati conoscono tutte le spie (non solo la propria)</span>
             </label>
           </div>
 
-          <p class="text-muted mb-lg">💡 I ruoli speciali totali devono essere <strong>minori</strong> dei giocatori.</p>
-          <button id="saveSettings" class="btn success">💾 Salva</button>
+          <p class="text-muted mb-lg" data-i="rolesConstraint">💡 I ruoli speciali totali devono essere <strong>minori</strong> dei giocatori.</p>
+          <button id="saveSettings" class="btn success">💾 <span data-i="save">Salva</span></button>
         </div>
       </div>
 
       <!-- Start Game -->
       <div class="card">
-        <h2 class="section-title"><span class="emoji">🚀</span> Avvia partita</h2>
-        <p class="text-muted mb-lg">Serve almeno 1 Spia, 3 giocatori e una categoria con parole.</p>
+        <h2 class="section-title"><span class="emoji">🚀</span> <span data-i="startGame">Avvia partita</span></h2>
+        <p class="text-muted mb-lg" data-i="gameRequirements">Serve almeno 1 Spia, 3 giocatori e una categoria con parole.</p>
         <div class="flex gap-md">
-          <button id="startGameMain" class="btn secondary glow">▶️ Inizia ora</button>
-          <button id="howToBtn" class="btn ghost">📜 Regole</button>
+          <button id="startGameMain" class="btn secondary glow">▶️ <span data-i="startNow">Inizia ora</span></button>
+          <button id="howToBtn" class="btn ghost">📜 <span data-i="rules">Regole</span></button>
         </div>
       </div>
     </section>
@@ -391,22 +427,25 @@
     <!-- Category Management -->
     <section data-view id="view-cats">
       <div class="card">
-        <h2 class="section-title"><span class="emoji">📚</span> Gestisci categorie</h2>
-        <button id="backHomeFromCats" class="btn ghost">← Indietro</button>
+        <h2 class="section-title"><span class="emoji">📚</span> <span data-i="manageCats">Gestisci categorie</span></h2>
+        <div class="flex gap-md">
+          <button id="backHomeFromCats" class="btn ghost">← <span data-i="back">Indietro</span></button>
+          <button id="resetToDefaults" class="btn danger">🔄 <span data-i="resetDefaults">Ripristina predefinite</span></button>
+        </div>
       </div>
       <div class="card">
-        <h3 class="section-title"><span class="emoji">🧩</span> Le tue categorie</h3>
+        <h3 class="section-title"><span class="emoji">🧩</span> <span data-i="yourCats">Le tue categorie</span></h3>
         <ul id="customCatsList" class="enhanced-list"></ul>
       </div>
       <div class="card">
-        <h3 class="section-title"><span class="emoji">➕</span> Nuova categoria</h3>
-        <div class="form-group"><label class="form-label" for="catName">Nome categoria</label><input id="catName" class="form-input" type="text" placeholder="Nome categoria (es. Film)" /></div>
-        <div class="form-group"><label class="form-label" for="catWords">Parole</label><textarea id="catWords" class="form-textarea" rows="3" placeholder="Parole separate da virgola o a capo"></textarea></div>
-        <button id="saveCategory" class="btn success">💾 Salva categoria</button>
-        <p class="text-muted mt-md mb-0">💾 Salvataggio automatico per lingua.</p>
+        <h3 class="section-title"><span class="emoji">➕</span> <span data-i="newCat">Nuova categoria</span></h3>
+        <div class="form-group"><label class="form-label" for="catName" data-i="catName">Nome categoria</label><input id="catName" class="form-input" type="text" placeholder="Nome categoria (es. Film)" /></div>
+        <div class="form-group"><label class="form-label" for="catWords" data-i="words">Parole</label><textarea id="catWords" class="form-textarea" rows="3" placeholder="Parole separate da virgola o a capo"></textarea></div>
+        <button id="saveCategory" class="btn success">💾 <span data-i="saveCat">Salva categoria</span></button>
+        <p class="text-muted mt-md mb-0" data-i="autoSaveLang">💾 Salvataggio automatico per lingua.</p>
       </div>
       <div class="card">
-        <h3 class="section-title"><span class="emoji">📦</span> Categorie predefinite</h3>
+        <h3 class="section-title"><span class="emoji">📦</span> <span data-i="defaultCats">Categorie predefinite</span></h3>
         <ul id="stockCatsList" class="enhanced-list"></ul>
       </div>
     </section>
@@ -414,18 +453,18 @@
     <!-- Role Assignment -->
     <section data-view id="view-roles">
       <div class="card">
-        <h2 class="section-title"><span class="emoji">🪪</span> Assegnazione ruoli</h2>
-        <p class="text-muted mb-lg">Nome del giocatore: <span id="currentPlayer" class="text-primary" style="font-weight:700;"></span></p>
+        <h2 class="section-title"><span class="emoji">🪪</span> <span data-i="roleAssignment">Assegnazione ruoli</span></h2>
+        <p class="text-muted mb-lg" data-i="currentPlayerLabel"><span data-i="playerName">Nome del giocatore</span>: <span id="currentPlayer" class="text-primary" style="font-weight:700;"></span></p>
 
-        <div class="role-card" id="roleCard" tabindex="0"><span class="text-muted">Tocca o premi Invio per vedere il tuo ruolo</span></div>
-        <div class="flex justify-center mt-lg"><button id="nextPlayer" class="btn secondary" disabled>➡️ Prossimo</button></div>
+        <div class="role-card" id="roleCard" tabindex="0"><span class="text-muted" data-i="revealRole">Tocca o premi Invio per vedere il tuo ruolo</span></div>
+        <div class="flex justify-center mt-lg"><button id="nextPlayer" class="btn secondary" disabled>➡️ <span data-i="next">Prossimo</span></button></div>
 
         <!-- Legend moved below with short descriptions -->
         <div id="roleLegend" class="mt-lg">
-          <div class="flex items-center gap-sm mb-sm"><span class="badge role-spy">🕵️ Spia</span><small class="text-muted">Non conosce la parola.</small></div>
-          <div class="flex items-center gap-sm mb-sm"><span class="badge role-fake">🎭 Finta Spia</span><small class="text-muted">Conosce la parola, vince se viene eliminata.</small></div>
-          <div class="flex items-center gap-sm mb-sm"><span class="badge role-lawyer">⚖️ Avvocato</span><small class="text-muted">Conosce parola e Spie; vince con la sua Spia.</small></div>
-          <div class="flex items-center gap-sm"><span class="badge role-civilian">👤 Civile</span><small class="text-muted">Conosce la parola, smaschera le Spie.</small></div>
+          <div class="flex items-center gap-sm mb-sm"><span class="badge role-spy">🕵️ <span data-i="spy">Spia</span></span><small class="text-muted" data-i="spyDesc">Non conosce la parola.</small></div>
+          <div class="flex items-center gap-sm mb-sm"><span class="badge role-fake">🎭 <span data-i="fakeSpy">Finta Spia</span></span><small class="text-muted" data-i="fakeDesc">Conosce la parola, vince se viene eliminata.</small></div>
+          <div class="flex items-center gap-sm mb-sm"><span class="badge role-lawyer">⚖️ <span data-i="lawyer">Avvocato</span></span><small class="text-muted" data-i="lawyerDesc">Conosce parola e Spie; vince con la sua Spia.</small></div>
+          <div class="flex items-center gap-sm"><span class="badge role-civilian">👤 <span data-i="civilian">Civile</span></span><small class="text-muted" data-i="civDesc">Conosce la parola, smaschera le Spie.</small></div>
         </div>
       </div>
     </section>
@@ -433,12 +472,12 @@
     <!-- Game -->
     <section data-view id="view-game">
       <div class="card text-center">
-        <h2 class="section-title justify-center"><span class="emoji">🎮</span> Gioco in corso</h2>
+        <h2 class="section-title justify-center"><span class="emoji">🎮</span> <span data-i="gameInProgress">Gioco in corso</span></h2>
         <p id="firstQuestionHint" class="text-muted mb-lg"></p>
         <div class="timer" id="timer">05:00</div>
         <div class="flex justify-center gap-md mt-lg">
-          <button id="pauseTimer" class="btn ghost">⏸️ Pausa</button>
-          <button id="endRound" class="btn danger">⏰ Termina round</button>
+          <button id="pauseTimer" class="btn ghost">⏸️ <span data-i="pause">Pausa</span></button>
+          <button id="endRound" class="btn danger">⏰ <span data-i="endRound">Termina round</span></button>
         </div>
       </div>
     </section>
@@ -446,25 +485,25 @@
     <!-- Voting -->
     <section data-view id="view-vote">
       <div class="card">
-        <h2 class="section-title" id="voteTitle"><span class="emoji">🗳️</span> Votate la spia 1/1</h2>
-        <p class="text-muted mb-md" id="voteHint">Tocca "Vota" accanto a un nome per assegnargli un voto. In caso di parità dovete prendere una decisione!</p>
+        <h2 class="section-title" id="voteTitle"><span class="emoji">🗳️</span> <span data-i="voteSpy">Votate la spia</span> 1/1</h2>
+        <p class="text-muted mb-md" id="voteHint" data-i="voteHint">Tocca "Vota" accanto a un nome per assegnargli un voto. In caso di parità dovete prendere una decisione!</p>
         <p class="text-muted mb-lg" id="voteSubHint"></p>
         <ul id="voteList" class="enhanced-list"></ul>
         <div class="mb-lg" style="padding:var(--space-lg); background:var(--surface-elevated); border-radius:var(--radius-lg);">
-          <p class="text-muted mb-0" id="voteStatus">Voti assegnati: <strong id="totalVotes">0</strong></p>
+          <p class="text-muted mb-0" id="voteStatus" data-i="votesAssigned">Voti assegnati: <strong id="totalVotes">0</strong></p>
         </div>
-        <button id="seeRoundResult" class="btn secondary">📊 Concludi votazione</button>
+        <button id="seeRoundResult" class="btn secondary">📊 <span data-i="concludeVote">Concludi votazione</span></button>
       </div>
     </section>
 
     <!-- Results -->
     <section data-view id="view-results">
       <div class="card">
-        <h2 class="section-title"><span class="emoji">📈</span> Esito</h2>
+        <h2 class="section-title"><span class="emoji">📈</span> <span data-i="outcome">Esito</span></h2>
         <div id="resultsBox"></div>
         <div class="flex gap-md mt-lg">
-          <button id="revealAll" class="btn ghost">🃏 Rivela tutti i ruoli</button>
-          <button id="restart" class="btn success glow">🔄 Gioca di nuovo</button>
+          <button id="revealAll" class="btn ghost">🃏 <span data-i="revealAllRoles">Rivela tutti i ruoli</span></button>
+          <button id="restart" class="btn success glow">🔄 <span data-i="playAgain">Gioca di nuovo</span></button>
         </div>
       </div>
     </section>
@@ -472,17 +511,17 @@
     <!-- History -->
     <section data-view id="view-history">
       <div class="card">
-        <h2 class="section-title"><span class="emoji">🗂️</span> Storico partite</h2>
+        <h2 class="section-title"><span class="emoji">🗂️</span> <span data-i="gameHistory">Storico partite</span></h2>
         <div id="historyList"></div>
         <div class="flex gap-md mt-lg">
-          <button id="clearHistory" class="btn danger">🗑️ Svuota storico</button>
-          <button id="backFromHistory" class="btn ghost">← Indietro</button>
+          <button id="clearHistory" class="btn danger">🗑️ <span data-i="clearHistory">Svuota storico</span></button>
+          <button id="backFromHistory" class="btn ghost">← <span data-i="back">Indietro</span></button>
         </div>
       </div>
     </section>
   </main>
 
-  <footer><span>© 2025 • Dati <strong>locali</strong> nel tuo browser.</span></footer>
+  <footer><span data-i="footer">© 2025 • Dati <strong>locali</strong> nel tuo browser.</span></footer>
 
   <!-- Modal -->
   <dialog id="modal">
@@ -499,737 +538,951 @@
     <source src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAA..." type="audio/mp3">
   </audio>
 
-  <script>
-  "use strict";
+<script>
+"use strict";
 
-  /* ====== Storage Utils ====== */
-  const LS = {
-    get: (k, fallback) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : (fallback ?? null); } catch { return fallback ?? null; } },
-    set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
-    del: k => { try { localStorage.removeItem(k); } catch {} }
-  };
+/* ====== Storage Utils ====== */
+const LS = {
+  get: (k, fallback) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : (fallback ?? null); } catch { return fallback ?? null; } },
+  set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  del: k => { try { localStorage.removeItem(k); } catch {} }
+};
 
-  /* ====== DOM Helpers (no conflicts) ====== */
-  const $  = (s, root = document) => root.querySelector(s);
-  const $$ = (s, root = document) => Array.from(root.querySelectorAll(s));
+/* ====== DOM Helpers (no conflicts) ====== */
+const $  = (s, root = document) => root.querySelector(s);
+const $$ = (s, root = document) => Array.from(root.querySelectorAll(s));
 
-  /* ====== Game constants ====== */
-  const Role = { spy:"spy", fake:"fake", law:"law", civ:"civ" };
-  const roleBadgeCls = r => r === Role.spy ? 'role-spy' : r === Role.fake ? 'role-fake' : r === Role.law ? 'role-lawyer' : 'role-civilian';
-  const roleLabel = r => (r === Role.spy ? 'Spia' : r === Role.fake ? 'Finta Spia' : r === Role.law ? 'Avvocato' : 'Civile');
+/* ====== Game constants ====== */
+const Role = { spy:"spy", fake:"fake", law:"law", civ:"civ" };
+const roleBadgeCls = r => r === Role.spy ? 'role-spy' : r === Role.fake ? 'role-fake' : r === Role.law ? 'role-lawyer' : 'role-civilian';
+const roleLabel = r => (r === Role.spy ? (state.lang === 'it' ? 'Spia' : 'Spy') : r === Role.fake ? (state.lang === 'it' ? 'Finta Spia' : 'Fake Spy') : r === Role.law ? (state.lang === 'it' ? 'Avvocato' : 'Lawyer') : (state.lang === 'it' ? 'Civile' : 'Civilian'));
 
-  const STOCK = {
-    it:{"Animali":["Cane","Gatto","Elefante","Leone","Tigre","Giraffa","Zebra","Scimmia","Orso","Lupo","Volpe","Pinguino","Delfino","Aquila","Gufo"],"Cibo":["Pizza","Pasta","Gelato","Sushi","Hamburger","Lasagna","Risotto","Tiramisù","Cioccolato","Formaggio"],"Sport":["Calcio","Basket","Nuoto","Tennis","Rugby","Volley","Ciclismo","Atletica","Sci","Pattinaggio"],"Luoghi":["Bar","Ospedale","Scuola","Parco","Museo","Biblioteca","Cinema","Ristorante","Aeroporto","Stadio"],"Professioni":["Medico","Ingegnere","Avvocato","Insegnante","Poliziotto","Pompiere","Architetto","Cuoco","Pilota","Musicista"]},
-    en:{"Animals":["Dog","Cat","Elephant","Lion","Tiger","Giraffe","Zebra","Monkey","Bear","Wolf","Fox","Penguin","Dolphin","Eagle","Owl"],"Food":["Pizza","Pasta","Ice Cream","Sushi","Hamburger","Lasagna","Risotto","Tiramisu","Chocolate","Cheese"],"Sports":["Football","Basketball","Swimming","Tennis","Rugby","Volleyball","Cycling","Athletics","Skiing","Skating"],"Places":["Bar","Hospital","School","Park","Museum","Library","Cinema","Restaurant","Airport","Stadium"],"Professions":["Doctor","Engineer","Lawyer","Teacher","Police Officer","Firefighter","Architect","Cook","Pilot","Musician"]}
-  };
+const STOCK = {
+  it:{"Animali":["Cane","Gatto","Elefante","Leone","Tigre","Giraffa","Zebra","Scimmia","Orso","Lupo","Volpe","Pinguino","Delfino","Aquila","Gufo"],"Cibo":["Pizza","Pasta","Gelato","Sushi","Hamburger","Lasagna","Risotto","Tiramisù","Cioccolato","Formaggio"],"Sport":["Calcio","Basket","Nuoto","Tennis","Rugby","Volley","Ciclismo","Atletica","Sci","Pattinaggio"],"Luoghi":["Bar","Ospedale","Scuola","Parco","Museo","Biblioteca","Cinema","Ristorante","Aeroporto","Stadio"],"Professioni":["Medico","Ingegnere","Avvocato","Insegnante","Poliziotto","Pompiere","Architetto","Cuoco","Pilota","Musicista"]},
+  en:{"Animals":["Dog","Cat","Elephant","Lion","Tiger","Giraffe","Zebra","Monkey","Bear","Wolf","Fox","Penguin","Dolphin","Eagle","Owl"],"Food":["Pizza","Pasta","Ice Cream","Sushi","Hamburger","Lasagna","Risotto","Tiramisu","Chocolate","Cheese"],"Sports":["Football","Basketball","Swimming","Tennis","Rugby","Volleyball","Cycling","Athletics","Skiing","Skating"],"Places":["Bar","Hospital","School","Park","Museum","Library","Cinema","Restaurant","Airport","Stadium"],"Professions":["Doctor","Engineer","Lawyer","Teacher","Police Officer","Firefighter","Architect","Cook","Pilot","Musician"]}
+};
 
-  const state = {
-    theme: LS.get('theme','auto'),
-    lang:  LS.get('lang','it'),
-    players: LS.get('players',[]),
-    custom:  LS.get('custom_'+(LS.get('lang','it')||'it'),{}),
-    category: LS.get('category',''),
-    settings: LS.get('settings',{spies:1,fakes:0,laws:0,minutes:5,optElimNoVote:false,optSpiesKnow:false}),
-    history: LS.get('history',[]),
-    game: null
-  };
+// i18n translations  (FIX: chiavi distinte per “Eliminato …”)
+const translations = {
+  it: {
+    startNow: "Inizia", rules: "Istruzioni", gameStats: "Andamento partite", gamesPlayed: "Partite", 
+    civilians: "Civili", spies: "Spie", fakeSpies: "Finte Spie", lawyers: "Avvocati",
+    clickForHistory: "Tocca per aprire lo <strong>storico</strong> delle partite.",
+    specialRoles: "Ruoli speciali", rolesDesc: "Spia, Finta Spia, Avvocato, Civile. Votazione a turni (una per Spia), timer con suono, categorie personalizzate.",
+    autoSave: "💾 Salvataggio <strong>automatico</strong>: giocatori, impostazioni, categorie e storico restano nel tuo browser.",
+    players: "Giocatori", add: "Aggiungi", shuffle: "Mescola", clear: "Svuota", autoSaveNames: "💾 Salvataggio automatico dei nomi.",
+    categories: "Categorie", manage: "Gestisci", selectedCat: "Categoria selezionata", gameSettings: "Impostazioni",
+    elimNoVote: "🚫 Gli eliminati non votano più", spiesKnow: "🕵️‍➡️ Le vere spie si conoscono tra loro (se abilitato, meglio giocare con 0 avvocati)",
+    lawyersKnowAll: "⚖️🔍 Gli avvocati conoscono tutte le spie (non solo la propria)",
+    rolesConstraint: "💡 I ruoli speciali totali devono essere <strong>minori</strong> dei giocatori.",
+    save: "Salva", startGame: "Avvia partita", gameRequirements: "Serve almeno 1 Spia, 3 giocatori e una categoria con parole.",
+    manageCats: "Gestisci categorie", back: "Indietro", resetDefaults: "Ripristina predefinite", yourCats: "Le tue categorie",
+    newCat: "Nuova categoria", catName: "Nome categoria", words: "Parole", saveCat: "Salva categoria", autoSaveLang: "💾 Salvataggio automatico per lingua.",
+    defaultCats: "Categorie predefinite", roleAssignment: "Assegnazione ruoli", playerName: "Nome del giocatore",
+    revealRole: "Tocca o premi Invio per vedere il tuo ruolo", next: "Prossimo", spy: "Spia", fakeSpy: "Finta Spia", lawyer: "Avvocato", civilian: "Civile",
+    spyDesc: "Non conosce la parola.", fakeDesc: "Conosce la parola, vince se viene eliminata.", lawyerDesc: "Conosce parola e Spie; vince con la sua Spia.", civDesc: "Conosce la parola, smaschera le Spie.",
+    gameInProgress: "Gioco in corso", pause: "Pausa", endRound: "Termina round", voteSpy: "Votate la spia",
+    voteHint: "Tocca \"Vota\" accanto a un nome per assegnargli un voto. In caso di parità dovete prendere una decisione!",
+    votesAssigned: "Voti assegnati:", concludeVote: "Concludi votazione", outcome: "Esito", revealAllRoles: "Rivela tutti i ruoli", playAgain: "Gioca di nuovo",
+    gameHistory: "Storico partite", clearHistory: "Svuota storico", footer: "© 2025 • Dati <strong>locali</strong> nel tuo browser.",
+    minutes: "Minuti", currentPlayerLabel: "Nome del giocatore:",
+    // Role messages
+    youAreCivilian: "Sei un <span style=\"font-weight:700;\">Civile</span>! La parola è: <span style=\"font-weight:700; color:var(--primary);\">",
+    youAreFakeSpy: "Sei la <span style=\"font-weight:700;\">Finta Spia</span>! Parola: <span style=\"font-weight:700; color:var(--primary);\">",
+    youAreLawyer: "Sei l'<span style=\"font-weight:700;\">Avvocato</span>! La parola è \"<span style=\"font-weight:700; color:var(--primary);\">",
+    theSpiesAre: "\". Le Spie sono: <strong>", theSpyIs: "\". La Spia è: <strong>",
+    youAreSpy: "Sei la <span style=\"font-weight:700;\">Spia</span>! <small>Gioca con il tuo Avvocato, se ne hai uno.</small>",
+    otherSpiesAre: "<br><small>Le altre spie sono: <strong>", firstQuestionBy: "La prima domanda la fa: <strong>",
+    startAsking: "</strong><br><small>Iniziate a fare domande per scoprire chi è la spia.</small>",
+    // Vote messages
+    round: "Turno", of: "di", availableVoters: "Votanti disponibili:", timeUp: "Tempo scaduto! Si va al voto.", maxVotesReached: "Hai raggiunto il numero massimo di voti disponibili!",
+    noVotes: "Nessun voto espresso. Assegnate almeno un voto.", tieDetected: "⚠️ Parità rilevata. Dovete prendere una decisione prima di procedere!",
+    eliminatedPrefix: "Eliminato <strong>", wasRole: "</strong> — era <strong>", continue: "Continua",
+    // Win messages
+    fakeSpyWins: "🎭 <strong>", fakeWon: "</strong> ha vinto <em>como Finta Spia</em>.", allOthersLose: "Tutti gli altri perdono (incluse le Spie vere e gli Avvocati).",
+    spyWins: "🕵️ <strong>", wonWithLawyer: "</strong> ha vinto <strong>insieme al suo Avvocato</strong> <strong>", won: "</strong> ha vinto.",
+    spiesWin: "Le Spie hanno prevalso.", civiliansWin: "👤 <strong>I Civili vincono</strong>! Avete identificato correttamente tutte le Spie.",
+    gameResult: "Esito partita", eliminations: "Eliminazioni", allRoles: "Tutti i ruoli",
+    // History
+    noGamesYet: "Ancora nessuna partita salvata.", category: "Cat:", word: "Parola:",
+    // Modals
+    deleteCategory: "Eliminare la categoria \"<strong>", confirm: "Conferma", cancel: "Annulla", delete: "Elimina",
+    clearPlayersList: "Svuotare la lista giocatori?", clearGameHistory: "Svuotare lo storico partite?",
+    categoryNameRequired: "Inserisci un nome categoria.", addWords: "Aggiungi almeno una parola.", categorySaved: "Categoria salvata!",
+    settingsSaved: "Impostazioni salvate!", needPlayers: "Devi avere almeno 3 giocatori.", needSpy: "Serve almeno 1 Spia.",
+    tooManyRoles: "I ruoli speciali totali devono essere minori dei giocatori.", needCategory: "Seleziona una categoria con almeno una parola.",
+    resetCategoriesConfirm: "Ripristinare tutte le categorie ai valori predefiniti? Questo cancellerà tutte le tue categorie personalizzate.",
+    reset: "Ripristina", categoriesReset: "Categorie ripristinate ai valori predefiniti.", 
+    done: "Fatto", eliminatedCantVote: "Eliminato: non vota"
+  },
+  en: {
+    startNow: "Start Now", rules: "Rules", gameStats: "Game Stats", gamesPlayed: "Games",
+    civilians: "Civilians", spies: "Spies", fakeSpies: "Fake Spies", lawyers: "Lawyers",
+    clickForHistory: "Tap to open game <strong>history</strong>.",
+    specialRoles: "Special Roles", rolesDesc: "Spy, Fake Spy, Lawyer, Civilian. Round voting (one per Spy), timer with sound, custom categories.",
+    autoSave: "💾 <strong>Automatic</strong> save: players, settings, categories and history stay in your browser.",
+    players: "Players", add: "Add", shuffle: "Shuffle", clear: "Clear", autoSaveNames: "💾 Automatic name saving.",
+    categories: "Categories", manage: "Manage", selectedCat: "Selected category", gameSettings: "Settings",
+    elimNoVote: "🚫 Eliminated players can't vote", spiesKnow: "🕵️‍➡️ Real spies know each other (if enabled, better to play with 0 lawyers)",
+    lawyersKnowAll: "⚖️🔍 Lawyers know all spies (not just their own)",
+    rolesConstraint: "💡 Total special roles must be <strong>fewer</strong> than players.",
+    save: "Save", startGame: "Start Game", gameRequirements: "Need at least 1 Spy, 3 players and a category with words.",
+    manageCats: "Manage Categories", back: "Back", resetDefaults: "Reset to Defaults", yourCats: "Your Categories",
+    newCat: "New Category", catName: "Category Name", words: "Words", saveCat: "Save Category", autoSaveLang: "💾 Automatic save per language.",
+    defaultCats: "Default Categories", roleAssignment: "Role Assignment", playerName: "Player name",
+    revealRole: "Tap or press Enter to see your role", next: "Next", spy: "Spy", fakeSpy: "Fake Spy", lawyer: "Lawyer", civilian: "Civilian",
+    spyDesc: "Doesn't know the word.", fakeDesc: "Knows the word, wins if eliminated.", lawyerDesc: "Knows word and Spies; wins with their Spy.", civDesc: "Knows the word, unmasks Spies.",
+    gameInProgress: "Game in Progress", pause: "Pause", endRound: "End Round", voteSpy: "Vote for the spy",
+    voteHint: "Tap \"Vote\" next to a name to assign a vote. In case of a tie, you must make a decision!",
+    votesAssigned: "Votes assigned:", concludeVote: "Conclude Voting", outcome: "Outcome", revealAllRoles: "Reveal All Roles", playAgain: "Play Again",
+    gameHistory: "Game History", clearHistory: "Clear History", footer: "© 2025 • <strong>Local</strong> data in your browser.",
+    minutes: "Minutes", currentPlayerLabel: "Player name:",
+    // Role messages
+    youAreCivilian: "You are a <span style=\"font-weight:700;\">Civilian</span>! The word is: <span style=\"font-weight:700; color:var(--primary);\">",
+    youAreFakeSpy: "You are the <span style=\"font-weight:700;\">Fake Spy</span>! Word: <span style=\"font-weight:700; color:var(--primary);\">",
+    youAreLawyer: "You are the <span style=\"font-weight:700;\">Lawyer</span>! The word is \"<span style=\"font-weight:700; color:var(--primary);\">",
+    theSpiesAre: "\". The Spies are: <strong>", theSpyIs: "\". The Spy is: <strong>",
+    youAreSpy: "You are the <span style=\"font-weight:700;\">Spy</span>! <small>Work with your Lawyer, if you have one.</small>",
+    otherSpiesAre: "<br><small>The other spies are: <strong>", firstQuestionBy: "First question by: <strong>",
+    startAsking: "</strong><br><small>Start asking questions to find out who the spy is.</small>",
+    // Vote messages
+    round: "Round", of: "of", availableVoters: "Available voters:", timeUp: "Time's up! Time to vote.", maxVotesReached: "You've reached the maximum number of available votes!",
+    noVotes: "No votes cast. Assign at least one vote.", tieDetected: "⚠️ Tie detected. You must make a decision before proceeding!",
+    eliminatedPrefix: "Eliminated <strong>", wasRole: "</strong> — was <strong>", continue: "Continue",
+    // Win messages
+    fakeSpyWins: "🎭 <strong>", fakeWon: "</strong> won <em>as Fake Spy</em>.", allOthersLose: "All others lose (including real Spies and Lawyers).",
+    spyWins: "🕵️ <strong>", wonWithLawyer: "</strong> won <strong>together with their Lawyer</strong> <strong>", won: "</strong> won.",
+    spiesWin: "The Spies have prevailed.", civiliansWin: "👤 <strong>Civilians win</strong>! You correctly identified all the Spies.",
+    gameResult: "Game Result", eliminations: "Eliminations", allRoles: "All Roles",
+    // History
+    noGamesYet: "No games saved yet.", category: "Cat:", word: "Word:",
+    // Modals
+    deleteCategory: "Delete category \"<strong>", confirm: "Confirm", cancel: "Cancel", delete: "Delete",
+    clearPlayersList: "Clear the players list?", clearGameHistory: "Clear game history?",
+    categoryNameRequired: "Enter a category name.", addWords: "Add at least one word.", categorySaved: "Category saved!",
+    settingsSaved: "Settings saved!", needPlayers: "You need at least 3 players.", needSpy: "Need at least 1 Spy.",
+    tooManyRoles: "Total special roles must be fewer than players.", needCategory: "Select a category with at least one word.",
+    resetCategoriesConfirm: "Reset all categories to default values? This will delete all your custom categories.",
+    reset: "Reset", categoriesReset: "Categories reset to default values.",
+    done: "Done", eliminatedCantVote: "Eliminated: can't vote"
+  }
+};
 
-  /* ====== Animations ====== */
-  function revealOnScroll(){
-    const cards = $$('.card');
-    if (!cards.length) return;
-    const observer = new IntersectionObserver(entries=>{
-      entries.forEach(entry=>{
-        if(entry.isIntersecting){
-          entry.target.classList.add('visible');
-          const siblings = [...entry.target.parentElement.children];
-          const delay = siblings.indexOf(entry.target) * 100;
-          entry.target.style.transitionDelay = `${delay}ms`;
-        }
+const state = {
+  theme: LS.get('theme','auto'),
+  lang:  LS.get('lang','it'),
+  players: LS.get('players',[]),
+  custom:  LS.get('custom_'+(LS.get('lang','it')||'it'),{}),
+  category: LS.get('category',''),
+  settings: LS.get('settings',{spies:1,fakes:0,laws:0,minutes:5,optElimNoVote:false,optSpiesKnow:false,optLawyersKnowAll:false}),
+  history: LS.get('history',[]),
+  game: null
+};
+
+const t = (key) => translations[state.lang]?.[key] || translations.it[key] || key;
+
+/* ====== Animations ====== */
+function revealOnScroll(){
+  const cards = $$('.card');
+  if (!cards.length) return;
+  const observer = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        const siblings = [...entry.target.parentElement.children];
+        const delay = siblings.indexOf(entry.target) * 100;
+        entry.target.style.transitionDelay = `${delay}ms`;
+      }
+    });
+  },{ rootMargin:'0px 0px -10% 0px', threshold:0.1 });
+  cards.forEach(card=>{ if(!card.classList.contains('visible')) observer.observe(card); });
+}
+
+/* ====== Theme ====== */
+function metaThemeSync(){
+  const meta = $('#metaTheme');
+  if (meta) meta.content = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+}
+function applyTheme(){
+  const root = document.documentElement;
+  if(state.theme === 'auto'){
+    const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+    root.setAttribute('data-theme', dark ? 'dark' : 'light');
+  } else {
+    root.setAttribute('data-theme', state.theme);
+  }
+  metaThemeSync();
+}
+function cycleTheme(){
+  state.theme = state.theme === 'auto' ? 'light' : state.theme === 'light' ? 'dark' : 'auto';
+  LS.set('theme', state.theme);
+  const btn = $('#themeBtn');
+  btn.textContent = state.theme === 'auto' ? '🌓' : state.theme === 'light' ? '☀️' : '🌙';
+  applyTheme();
+}
+
+/* ====== Modal ====== */
+function modal(html, {title='', actions=[]}={}){
+  const d = $('#modal');
+  if(!d || !d.showModal) return;
+  $('#modalTitle').textContent = title || 'Info';
+  $('#modalBody').innerHTML = html;
+  const actionsEl = $('#modalActions');
+  actionsEl.innerHTML = '';
+  (actions.length ? actions : [{label:'OK', kind:'secondary'}]).forEach(a=>{
+    const btn = document.createElement('button');
+    btn.className = 'btn ' + (a.kind || 'secondary');
+    btn.textContent = a.label;
+    btn.onclick = () => { a.onClick?.(); d.close(); };
+    actionsEl.appendChild(btn);
+  });
+  d.showModal();
+}
+
+/* ====== i18n ====== */
+function i18nRefresh(){
+  $('#appTitle').textContent = state.lang === 'it' ? 'Spia' : 'Spy Game';
+  $('#heroTitle').textContent = state.lang === 'it' ? 'Il party game in tasca' : 'The party game in your pocket';
+  $('#heroDesc').textContent = state.lang === 'it' ? 'Spie, Finte Spie e Avvocati. UI moderna, salvataggio locale, nessun account.' : 'Spies, Fake Spies and Lawyers. Modern UI, local save, no account.';
+  $('#playerInput').placeholder = state.lang === 'it' ? 'Nome giocatore' : 'Player name';
+  $('#catName').placeholder = state.lang === 'it' ? 'Nome categoria (es. Film)' : 'Category name (e.g., Movies)';
+  $('#catWords').placeholder = state.lang === 'it' ? 'Parole separate da virgola o a capo' : 'Words separated by comma or newline';
+  $('#lang').value = state.lang;
+
+  // Applica le traduzioni
+  $$('[data-i]').forEach(el => {
+    const key = el.getAttribute('data-i');
+    const translation = t(key);
+    if (translation) el.innerHTML = translation;
+  });
+
+  renderCategories();
+  updateSelectedCat();
+  renderPlayers();
+  renderCatsPage();
+  renderStats();
+  renderSettingsSummary();
+}
+
+/* ====== Navigation ====== */
+function showView(id){
+  if(state.game?.timer){ clearInterval(state.game.timer); state.game.timer = null; }
+  $$('[data-view]').forEach(view => view.classList.remove('show'));
+  const targetView = document.getElementById(id);
+  if (targetView){ targetView.classList.add('show'); setTimeout(revealOnScroll, 100); }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ====== Players ====== */
+function renderPlayers(){
+  const ul = $('#playersList');
+  ul.innerHTML = '';
+  state.players.forEach((player, idx)=>{
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <span style="font-weight:600;">${player}</span>
+      <div class="flex gap-sm">
+        <button class="btn ghost small" data-move="-1" title="${state.lang === 'it' ? 'Su' : 'Up'}">⬆️</button>
+        <button class="btn ghost small" data-move="1" title="${state.lang === 'it' ? 'Giù' : 'Down'}">⬇️</button>
+        <button class="btn danger small" title="${state.lang === 'it' ? 'Rimuovi' : 'Remove'}">✕</button>
+      </div>`;
+    li.querySelector('[data-move="-1"]').onclick = ()=>{
+      if(idx>0){ [state.players[idx-1], state.players[idx]] = [state.players[idx], state.players[idx-1]]; savePlayers(); renderPlayers(); }
+    };
+    li.querySelector('[data-move="1"]').onclick = ()=>{
+      if(idx<state.players.length-1){ [state.players[idx+1], state.players[idx]] = [state.players[idx], state.players[idx+1]]; savePlayers(); renderPlayers(); }
+    };
+    li.querySelector('.btn.danger').onclick = ()=>{
+      state.players.splice(idx,1); savePlayers(); renderPlayers();
+    };
+    ul.appendChild(li);
+  });
+  $('#playersCount').textContent = state.players.length;
+}
+function addPlayer(){
+  const input = $('#playerInput');
+  const value = input.value.trim();
+  if(!value) return;
+  if(state.players.includes(value)){ input.value=''; return; }
+  state.players.push(value);
+  input.value=''; savePlayers(); renderPlayers();
+}
+const savePlayers = ()=> LS.set('players', state.players);
+
+/* ====== Categories ====== */
+const allCategories = ()=> ({ ...STOCK[state.lang], ...(state.custom || {}) });
+function renderCategories(){
+  const select = $('#categorySelect');
+  select.innerHTML = '';
+  const placeholder = document.createElement('option');
+  placeholder.disabled = true; placeholder.selected = !state.category;
+  placeholder.textContent = state.lang === 'it' ? 'Seleziona una categoria' : 'Select a category';
+  select.appendChild(placeholder);
+  const categories = allCategories();
+  Object.keys(categories).sort().forEach(cat=>{
+    const option = document.createElement('option');
+    option.value = cat; 
+    const wordCount = state.lang === 'it' ? 'parole' : 'words';
+    option.textContent = `${cat} (${categories[cat].length} ${wordCount})`;
+    if(cat === state.category) option.selected = true;
+    select.appendChild(option);
+  });
+}
+const updateSelectedCat = ()=> { $('#selCatTxt').textContent = state.category || '—'; };
+
+function renderCatsPage(){
+  const customUl = $('#customCatsList');
+  const stockUl = $('#stockCatsList');
+  customUl.innerHTML = ''; stockUl.innerHTML = '';
+  const custom = state.custom || {};
+  const stock = STOCK[state.lang];
+  const wordCount = state.lang === 'it' ? 'parole' : 'words';
+
+  // Custom
+  Object.keys(custom).sort().forEach(cat=>{
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <span><strong>${cat}</strong> <span class="text-muted" data-count>(${custom[cat].length} ${wordCount})</span></span>
+      <div class="flex gap-sm">
+        <button class="btn ghost small" data-edit>✏️</button>
+        <button class="btn danger small" data-del>✕</button>
+      </div>`;
+    li.querySelector('[data-edit]').onclick = ()=> openEditor(cat, li);
+    li.querySelector('[data-del]').onclick = ()=>{
+      modal(t('deleteCategory') + cat + '</strong>"?', {
+        title: t('confirm'),
+        actions:[
+          {label: t('cancel'), kind:'ghost'},
+          {label: t('delete'), kind:'danger', onClick:()=>{
+            delete custom[cat];
+            state.custom = custom;
+            LS.set('custom_'+state.lang, custom);
+            if(state.category === cat) state.category = '';
+            renderCategories(); renderCatsPage(); updateSelectedCat();
+          }}
+        ]
       });
-    },{ rootMargin:'0px 0px -10% 0px', threshold:0.1 });
-    cards.forEach(card=>{ if(!card.classList.contains('visible')) observer.observe(card); });
-  }
+    };
+    customUl.appendChild(li);
+  });
 
-  /* ====== Theme ====== */
-  function metaThemeSync(){
-    const meta = $('#metaTheme');
-    if (meta) meta.content = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
-  }
-  function applyTheme(){
-    const root = document.documentElement;
-    if(state.theme === 'auto'){
-      const dark = matchMedia('(prefers-color-scheme: dark)').matches;
-      root.setAttribute('data-theme', dark ? 'dark' : 'light');
-    } else {
-      root.setAttribute('data-theme', state.theme);
-    }
-    metaThemeSync();
-  }
-  function cycleTheme(){
-    state.theme = state.theme === 'auto' ? 'light' : state.theme === 'light' ? 'dark' : 'auto';
-    LS.set('theme', state.theme);
-    const btn = $('#themeBtn');
-    btn.textContent = state.theme === 'auto' ? '🌓' : state.theme === 'light' ? '☀️' : '🌙';
-    applyTheme();
-  }
+  // Stock (ora editabili promuovendole a custom)
+  Object.keys(stock).sort().forEach(cat=>{
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <span><strong>${cat}</strong> <span class="text-muted" data-count>(${(custom[cat]?.length ?? stock[cat].length)} ${wordCount})</span></span>
+      <div class="flex gap-sm">
+        <button class="btn ghost small" data-edit>✏️</button>
+        <span class="badge neutral">${state.lang === 'it' ? 'Predefinita' : 'Default'}</span>
+      </div>`;
+    li.querySelector('[data-edit]').onclick = ()=> openStockEditor(cat, li);
+    stockUl.appendChild(li);
+  });
+}
 
-  /* ====== Modal ====== */
-  function modal(html, {title='', actions=[]}={}){
-    const d = $('#modal');
-    if(!d || !d.showModal) return;
-    $('#modalTitle').textContent = title || 'Info';
-    $('#modalBody').innerHTML = html;
-    const actionsEl = $('#modalActions');
-    actionsEl.innerHTML = '';
-    (actions.length ? actions : [{label:'OK', kind:'secondary'}]).forEach(a=>{
-      const btn = document.createElement('button');
-      btn.className = 'btn ' + (a.kind || 'secondary');
-      btn.textContent = a.label;
-      btn.onclick = () => { a.onClick?.(); d.close(); };
-      actionsEl.appendChild(btn);
-    });
-    d.showModal();
-  }
+const parseWords = text => [...new Set(text.split(/[\n,;]+/).map(s=>s.trim()).filter(Boolean))];
 
-  /* ====== i18n ====== */
-  function i18nRefresh(){
-    $('#appTitle').textContent = state.lang === 'it' ? 'Spia' : 'Spy Game';
-    $('#heroTitle').textContent = state.lang === 'it' ? 'Il party game in tasca' : 'The party game in your pocket';
-    $('#heroDesc').textContent = state.lang === 'it' ? 'Spies, Fake Spies e Avvocati. UI moderna, salvataggio locale, nessun account.' : 'Spies, Fake Spies and Lawyers. Modern UI, local save, no account.';
-    $('#playerInput').placeholder = state.lang === 'it' ? 'Nome giocatore' : 'Player name';
-    $('#catName').placeholder = state.lang === 'it' ? 'Nome categoria (es. Film)' : 'Category name (e.g., Movies)';
-    $('#catWords').placeholder = state.lang === 'it' ? 'Parole separate da virgola o a capo' : 'Words separated by comma or newline';
-    $('#lang').value = state.lang;
+function saveNewCategory(){
+  const name = $('#catName').value.trim();
+  if(!name) return modal(t('categoryNameRequired'));
+  const words = parseWords($('#catWords').value);
+  if(!words.length) return modal(t('addWords'));
+  if(!state.custom) state.custom = {};
+  state.custom[name] = [...(state.custom[name] || []), ...words].filter((w,i,a)=>a.indexOf(w)===i);
+  LS.set('custom_'+state.lang, state.custom);
+  $('#catName').value=''; $('#catWords').value='';
+  renderCategories(); renderCatsPage(); modal(t('categorySaved'));
+}
 
-    renderCategories();
-    updateSelectedCat();
-    renderPlayers();
-    renderCatsPage();
-    renderStats();
-    renderSettingsSummary();
-  }
-
-  /* ====== Navigation ====== */
-  function showView(id){
-    if(state.game?.timer){ clearInterval(state.game.timer); state.game.timer = null; }
-    $$('[data-view]').forEach(view => view.classList.remove('show'));
-    const targetView = document.getElementById(id);
-    if (targetView){ targetView.classList.add('show'); setTimeout(revealOnScroll, 100); }
-    window.scrollTo({top:0, behavior:'smooth'});
-  }
-
-  /* ====== Players ====== */
-  function renderPlayers(){
-    const ul = $('#playersList');
-    ul.innerHTML = '';
-    state.players.forEach((player, idx)=>{
-      const li = document.createElement('li');
-      li.innerHTML = `
-        <span style="font-weight:600;">${player}</span>
-        <div class="flex gap-sm">
-          <button class="btn ghost small" data-move="-1" title="Su">⬆️</button>
-          <button class="btn ghost small" data-move="1" title="Giù">⬇️</button>
-          <button class="btn danger small" title="Rimuovi">✕</button>
-        </div>`;
-      li.querySelector('[data-move="-1"]').onclick = ()=>{
-        if(idx>0){ [state.players[idx-1], state.players[idx]] = [state.players[idx], state.players[idx-1]]; savePlayers(); renderPlayers(); }
-      };
-      li.querySelector('[data-move="1"]').onclick = ()=>{
-        if(idx<state.players.length-1){ [state.players[idx+1], state.players[idx]] = [state.players[idx], state.players[idx+1]]; savePlayers(); renderPlayers(); }
-      };
-      li.querySelector('.btn.danger').onclick = ()=>{
-        state.players.splice(idx,1); savePlayers(); renderPlayers();
-      };
-      ul.appendChild(li);
-    });
-    $('#playersCount').textContent = state.players.length;
-  }
-  function addPlayer(){
-    const input = $('#playerInput');
-    const value = input.value.trim();
-    if(!value) return;
-    if(state.players.includes(value)){ input.value=''; return; }
-    state.players.push(value);
-    input.value=''; savePlayers(); renderPlayers();
-  }
-  const savePlayers = ()=> LS.set('players', state.players);
-
-  /* ====== Categories ====== */
-  const allCategories = ()=> ({ ...STOCK[state.lang], ...(state.custom || {}) });
-  function renderCategories(){
-    const select = $('#categorySelect');
-    select.innerHTML = '';
-    const placeholder = document.createElement('option');
-    placeholder.disabled = true; placeholder.selected = !state.category;
-    placeholder.textContent = state.lang === 'it' ? 'Seleziona una categoria' : 'Select a category';
-    select.appendChild(placeholder);
-    const categories = allCategories();
-    Object.keys(categories).sort().forEach(cat=>{
-      const option = document.createElement('option');
-      option.value = cat; option.textContent = `${cat} (${categories[cat].length} parole)`;
-      if(cat === state.category) option.selected = true;
-      select.appendChild(option);
-    });
-  }
-  const updateSelectedCat = ()=> { $('#selCatTxt').textContent = state.category || '—'; };
-
-  function renderCatsPage(){
-    const customUl = $('#customCatsList');
-    const stockUl = $('#stockCatsList');
-    customUl.innerHTML = ''; stockUl.innerHTML = '';
-    const custom = state.custom || {};
-    const stock = STOCK[state.lang];
-
-    // Custom
-    Object.keys(custom).sort().forEach(cat=>{
-      const li = document.createElement('li');
-      li.innerHTML = `
-        <span><strong>${cat}</strong> <span class="text-muted" data-count>(${custom[cat].length} parole)</span></span>
-        <div class="flex gap-sm">
-          <button class="btn ghost small" data-edit>✏️</button>
-          <button class="btn danger small" data-del>✕</button>
-        </div>`;
-      li.querySelector('[data-edit]').onclick = ()=> openEditor(cat, li);
-      li.querySelector('[data-del]').onclick = ()=>{
-        modal(`Eliminare la categoria "<strong>${cat}</strong>"?`, {
-          title:'Conferma',
-          actions:[
-            {label:'Annulla', kind:'ghost'},
-            {label:'Elimina', kind:'danger', onClick:()=>{
-              delete custom[cat];
-              state.custom = custom;
-              LS.set('custom_'+state.lang, custom);
-              if(state.category === cat) state.category = '';
-              renderCategories(); renderCatsPage(); updateSelectedCat();
-            }}
-          ]
-        });
-      };
-      customUl.appendChild(li);
-    });
-
-    // Stock (now editable)
-    Object.keys(stock).sort().forEach(cat=>{
-      const li = document.createElement('li');
-      li.innerHTML = `
-        <span><strong>${cat}</strong> <span class="text-muted" data-count>(${(custom[cat]?.length ?? stock[cat].length)} parole)</span></span>
-        <div class="flex gap-sm">
-          <button class="btn ghost small" data-edit>✏️</button>
-          <span class="badge neutral">Predefinita</span>
-        </div>`;
-      li.querySelector('[data-edit]').onclick = ()=> openStockEditor(cat, li);
-      stockUl.appendChild(li);
-    });
-  }
-
-  const parseWords = text => [...new Set(text.split(/[\n,;]+/).map(s=>s.trim()).filter(Boolean))];
-
-  function saveNewCategory(){
-    const name = $('#catName').value.trim();
-    if(!name) return modal('Inserisci un nome categoria.');
-    const words = parseWords($('#catWords').value);
-    if(!words.length) return modal('Aggiungi almeno una parola.');
-    if(!state.custom) state.custom = {};
-    state.custom[name] = [...(state.custom[name] || []), ...words].filter((w,i,a)=>a.indexOf(w)===i);
+function openStockEditor(cat, li){
+  if(!state.custom[cat]){
+    state.custom[cat] = [...STOCK[state.lang][cat]];
     LS.set('custom_'+state.lang, state.custom);
-    $('#catName').value=''; $('#catWords').value='';
-    renderCategories(); renderCatsPage(); modal('Categoria salvata!');
+  }
+  openEditor(cat, li);
+}
+
+function openEditor(cat, li){
+  // Chiudi altri editor inline
+  $$('.cat-inline-editor').forEach(n=>n.remove());
+  [...$('#customCatsList').children].forEach(x=>x.classList.remove('editing'));
+  [...$('#stockCatsList').children].forEach(x=>x.classList.remove('editing'));
+  li.classList.add('editing');
+
+  const editor = document.createElement('div');
+  editor.className = 'mt-md cat-inline-editor';
+  editor.style.cssText = 'padding:var(--space-md); background:var(--surface-elevated); border-radius:var(--radius-md); border:1px solid var(--line);';
+  editor.innerHTML = `
+    <div class="flex gap-sm mb-md">
+      <input id="wInput" class="form-input" type="text" placeholder="${state.lang === 'it' ? 'Aggiungi parola' : 'Add word'}" style="flex:1; margin-bottom:0;"/>
+      <button id="addWordBtn" class="btn success small">✓</button>
+      <button id="doneBtn" class="btn ghost small">${t('done')}</button>
+    </div>
+    <div id="wChips" class="flex gap-sm" style="flex-wrap:wrap;"></div>`;
+  li.appendChild(editor);
+
+  const chips = editor.querySelector('#wChips');
+  const input = editor.querySelector('#wInput');
+  const addBtn = editor.querySelector('#addWordBtn');
+  const doneBtn = editor.querySelector('#doneBtn');
+
+  function refreshCount(){
+    const cnt = li.querySelector('[data-count]');
+    const wordCount = state.lang === 'it' ? 'parole' : 'words';
+    if(cnt) cnt.textContent = `(${(state.custom[cat] || []).length} ${wordCount})`;
   }
 
-  function openStockEditor(cat, li){
-    // Promote stock category to editable custom copy (keeps same name, overrides in merge)
-    if(!state.custom[cat]){
-      state.custom[cat] = [...STOCK[state.lang][cat]];
+  function closeEditor(){
+    editor.remove();
+    li.classList.remove('editing');
+  }
+
+  function addWord(){
+    const value = input.value.trim(); if(!value) return;
+    if(!state.custom[cat]) state.custom[cat] = [];
+    if(!state.custom[cat].includes(value)){
+      state.custom[cat].push(value);
       LS.set('custom_'+state.lang, state.custom);
+      drawChips(); renderCategories(); refreshCount();
     }
-    openEditor(cat, li);
+    input.value='';
+    input.focus();
   }
 
-  function openEditor(cat, li){
-    // Close any other inline editor to avoid duplicate IDs
-    $$('.cat-inline-editor').forEach(n=>n.remove());
-    [...$('#customCatsList').children].forEach(x=>x.classList.remove('editing'));
-    [...$('#stockCatsList').children].forEach(x=>x.classList.remove('editing'));
-    li.classList.add('editing');
-
-    const editor = document.createElement('div');
-    editor.className = 'mt-md cat-inline-editor';
-    editor.style.cssText = 'padding:var(--space-md); background:var(--surface-elevated); border-radius:var(--radius-md); border:1px solid var(--line);';
-    editor.innerHTML = `
-      <div class="flex gap-sm mb-md">
-        <input id="wInput" class="form-input" type="text" placeholder="Aggiungi parola" style="flex:1; margin-bottom:0;"/>
-        <button id="addWordBtn" class="btn success small">✓</button>
-      </div>
-      <div id="wChips" class="flex gap-sm" style="flex-wrap:wrap;"></div>`;
-    li.appendChild(editor);
-
-    const chips = editor.querySelector('#wChips');
-    const input = editor.querySelector('#wInput');
-    const addBtn = editor.querySelector('#addWordBtn');
-
-    function refreshCount(){
-      const cnt = li.querySelector('[data-count]');
-      if(cnt) cnt.textContent = `(${(state.custom[cat] || []).length} parole)`;
-    }
-
-    function addWord(){
-      const value = input.value.trim(); if(!value) return;
-      if(!state.custom[cat]) state.custom[cat] = [];
-      if(!state.custom[cat].includes(value)){
-        state.custom[cat].push(value);
+  function drawChips(){
+    chips.innerHTML='';
+    (state.custom[cat] || []).forEach((word,i)=>{
+      const chip = document.createElement('div');
+      chip.className = 'badge neutral';
+      chip.innerHTML = `${word} <button class="btn danger small" style="margin-left:var(--space-xs);">×</button>`;
+      chip.querySelector('button').onclick = ()=>{
+        state.custom[cat].splice(i,1);
         LS.set('custom_'+state.lang, state.custom);
         drawChips(); renderCategories(); refreshCount();
-      }
-      input.value='';
-      input.focus();
+      };
+      chips.appendChild(chip);
+    });
+  }
+
+  drawChips();
+  input.addEventListener('keydown', e=>{ if(e.key==='Enter') addWord(); });
+  addBtn.onclick = addWord;
+  doneBtn.onclick = closeEditor;
+
+  // Chiudi cliccando fuori
+  document.addEventListener('click', function closeOnOutside(e) {
+    if (!editor.contains(e.target) && e.target !== editor) {
+      closeEditor();
+      document.removeEventListener('click', closeOnOutside);
     }
+  });
+}
 
-    function drawChips(){
-      chips.innerHTML='';
-      (state.custom[cat] || []).forEach((word,i)=>{
-        const chip = document.createElement('div');
-        chip.className = 'badge neutral';
-        chip.innerHTML = `${word} <button class="btn danger small" style="margin-left:var(--space-xs);">×</button>`;
-        chip.querySelector('button').onclick = ()=>{
-          state.custom[cat].splice(i,1);
-          LS.set('custom_'+state.lang, state.custom);
-          drawChips(); renderCategories(); refreshCount();
-        };
-        chips.appendChild(chip);
-      });
+function resetCategories(){
+  modal(t('resetCategoriesConfirm'), {
+    title: t('confirm'),
+    actions: [
+      {label: t('cancel'), kind: 'ghost'},
+      {label: t('reset'), kind: 'danger', onClick: () => {
+        state.custom = {};
+        LS.set('custom_'+state.lang, {});
+        renderCategories();
+        renderCatsPage();
+        modal(t('categoriesReset'));
+      }}
+    ]
+  });
+}
+
+/* ====== Settings ====== */
+const clamp = (n,min,max)=> Math.max(min, Math.min(max, Number(n)||0));
+function readSettings(){
+  return {
+    spies: clamp($('#numSpies').value, 1, 6),
+    fakes: clamp($('#numFakeSpies').value, 0, 6),
+    laws: clamp($('#numLawyers').value, 0, 6),
+    minutes: clamp($('#roundMinutes').value, 1, 99),
+    optElimNoVote: $('#optElimNoVote').checked,
+    optSpiesKnow: $('#optSpiesKnow').checked,
+    optLawyersKnowAll: $('#optLawyersKnowAll').checked
+  };
+}
+function writeSettings(s){
+  $('#numSpies').value = s.spies;
+  $('#numFakeSpies').value = s.fakes;
+  $('#numLawyers').value = s.laws;
+  $('#roundMinutes').value = s.minutes;
+  $('#optElimNoVote').checked = s.optElimNoVote;
+  $('#optSpiesKnow').checked = s.optSpiesKnow;
+  $('#optLawyersKnowAll').checked = s.optLawyersKnowAll || false;
+  renderSettingsSummary();
+}
+function saveSettings(){ 
+  state.settings = readSettings(); 
+  LS.set('settings', state.settings); 
+  modal(t('settingsSaved')); 
+  renderSettingsSummary(); 
+}
+function renderSettingsSummary(){
+  const s = readSettings();
+  $('#settingsSummary').textContent = `🕵️ ${s.spies} · 🎭 ${s.fakes} · ⚖️ ${s.laws} · ⏱️ ${s.minutes}′`;
+}
+
+/* ====== Stats & History (FIX: conteggio vittorie Avvocati) ====== */
+function renderStats(){
+  const history = state.history;
+  const total = history.length || 0;
+  const winCount = key => history.filter(x=>x.winner===key).length;
+  const lawWins = history.filter(x=>x.lawyersWon).length;
+  const percentage = value => total ? Math.round(value*100/total) : 0;
+  $('#s_games').textContent = total;
+  $('#s_civ').innerHTML = `${percentage(winCount('civ'))}<span style="font-size:.8em;">%</span>`;
+  $('#s_spy').innerHTML = `${percentage(winCount('spy'))}<span style="font-size:.8em;">%</span>`;
+  $('#s_fake').innerHTML = `${percentage(winCount('fake'))}<span style="font-size:.8em;">%</span>`;
+  $('#s_law').innerHTML = `${percentage(lawWins)}<span style="font-size:.8em;">%</span>`;
+}
+function renderHistory(){
+  const container = $('#historyList');
+  const history = [...state.history].reverse();
+  if(!history.length){ 
+    container.innerHTML = `<p class="text-muted text-center">${t('noGamesYet')}</p>`;
+    return; 
+  }
+  container.innerHTML = history.map(item=>{
+    const timestamp = new Date(item.time).toLocaleString();
+    const eliminations = item.eliminations.map(x=>`<li><span>${x.name}</span><span class="badge ${roleBadgeCls(x.role)}">${roleLabel(x.role)}</span></li>`).join('');
+    return `<div class="card visible" style="margin-bottom:var(--space-lg);">
+      <p class="text-muted mb-md">${timestamp} • ${t('category')}: <strong>${item.category || '—'}</strong> • ${t('word')}: <strong>${item.secret || '—'}</strong></p>
+      <h4 style="margin:var(--space-sm) 0;">${t('eliminations')}:</h4>
+      <ul class="enhanced-list">${eliminations}</ul>
+      <div class="mt-md">${item.winDetailHtml}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ====== Game Flow ====== */
+function startGame(){
+  const settings = readSettings();
+  const categories = allCategories();
+  const words = (state.category && categories[state.category]) ? categories[state.category] : [];
+  if(state.players.length < 3) return modal(t('needPlayers'));
+  if(settings.spies < 1) return modal(t('needSpy'));
+  if(settings.spies + settings.fakes + settings.laws >= state.players.length) return modal(t('tooManyRoles'));
+  if(!state.category || words.length === 0) return modal(t('needCategory'));
+
+  LS.set('settings', settings);
+  LS.set('category', state.category);
+
+  const secret = words[Math.floor(Math.random()*words.length)];
+  const order = [...state.players];
+  for(let i=order.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [order[i],order[j]]=[order[j],order[i]]; }
+
+  const roles = [];
+  for(let i=0;i<settings.spies;i++) roles.push(Role.spy);
+  for(let i=0;i<settings.fakes;i++) roles.push(Role.fake);
+  for(let i=0;i<settings.laws;i++) roles.push(Role.law);
+  while(roles.length < order.length) roles.push(Role.civ);
+  for(let i=roles.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [roles[i],roles[j]]=[roles[j],roles[i]]; }
+
+  const spyIndices = roles.map((r,i)=>r===Role.spy ? i : -1).filter(i=>i>=0);
+  const lawyerIndices = roles.map((r,i)=>r===Role.law ? i : -1).filter(i=>i>=0);
+
+  // FIX: mappatura chiara Spy -> Lawyer (uno-a-uno con ripartizione modulo)
+  const lawyerForSpy = {};
+  if(lawyerIndices.length>0){
+    spyIndices.forEach((spyIdx,k)=>{
+      const lawyerIdx = lawyerIndices[k % lawyerIndices.length];
+      lawyerForSpy[spyIdx] = lawyerIdx;
+    });
+  }
+
+  state.game = {
+    order, roles, secret, lawyerForSpy,
+    spiesKnow: settings.optSpiesKnow,
+    lawyersKnowAll: settings.optLawyersKnowAll,
+    index:0, revealed:false,
+    minutes:settings.minutes, time:settings.minutes*60, timer:null,
+    voteRound:1, voteMaxRounds: spyIndices.length || 1,
+    eliminated:[], canVoteMask: order.map(()=>true),
+    optElimNoVote: settings.optElimNoVote
+  };
+
+  showView('view-roles');
+  showNextRole();
+}
+
+function roleRevealText(index){
+  const g = state.game, role = g.roles[index];
+  if(role === Role.civ) return t('youAreCivilian') + g.secret + '</span>';
+  if(role === Role.fake) return t('youAreFakeSpy') + g.secret + '</span>';
+  if(role === Role.law){
+    const spies = g.lawyersKnowAll 
+      ? g.roles.map((r,k)=> r===Role.spy ? g.order[k] : null).filter(Boolean)
+      : Object.entries(g.lawyerForSpy)
+          .filter(([spyIdx, lawyerIdx]) => lawyerIdx === index)
+          .map(([spyIdx]) => g.order[Number(spyIdx)]);
+    if(spies.length === 1) {
+      return t('youAreLawyer') + g.secret + t('theSpyIs') + spies.join(', ') + '</strong>.';
+    } else {
+      return t('youAreLawyer') + g.secret + t('theSpiesAre') + spies.join(', ') + '</strong>.';
     }
+  }
+  if(role === Role.spy){
+    const otherSpies = g.spiesKnow ? g.roles.map((r,k)=>(r===Role.spy && k!==index) ? g.order[k] : null).filter(Boolean) : [];
+    const knowText = otherSpies.length ? t('otherSpiesAre') + otherSpies.join(', ') + '</strong>.</small>' : '';
+    return t('youAreSpy') + knowText;
+  }
+}
 
-    drawChips();
-    input.addEventListener('keydown', e=>{ if(e.key==='Enter') addWord(); });
-    addBtn.onclick = addWord;
-  }
-
-  /* ====== Settings ====== */
-  const clamp = (n,min,max)=> Math.max(min, Math.min(max, Number(n)||0));
-  function readSettings(){
-    return {
-      spies: clamp($('#numSpies').value, 1, 6),
-      fakes: clamp($('#numFakeSpies').value, 0, 6),
-      laws: clamp($('#numLawyers').value, 0, 6),
-      minutes: clamp($('#roundMinutes').value, 1, 99),
-      optElimNoVote: $('#optElimNoVote').checked,
-      optSpiesKnow: $('#optSpiesKnow').checked
-    };
-  }
-  function writeSettings(s){
-    $('#numSpies').value = s.spies;
-    $('#numFakeSpies').value = s.fakes;
-    $('#numLawyers').value = s.laws;
-    $('#roundMinutes').value = s.minutes;
-    $('#optElimNoVote').checked = s.optElimNoVote;
-    $('#optSpiesKnow').checked = s.optSpiesKnow;
-    renderSettingsSummary();
-  }
-  function saveSettings(){ state.settings = readSettings(); LS.set('settings', state.settings); modal('Impostazioni salvate!'); renderSettingsSummary(); }
-  function renderSettingsSummary(){
-    const s = readSettings();
-    $('#settingsSummary').textContent = `🕵️ ${s.spies} · 🎭 ${s.fakes} · ⚖️ ${s.laws} · ⏱️ ${s.minutes}′`;
-  }
-
-  /* ====== Stats & History ====== */
-  function renderStats(){
-    const history = state.history;
-    const total = history.length || 0;
-    const winCount = key => history.filter(x=>x.winner===key).length;
-    const percentage = value => total ? Math.round(value*100/total) : 0;
-    $('#s_games').textContent = total;
-    $('#s_civ').innerHTML = `${percentage(winCount('civ'))}<span style="font-size:.8em;">%</span>`;
-    $('#s_spy').innerHTML = `${percentage(winCount('spy'))}<span style="font-size:.8em;">%</span>`;
-    $('#s_fake').innerHTML = `${percentage(winCount('fake'))}<span style="font-size:.8em;">%</span>`;
-    $('#s_law').innerHTML = `${percentage(winCount('law'))}<span style="font-size:.8em;">%</span>`;
-  }
-  function renderHistory(){
-    const container = $('#historyList');
-    const history = [...state.history].reverse();
-    if(!history.length){ container.innerHTML = '<p class="text-muted text-center">Ancora nessuna partita salvata.</p>'; return; }
-    container.innerHTML = history.map(item=>{
-      const timestamp = new Date(item.time).toLocaleString();
-      const eliminations = item.eliminations.map(x=>`<li><span>${x.name}</span><span class="badge ${roleBadgeCls(x.role)}">${roleLabel(x.role)}</span></li>`).join('');
-      return `<div class="card visible" style="margin-bottom:var(--space-lg);">
-        <p class="text-muted mb-md">${timestamp} • Cat: <strong>${item.category || '—'}</strong> • Parola: <strong>${item.secret || '—'}</strong></p>
-        <h4 style="margin:var(--space-sm) 0;">Eliminazioni:</h4>
-        <ul class="enhanced-list">${eliminations}</ul>
-        <div class="mt-md">${item.winDetailHtml}</div>
+function showNextRole(){
+  const g = state.game; if(!g) return;
+  if(g.index >= g.order.length){ showView('view-game'); startTimer(); setFirstQuestion(); return; }
+  const name = g.order[g.index];
+  $('#currentPlayer').textContent = name;
+  const card = $('#roleCard');
+  card.classList.remove('revealed'); g.revealed=false; 
+  card.innerHTML = `<p class="text-muted">${t('revealRole')}</p>`;
+  $('#nextPlayer').disabled = true;
+  function reveal(){
+    if(g.revealed) return;
+    g.revealed = true; card.classList.add('revealed');
+    const role = g.roles[g.index];
+    card.innerHTML = `
+      <div class="text-center">
+        <div class="badge ${roleBadgeCls(role)} mb-md">${roleLabel(role)}</div>
+        <div style="font-size:1.1rem;">${roleRevealText(g.index)}</div>
       </div>`;
-    }).join('');
+    $('#nextPlayer').disabled = false;
   }
+  card.onclick = reveal;
+  card.onkeydown = e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); reveal(); } };
+  $('#nextPlayer').onclick = ()=>{ 
+    if(!g.revealed) return modal(state.lang === 'it' ? 'Prima leggi il tuo ruolo.' : 'Read your role first.'); 
+    g.index++; showNextRole(); 
+  };
+}
 
-  /* ====== Game Flow ====== */
-  function startGame(){
-    const settings = readSettings();
-    const categories = allCategories();
-    const words = (state.category && categories[state.category]) ? categories[state.category] : [];
-    if(state.players.length < 3) return modal('Devi avere almeno 3 giocatori.');
-    if(settings.spies < 1) return modal('Serve almeno 1 Spia.');
-    if(settings.spies + settings.fakes + settings.laws >= state.players.length) return modal('I ruoli speciali totali devono essere minori dei giocatori.');
-    if(!state.category || words.length === 0) return modal('Seleziona una categoria con almeno una parola.');
+/* ====== Timer ====== */
+const formatTime = s => `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
+function startTimer(){
+  const g = state.game; if(!g) return;
+  g.time = g.minutes*60; const el = $('#timer'); el.textContent = formatTime(g.time); el.classList.remove('warning');
+  if(g.timer){ clearInterval(g.timer); g.timer = null; }
+  g.timer = setInterval(()=>{
+    g.time = Math.max(0, g.time-1); el.textContent = formatTime(g.time);
+    if(g.time<=30 && !el.classList.contains('warning')) el.classList.add('warning');
+    if(g.time<=0){
+      clearInterval(g.timer); g.timer=null;
+      try{ const beep = $('#beep'); beep.currentTime=0; beep.play().catch(()=>{});}catch(e){}
+      onTimeUp();
+    }
+  },1000);
+}
+function pauseTimer(){
+  const g = state.game; if(!g) return;
+  const btn = $('#pauseTimer');
+  if(g.timer){ 
+    clearInterval(g.timer); g.timer=null; 
+    btn.innerHTML = '▶️ ' + (state.lang === 'it' ? 'Riprendi' : 'Resume'); 
+  } else { 
+    startTimer(); 
+    btn.innerHTML = '⏸️ ' + t('pause'); 
+  }
+}
+function setFirstQuestion(){
+  const g = state.game;
+  const randomPlayer = g.order[Math.floor(Math.random()*g.order.length)];
+  $('#firstQuestionHint').innerHTML = t('firstQuestionBy') + randomPlayer + t('startAsking');
+}
+const onTimeUp = ()=> modal(t('timeUp'), { actions:[{label:'OK', kind:'success', onClick: goVote}] });
 
-    LS.set('settings', settings);
-    LS.set('category', state.category);
-
-    const secret = words[Math.floor(Math.random()*words.length)];
-    const order = [...state.players];
-    for(let i=order.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [order[i],order[j]]=[order[j],order[i]]; }
-
-    const roles = [];
-    for(let i=0;i<settings.spies;i++) roles.push(Role.spy);
-    for(let i=0;i<settings.fakes;i++) roles.push(Role.fake);
-    for(let i=0;i<settings.laws;i++) roles.push(Role.law);
-    while(roles.length < order.length) roles.push(Role.civ);
-    for(let i=roles.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [roles[i],roles[j]]=[roles[j],roles[i]]; }
-
-    const spyIndices = roles.map((r,i)=>r===Role.spy ? i : -1).filter(i=>i>=0);
-    const lawyerIndices = roles.map((r,i)=>r===Role.law ? i : -1).filter(i=>i>=0);
-    const lawyerForSpy = {};
-    if(lawyerIndices.length>0){ spyIndices.forEach((spyIdx,k)=>{ const lawyerIdx = lawyerIndices[k % lawyerIndices.length]; lawyerForSpy[spyIdx] = lawyerIdx; }); }
-
-    state.game = {
-      order, roles, secret, lawyerForSpy,
-      spiesKnow: settings.optSpiesKnow,
-      index:0, revealed:false,
-      minutes:settings.minutes, time:settings.minutes*60, timer:null,
-      voteRound:1, voteMaxRounds: spyIndices.length || 1,
-      eliminated:[], canVoteMask: order.map(()=>true),
-      optElimNoVote: settings.optElimNoVote
+/* ====== Voting ====== */
+function updateVoteStatus(){
+  const g = state.game;
+  const total = Object.values(g.votes||{}).reduce((s,v)=>s+v,0);
+  $('#totalVotes').textContent = total;
+}
+function goVote(){
+  const g = state.game; g.votes = {};
+  $('#voteTitle').innerHTML = `<span class="emoji">🗳️</span> ${t('voteSpy')} ${g.voteRound}/${g.voteMaxRounds}`;
+  const maxVoters = g.optElimNoVote ? g.canVoteMask.filter(Boolean).length : g.order.length;
+  $('#voteSubHint').textContent = `${t('round')} ${g.voteRound} ${t('of')} ${g.voteMaxRounds} • ${t('availableVoters')} ${maxVoters}`;
+  const ul = $('#voteList'); ul.innerHTML='';
+  g.order.forEach((name, idx)=>{
+    const alreadyEliminated = g.eliminated.some(x=>x.index===idx);
+    const canVote = g.optElimNoVote ? g.canVoteMask[idx] : true;
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <span style="${alreadyEliminated ? 'text-decoration:line-through; opacity:.6;' : 'font-weight:600;'}">${name}</span>
+      <div class="vote-controls">
+        <button class="btn ghost small" data-dec>−</button>
+        <div class="vote-count" data-count>0</div>
+        <button class="btn secondary small" data-inc ${alreadyEliminated ? 'disabled' : ''}>${state.lang === 'it' ? 'Vota' : 'Vote'}</button>
+      </div>`;
+    const countEl = li.querySelector('[data-count]');
+    g.votes[name] = 0;
+    li.querySelector('[data-inc]').onclick = ()=>{
+      const totalVotes = Object.values(g.votes||{}).reduce((s,v)=>s+v,0);
+      if(totalVotes >= maxVoters){ modal(t('maxVotesReached')); return; }
+      g.votes[name]++; countEl.textContent = g.votes[name]; countEl.classList.toggle('has-votes', g.votes[name]>0); updateVoteStatus();
     };
+    li.querySelector('[data-dec]').onclick = ()=>{
+      g.votes[name] = Math.max(0, g.votes[name]-1); countEl.textContent = g.votes[name]; countEl.classList.toggle('has-votes', g.votes[name]>0); updateVoteStatus();
+    };
+    if(!canVote){ li.style.opacity='.6'; li.title=t('eliminatedCantVote'); }
+    ul.appendChild(li);
+  });
+  updateVoteStatus();
+  showView('view-vote');
+}
+function seeRoundResult(){
+  const g = state.game;
+  const totalVotes = Object.values(g.votes||{}).reduce((s,v)=>s+v,0);
+  if(totalVotes===0) return modal(t('noVotes'));
+  const entries = Object.entries(g.votes||{}).sort((a,b)=>b[1]-a[1]);
+  const topVotes = entries[0][1];
+  if(topVotes===0) return modal(t('noVotes'));
+  const tied = entries.filter(e=>e[1]===topVotes).map(e=>e[0]);
+  if(tied.length!==1) return modal(t('tieDetected'));
+  const eliminatedName = tied[0];
+  const eliminatedIndex = g.order.indexOf(eliminatedName);
+  const eliminatedRole = g.roles[eliminatedIndex];
+  g.eliminated.push({ index:eliminatedIndex, name:eliminatedName, role:eliminatedRole });
+  if(g.optElimNoVote) g.canVoteMask[eliminatedIndex] = false;
+  modal(t('eliminatedPrefix') + eliminatedName + t('wasRole') + roleLabel(eliminatedRole) + '</strong>.', { 
+    actions:[{label: t('continue'), kind:'success', onClick: afterElimination}] 
+  });
+}
+function afterElimination(){
+  const g = state.game;
+  if(g.voteRound >= g.voteMaxRounds){ finalizeGame(); return; }
+  g.voteRound++; goVote();
+}
 
-    showView('view-roles');
-    showNextRole();
+/* ====== Results ====== */
+function finalizeGame(){
+  const g = state.game;
+  const spyIndices = g.roles.map((r,i)=> r===Role.spy ? i : -1).filter(i=>i>=0);
+  const eliminatedIndices = new Set(g.eliminated.map(x=>x.index));
+
+  // Fake Spy eliminata → vince Fake
+  const eliminatedFakes = g.eliminated.filter(x=>x.role===Role.fake);
+  if(eliminatedFakes.length){
+    const lines = eliminatedFakes.map(x=>`<p>${t('fakeSpyWins')}${x.name}${t('fakeWon')}</p>`).join('');
+    const html = lines + `<p class="text-muted">${t('allOthersLose')}</p>`;
+    endAndSave({winner:'fake', html, lawyersWon:false}); return;
   }
 
-  function roleRevealText(index){
-    const g = state.game, role = g.roles[index];
-    if(role === Role.civ) return `Sei un <span style="font-weight:700;">Civile</span>! La parola è: <span style="font-weight:700; color:var(--primary);">${g.secret}</span>`;
-    if(role === Role.fake) return `Sei la <span style="font-weight:700;">Finta Spia</span>! Parola: <span style="font-weight:700; color:var(--primary);">${g.secret}</span>`;
-    if(role === Role.law){
-      const spies = g.roles.map((r,k)=> r===Role.spy ? g.order[k] : null).filter(Boolean);
-      return `Sei l'<span style="font-weight:700;">Avvocato</span>! La parola è "<span style="font-weight:700; color:var(--primary);">${g.secret}</span>". Le Spie sono: <strong>${spies.join(', ') || '—'}</strong>.`;
-    }
-    if(role === Role.spy){
-      const otherSpies = g.spiesKnow ? g.roles.map((r,k)=>(r===Role.spy && k!==index) ? g.order[k] : null).filter(Boolean) : [];
-      const knowText = otherSpies.length ? `<br><small>Le altre spie sono: <strong>${otherSpies.join(', ')}</strong>.</small>` : '';
-      return `Sei la <span style="font-weight:700;">Spia</span>! <small>Gioca con il tuo Avvocato, se ne hai uno.</small>${knowText}`;
-    }
-  }
-
-  function showNextRole(){
-    const g = state.game; if(!g) return;
-    if(g.index >= g.order.length){ showView('view-game'); startTimer(); setFirstQuestion(); return; }
-    const name = g.order[g.index];
-    $('#currentPlayer').textContent = name;
-    const card = $('#roleCard');
-    card.classList.remove('revealed'); g.revealed=false; card.innerHTML = '<p class="text-muted">Tocca o premi Invio per vedere il tuo ruolo</p>';
-    $('#nextPlayer').disabled = true;
-    function reveal(){
-      if(g.revealed) return;
-      g.revealed = true; card.classList.add('revealed');
-      const role = g.roles[g.index];
-      card.innerHTML = `
-        <div class="text-center">
-          <div class="badge ${roleBadgeCls(role)} mb-md">${roleLabel(role)}</div>
-          <div style="font-size:1.1rem;">${roleRevealText(g.index)}</div>
-        </div>`;
-      $('#nextPlayer').disabled = false;
-    }
-    card.onclick = reveal;
-    card.onkeydown = e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); reveal(); } };
-    $('#nextPlayer').onclick = ()=>{ if(!g.revealed) return modal('Prima leggi il tuo ruolo.'); g.index++; showNextRole(); };
-  }
-
-  /* ====== Timer ====== */
-  const formatTime = s => `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
-  function startTimer(){
-    const g = state.game; if(!g) return;
-    g.time = g.minutes*60; const el = $('#timer'); el.textContent = formatTime(g.time); el.classList.remove('warning');
-    if(g.timer){ clearInterval(g.timer); g.timer = null; }
-    g.timer = setInterval(()=>{
-      g.time = Math.max(0, g.time-1); el.textContent = formatTime(g.time);
-      if(g.time<=30 && !el.classList.contains('warning')) el.classList.add('warning');
-      if(g.time<=0){
-        clearInterval(g.timer); g.timer=null;
-        try{ const beep = $('#beep'); beep.currentTime=0; beep.play().catch(()=>{});}catch(e){}
-        onTimeUp();
+  // Se almeno una Spia sopravvive → vince Spia (+ eventuali Avvocati)
+  const survivingSpies = spyIndices.filter(i=>!eliminatedIndices.has(i));
+  if(survivingSpies.length){
+    let html = '';
+    let lawyersWon = false;
+    survivingSpies.forEach(si=>{
+      const spyName = g.order[si];
+      const lawyerIndex = g.lawyerForSpy[si];
+      if(Number.isInteger(lawyerIndex) && !eliminatedIndices.has(lawyerIndex)){
+        const lawyerName = g.order[lawyerIndex];
+        html += `\n<p>${t('spyWins')}${spyName}${t('wonWithLawyer')}${lawyerName}</strong>.</p>`;
+        lawyersWon = true;
+      } else {
+        html += `\n<p>${t('spyWins')}${spyName}${t('won')}</p>`;
       }
-    },1000);
-  }
-  function pauseTimer(){
-    const g = state.game; if(!g) return;
-    const btn = $('#pauseTimer');
-    if(g.timer){ clearInterval(g.timer); g.timer=null; btn.innerHTML='▶️ Riprendi'; }
-    else { startTimer(); btn.innerHTML='⏸️ Pausa'; }
-  }
-  function setFirstQuestion(){
-    const g = state.game;
-    const randomPlayer = g.order[Math.floor(Math.random()*g.order.length)];
-    $('#firstQuestionHint').innerHTML = `La prima domanda la fa: <strong>${randomPlayer}</strong><br><small>Iniziate a fare domande per scoprire chi è la spia.</small>`;
-  }
-  const onTimeUp = ()=> modal('Tempo scaduto! Si va al voto.', { actions:[{label:'OK', kind:'success', onClick: goVote}] });
-
-  /* ====== Voting ====== */
-  function updateVoteStatus(){
-    const g = state.game;
-    const total = Object.values(g.votes||{}).reduce((s,v)=>s+v,0);
-    $('#totalVotes').textContent = total;
-  }
-  function goVote(){
-    const g = state.game; g.votes = {};
-    $('#voteTitle').innerHTML = `<span class="emoji">🗳️</span> Votate la spia ${g.voteRound}/${g.voteMaxRounds}`;
-    const maxVoters = g.optElimNoVote ? g.canVoteMask.filter(Boolean).length : g.order.length;
-    $('#voteSubHint').textContent = `Turno ${g.voteRound} di ${g.voteMaxRounds} • Votanti disponibili: ${maxVoters}`;
-    const ul = $('#voteList'); ul.innerHTML='';
-    g.order.forEach((name, idx)=>{
-      const alreadyEliminated = g.eliminated.some(x=>x.index===idx);
-      const canVote = g.optElimNoVote ? g.canVoteMask[idx] : true;
-      const li = document.createElement('li');
-      li.innerHTML = `
-        <span style="${alreadyEliminated ? 'text-decoration:line-through; opacity:.6;' : 'font-weight:600;'}">${name}</span>
-        <div class="vote-controls">
-          <button class="btn ghost small" data-dec>−</button>
-          <div class="vote-count" data-count>0</div>
-          <button class="btn secondary small" data-inc ${alreadyEliminated ? 'disabled' : ''}>Vota</button>
-        </div>`;
-      const countEl = li.querySelector('[data-count]');
-      g.votes[name] = 0;
-      li.querySelector('[data-inc]').onclick = ()=>{
-        const totalVotes = Object.values(g.votes||{}).reduce((s,v)=>s+v,0);
-        if(totalVotes >= maxVoters){ modal('Hai raggiunto il numero massimo di voti disponibili!'); return; }
-        g.votes[name]++; countEl.textContent = g.votes[name]; countEl.classList.toggle('has-votes', g.votes[name]>0); updateVoteStatus();
-      };
-      li.querySelector('[data-dec]').onclick = ()=>{
-        g.votes[name] = Math.max(0, g.votes[name]-1); countEl.textContent = g.votes[name]; countEl.classList.toggle('has-votes', g.votes[name]>0); updateVoteStatus();
-      };
-      if(!canVote){ li.style.opacity='.6'; li.title='Eliminato: non vota'; }
-      ul.appendChild(li);
     });
-    updateVoteStatus();
-    showView('view-vote');
-  }
-  function seeRoundResult(){
-    const g = state.game;
-    const totalVotes = Object.values(g.votes||{}).reduce((s,v)=>s+v,0);
-    if(totalVotes===0) return modal('Nessun voto espresso. Assegnate almeno un voto.');
-    const entries = Object.entries(g.votes||{}).sort((a,b)=>b[1]-a[1]);
-    const topVotes = entries[0][1];
-    if(topVotes===0) return modal('Nessun voto espresso. Assegnate almeno un voto.');
-    const tied = entries.filter(e=>e[1]===topVotes).map(e=>e[0]);
-    if(tied.length!==1) return modal('⚠️ Parità rilevata. Dovete prendere una decisione prima di procedere!');
-    const eliminatedName = tied[0];
-    const eliminatedIndex = g.order.indexOf(eliminatedName);
-    const eliminatedRole = g.roles[eliminatedIndex];
-    g.eliminated.push({ index:eliminatedIndex, name:eliminatedName, role:eliminatedRole });
-    if(g.optElimNoVote) g.canVoteMask[eliminatedIndex] = false;
-    modal(`Eliminato <strong>${eliminatedName}</strong> — era <strong>${roleLabel(eliminatedRole)}</strong>.`, { actions:[{label:'Continua', kind:'success', onClick: afterElimination}] });
-  }
-  function afterElimination(){
-    const g = state.game;
-    if(g.voteRound >= g.voteMaxRounds){ finalizeGame(); return; }
-    g.voteRound++; goVote();
+    if(survivingSpies.length>1) html += `<p class="text-muted">${t('spiesWin')}</p>`;
+    endAndSave({winner:'spy', html, lawyersWon}); return;
   }
 
-  /* ====== Results ====== */
-  function finalizeGame(){
-    const g = state.game;
-    const spyIndices = g.roles.map((r,i)=> r===Role.spy ? i : -1).filter(i=>i>=0);
-    const eliminatedIndices = new Set(g.eliminated.map(x=>x.index));
+  // Altrimenti vincono i Civili
+  endAndSave({winner:'civ', html:`<p>${t('civiliansWin')}</p>`, lawyersWon:false});
+}
 
-    // If any Fake Spy eliminated → Fake wins, others lose
-    const eliminatedFakes = g.eliminated.filter(x=>x.role===Role.fake);
-    if(eliminatedFakes.length){
-      const lines = eliminatedFakes.map(x=>`<p>🎭 <strong>${x.name}</strong> ha vinto <em>come Finta Spia</em>.</p>`).join('');
-      const html = lines + '<p class="text-muted">Tutti gli altri perdono (incluse le Spie vere e gli Avvocati).</p>';
-      endAndSave({winner:'fake', html}); return;
-    }
+function endAndSave({winner, html, lawyersWon=false}){
+  showView('view-results');
+  const g = state.game;
+  const eliminationsList = g.eliminated.map(o=>`<li><span>${o.name}</span><span class="badge ${roleBadgeCls(o.role)}">${roleLabel(o.role)}</span></li>`).join('');
+  const resultsHtml = `
+    <h3 class="section-title">${t('gameResult')}</h3>
+    ${html}
+    <h4 class="section-title mt-lg">${t('eliminations')}</h4>
+    <ul class="enhanced-list">${eliminationsList}</ul>`;
+  $('#resultsBox').innerHTML = resultsHtml;
 
-    // If at least one Spy survives → Spies (and their Lawyers if alive) win
-    const survivingSpies = spyIndices.filter(i=>!eliminatedIndices.has(i));
-    if(survivingSpies.length){
-      let html = '';
-      survivingSpies.forEach(si=>{
-        const spyName = g.order[si];
-        const lawyerIndex = g.lawyerForSpy[si];
-        if(Number.isInteger(lawyerIndex) && !eliminatedIndices.has(lawyerIndex)){
-          const lawyerName = g.order[lawyerIndex];
-          html += `\n<p>🕵️ <strong>${spyName}</strong> ha vinto <strong>insieme al suo Avvocato</strong> <strong>${lawyerName}</strong>.</p>`;
-        } else {
-          html += `\n<p>🕵️ <strong>${spyName}</strong> ha vinto.</p>`;
-        }
-      });
-      if(survivingSpies.length>1) html += '<p class="text-muted">Le Spie hanno prevalso.</p>';
-      endAndSave({winner:'spy', html}); return;
-    }
+  let rolesRevealed = false;
+  $('#revealAll').onclick = ()=>{
+    if(rolesRevealed) return; rolesRevealed = true;
+    const allRoles = g.order.map((player,i)=>`<li><span>${player}</span><span class="badge ${roleBadgeCls(g.roles[i])}">${roleLabel(g.roles[i])}</span></li>`).join('');
+    $('#resultsBox').innerHTML += `<div class="mt-lg"><h4 class="section-title">${t('allRoles')}</h4><ul class="enhanced-list">${allRoles}</ul></div>`;
+    $('#revealAll').style.display = 'none';
+  };
 
-    // Else Civilians win
-    endAndSave({winner:'civ', html:'<p>👤 <strong>I Civili vincono</strong>! Avete identificato correttamente tutte le Spie.</p>'});
-  }
+  triggerConfetti(winner);
 
-  function endAndSave({winner, html}){
-    showView('view-results');
-    const g = state.game;
-    const eliminationsList = g.eliminated.map(o=>`<li><span>${o.name}</span><span class="badge ${roleBadgeCls(o.role)}">${roleLabel(o.role)}</span></li>`).join('');
-    const resultsHtml = `
-      <h3 class="section-title">Esito partita</h3>
-      ${html}
-      <h4 class="section-title mt-lg">Eliminazioni</h4>
-      <ul class="enhanced-list">${eliminationsList}</ul>`;
-    $('#resultsBox').innerHTML = resultsHtml;
+  state.history.push({ time:Date.now(), winner, winDetailHtml:html, eliminations:g.eliminated, category:state.category, secret:g.secret, lawyersWon });
+  LS.set('history', state.history);
+  renderStats();
+}
 
-    let rolesRevealed = false;
-    $('#revealAll').onclick = ()=>{
-      if(rolesRevealed) return; rolesRevealed = true;
-      const allRoles = g.order.map((player,i)=>`<li><span>${player}</span><span class="badge ${roleBadgeCls(g.roles[i])}">${roleLabel(g.roles[i])}</span></li>`).join('');
-      $('#resultsBox').innerHTML += `<div class="mt-lg"><h4 class="section-title">Tutti i ruoli</h4><ul class="enhanced-list">${allRoles}</ul></div>`;
-      $('#revealAll').style.display = 'none';
-    };
-
-    triggerConfetti(winner);
-
-    state.history.push({ time:Date.now(), winner, winDetailHtml:html, eliminations:g.eliminated, category:state.category, secret:g.secret });
-    LS.set('history', state.history);
-    renderStats();
-  }
-
-  /* ====== Confetti ====== */
-  function triggerConfetti(type){
-    const canvas = $('#fxConfetti'), ctx = canvas.getContext('2d');
-    const width = canvas.width = window.innerWidth, height = canvas.height = window.innerHeight;
-    const colors = type==='civ' ? ['#67e8f9','#60a5fa','#a78bfa','#ffffff'] : type==='fake' ? ['#f59e0b','#ffe08a','#ffd27d','#ffffff'] : ['#ef476f','#ff9aa5','#ffd1d6','#ffffff'];
-    const particles = Array.from({length:150}, ()=>({
-      x:Math.random()*width, y:-20, vx:(Math.random()-.5)*3, vy:2+Math.random()*3, size:4+Math.random()*8,
-      rotation:Math.random()*360, rotationSpeed:(Math.random()-.5)*6, color:colors[Math.floor(Math.random()*colors.length)],
-      life:80+Math.random()*40, maxLife:80+Math.random()*40
-    }));
-    let animationId;
-    function animate(){
-      ctx.clearRect(0,0,width,height);
-      particles.forEach(p=>{
-        p.x+=p.vx; p.y+=p.vy; p.vy+=0.03; p.rotation+=p.rotationSpeed; p.life--;
-        const alpha = p.life / p.maxLife;
-        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rotation*Math.PI/180); ctx.globalAlpha = alpha; ctx.fillStyle=p.color; ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size); ctx.restore();
-      });
-      if(particles.some(p=>p.life>0 && p.y<height+50)){ animationId=requestAnimationFrame(animate); }
-      else { cancelAnimationFrame(animationId); ctx.clearRect(0,0,width,height); }
-    }
-    animate();
-    setTimeout(()=>{ if(animationId){ cancelAnimationFrame(animationId); ctx.clearRect(0,0,width,height);} }, 4000);
-  }
-
-  /* ====== Language & Rules ====== */
-  function loadCustomForLang(lang){ state.custom = LS.get('custom_'+lang, {}); }
-  function switchLang(lang){ state.lang = lang; LS.set('lang', lang); loadCustomForLang(lang); i18nRefresh(); }
-  function showRules(){
-    const rulesHtml = `
-      <h3>🎲 Scopo del gioco</h3>
-      <p>I <strong>Civili</strong> devono <strong>eliminare le Spie vere</strong> entro i turni di voto disponibili.<br>
-      La <strong>Spia</strong> vince se <strong>non viene votata</strong> (basta che ne sopravviva almeno una).</p>
-      <h3>🧩 Ruoli</h3>
-      <ul style="margin:var(--space-md) 0; padding-left:var(--space-lg);">
-        <li>🕵️ <strong>Spia</strong>: non conosce la parola. <u>Vince se non viene eliminata</u>. Le spie possono <strong>conoscersi</strong> tra loro (opzione), <strong>escluse</strong> le Finte Spie.</li>
-        <li>🎭 <strong>Finta Spia</strong>: <em>conosce</em> la parola. <u>Vince solo se viene eliminata</u> (passando per Spia). Se succede, <strong>perdono tutti gli altri</strong>, comprese le Spie.</li>
-        <li>⚖️ <strong>Avvocato</strong>: conosce parola e Spie vere. È <em>assegnato</em> a una Spia; se quella Spia <strong>vince</strong>, <strong>vince anche il suo Avvocato</strong>.</li>
-        <li>👤 <strong>Civile</strong>: conosce la parola e prova a smascherare le Spie.</li>
-      </ul>
-      <h3>⏳ Come si gioca</h3>
-      <ol style="margin:var(--space-md) 0; padding-left:var(--space-lg);">
-        <li>Assegnazione ruoli (reveal uno alla volta).</li>
-        <li>Discussione a tempo con domande e risposte.</li>
-        <li><strong>Voto a turni</strong>: numero turni = numero di Spie. A ogni turno si elimina una persona.</li>
-        <li>Esito finale secondo le regole di vittoria.</li>
-      </ol>
-      <h3>⚠️ Regole speciali</h3>
-      <p>Le votazioni <strong>non possono finire in parità</strong>: se succede, dovete decidere prima di procedere. Gli eliminati possono non votare più se attivate l'opzione nelle impostazioni.</p>`;
-    modal(rulesHtml, { title:'Regole del gioco', actions:[{label:'Ho capito', kind:'success'}] });
-  }
-
-  /* ====== Initialization ====== */
-  function initializeApp(){
-    applyTheme();
-    $('#themeBtn').textContent = state.theme === 'auto' ? '🌓' : state.theme === 'light' ? '☀️' : '🌙';
-
-    // Collapsibles
-    $$('[data-toggle]').forEach(btn=>{
-      btn.addEventListener('click', e=>{
-        e.preventDefault();
-        const collapsible = btn.closest('.collapsible');
-        if(collapsible) collapsible.classList.toggle('open');
-      });
+/* ====== Confetti ====== */
+function triggerConfetti(type){
+  const canvas = $('#fxConfetti'), ctx = canvas.getContext('2d');
+  const width = canvas.width = window.innerWidth, height = canvas.height = window.innerHeight;
+  const colors = type==='civ' ? ['#67e8f9','#60a5fa','#a78bfa','#ffffff'] : type==='fake' ? ['#f59e0b','#ffe08a','#ffd27d','#ffffff'] : ['#ef476f','#ff9aa5','#ffd1d6','#ffffff'];
+  const particles = Array.from({length:150}, ()=>({
+    x:Math.random()*width, y:-20, vx:(Math.random()-.5)*3, vy:2+Math.random()*3, size:4+Math.random()*8,
+    rotation:Math.random()*360, rotationSpeed:(Math.random()-.5)*6, color:colors[Math.floor(Math.random()*colors.length)],
+    life:80+Math.random()*40, maxLife:80+Math.random()*40
+  }));
+  let animationId;
+  function animate(){
+    ctx.clearRect(0,0,width,height);
+    particles.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy; p.vy+=0.03; p.rotation+=p.rotationSpeed; p.life--;
+      const alpha = p.life / p.maxLife;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rotation*Math.PI/180); ctx.globalAlpha = alpha; ctx.fillStyle=p.color; ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size); ctx.restore();
     });
-
-    // Step buttons
-    $$('[data-step]').forEach(btn=>{
-      btn.onclick = ()=>{
-        const id = btn.getAttribute('data-step');
-        const delta = Number(btn.getAttribute('data-delta'));
-        const el = document.getElementById(id);
-        const newValue = clamp(Number(el.value)+delta, Number(el.min), Number(el.max));
-        el.value = newValue;
-        renderSettingsSummary();
-      };
-    });
-
-    // Events
-    $('#addPlayer').onclick = addPlayer;
-    $('#playerInput').addEventListener('keydown', e=>{ if(e.key==='Enter') addPlayer(); });
-    $('#shufflePlayers').onclick = ()=>{ state.players.sort(()=>Math.random()-0.5); savePlayers(); renderPlayers(); };
-    $('#clearPlayers').onclick = ()=>{
-      modal('Svuotare la lista giocatori?', { title:'Conferma', actions:[
-        {label:'Annulla', kind:'ghost'},
-        {label:'Svuota', kind:'danger', onClick:()=>{ state.players=[]; savePlayers(); renderPlayers(); }}
-      ]});
-    };
-    $('#categorySelect').onchange = e=>{ state.category = e.target.value; LS.set('category', state.category); updateSelectedCat(); };
-    $('#openCats').onclick = ()=> showView('view-cats');
-    $('#backHomeFromCats').onclick = ()=> showView('view-home');
-    $('#saveCategory').onclick = saveNewCategory;
-    $('#saveSettings').onclick = saveSettings;
-    $('#statsCard').onclick = ()=>{ renderHistory(); showView('view-history'); };
-    $('#backFromHistory').onclick = ()=> showView('view-landing');
-    $('#clearHistory').onclick = ()=>{
-      modal('Svuotare lo storico partite?', { title:'Conferma', actions:[
-        {label:'Annulla', kind:'ghost'},
-        {label:'Svuota', kind:'danger', onClick:()=>{ state.history=[]; LS.set('history', state.history); renderHistory(); renderStats(); }}
-      ]});
-    };
-    $('#startGameMain').onclick = startGame;
-    $('#pauseTimer').onclick = pauseTimer;
-    $('#endRound').onclick = onTimeUp;
-    $('#seeRoundResult').onclick = seeRoundResult;
-    $('#restart').onclick = ()=>{ state.game=null; showView('view-home'); };
-    $('#lang').onchange = e=> switchLang(e.target.value);
-    $('#themeBtn').onclick = cycleTheme;
-    $('#helpBtn').onclick = showRules;
-    $('#howToBtn').onclick = showRules;
-    $('#titleBtn').onclick = ()=> showView('view-landing');
-    $('#goStart').onclick = ()=> showView('view-home');
-    $('#goHow').onclick = showRules;
-    $('#modalClose').onclick = ()=> $('#modal').close();
-
-    matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', ()=>{ if(state.theme==='auto') applyTheme(); });
-
-    // Start closed
-    $$('.collapsible').forEach(c=>c.classList.remove('open'));
-
-    loadCustomForLang(state.lang);
-    i18nRefresh();
-    writeSettings(state.settings);
-    setTimeout(revealOnScroll, 100);
-    renderStats();
-
-    // Splash
-    setTimeout(()=>{
-      const splash = $('#splash');
-      if(splash){ splash.classList.add('hide'); setTimeout(()=> splash.remove(), 800); }
-    }, 1000);
-
-    console.log('🕵️‍♂️ Spia Game initialized successfully!');
+    if(particles.some(p=>p.life>0 && p.y<height+50)){ animationId=requestAnimationFrame(animate); }
+    else { cancelAnimationFrame(animationId); ctx.clearRect(0,0,width,height); }
   }
+  animate();
+  setTimeout(()=>{ if(animationId){ cancelAnimationFrame(animationId); ctx.clearRect(0,0,width,height);} }, 4000);
+}
 
-  document.addEventListener('DOMContentLoaded', initializeApp);
-  </script>
+/* ====== Language & Rules ====== */
+function loadCustomForLang(lang){ state.custom = LS.get('custom_'+lang, {}); }
+function switchLang(lang){ state.lang = lang; LS.set('lang', lang); loadCustomForLang(lang); i18nRefresh(); }
+function showRules(){
+  const rulesHtml = state.lang === 'it' ? `
+    <h3>🎲 Scopo del gioco</h3>
+    <p>I <strong>Civili</strong> devono <strong>eliminare le Spie vere</strong> entro i turni di voto disponibili.<br>
+    La <strong>Spia</strong> vince se <strong>non viene votata</strong> (basta che ne sopravviva almeno una).</p>
+    <h3>🧩 Ruoli</h3>
+    <ul style="margin:var(--space-md) 0; padding-left:var(--space-lg);">
+      <li>🕵️ <strong>Spia</strong>: non conosce la parola. <u>Vince se non viene eliminata</u>. Le spie possono <strong>conoscersi</strong> tra loro (opzione), <strong>escluse</strong> le Finte Spie.</li>
+      <li>🎭 <strong>Finta Spia</strong>: <em>conosce</em> la parola. <u>Vince solo se viene eliminata</u> (passando per Spia). Se succede, <strong>perdono tutti gli altri</strong>, comprese le Spie.</li>
+      <li>⚖️ <strong>Avvocato</strong>: conosce parola e Spie vere. È <em>assegnato</em> a una Spia; se quella Spia <strong>vince</strong>, <strong>vince anche il suo Avvocato</strong>.</li>
+      <li>👤 <strong>Civile</strong>: conosce la parola e prova a smascherare le Spie.</li>
+    </ul>
+    <h3>⏳ Come si gioca</h3>
+    <ol style="margin:var(--space-md) 0; padding-left:var(--space-lg);">
+      <li>Assegnazione ruoli (reveal uno alla volta).</li>
+      <li>Discussione a tempo con domande e risposte.</li>
+      <li><strong>Voto a turni</strong>: numero turni = numero di Spie. A ogni turno si elimina una persona.</li>
+      <li>Esito finale secondo le regole di vittoria.</li>
+    </ol>
+    <h3>⚠️ Regole speciali</h3>
+    <p>Le votazioni <strong>non possono finire in parità</strong>: se succede, dovete decidere prima di procedere. Gli eliminati possono non votare più se attivate l'opzione nelle impostazioni.</p>` : `
+    <h3>🎲 Game Objective</h3>
+    <p><strong>Civilians</strong> must <strong>eliminate the real Spies</strong> within the available voting rounds.<br>
+    The <strong>Spy</strong> wins if <strong>not voted out</strong> (at least one must survive).</p>
+    <h3>🧩 Roles</h3>
+    <ul style="margin:var(--space-md) 0; padding-left:var(--space-lg);">
+      <li>🕵️ <strong>Spy</strong>: doesn't know the word. <u>Wins if not eliminated</u>. Spies can <strong>know each other</strong> (option), <strong>excluding</strong> Fake Spies.</li>
+      <li>🎭 <strong>Fake Spy</strong>: <em>knows</em> the word. <u>Only wins if eliminated</u> (posing as Spy). If this happens, <strong>everyone else loses</strong>, including Spies.</li>
+      <li>⚖️ <strong>Lawyer</strong>: knows word and real Spies. Is <em>assigned</em> to a Spy; if that Spy <strong>wins</strong>, the <strong>Lawyer also wins</strong>.</li>
+      <li>👤 <strong>Civilian</strong>: knows the word and tries to unmask the Spies.</li>
+    </ul>
+    <h3>⏳ How to Play</h3>
+    <ol style="margin:var(--space-md) 0; padding-left:var(--space-lg);">
+      <li>Role assignment (reveal one at a time).</li>
+      <li>Timed discussion with questions and answers.</li>
+      <li><strong>Round voting</strong>: number of rounds = number of Spies. Each round eliminates one person.</li>
+      <li>Final outcome according to victory rules.</li>
+    </ol>
+    <h3>⚠️ Special Rules</h3>
+    <p>Voting <strong>cannot end in a tie</strong>: if it happens, you must decide before proceeding. Eliminated players may not vote anymore if you enable the option in settings.</p>`;
+  modal(rulesHtml, { 
+    title: state.lang === 'it' ? 'Regole del gioco' : 'Game Rules', 
+    actions:[{label: state.lang === 'it' ? 'Ho capito' : 'Got it', kind:'success'}] 
+  });
+}
+
+/* ====== Initialization (FIX: usa $$ anziché $ per NodeList) ====== */
+function initializeApp(){
+  applyTheme();
+  $('#themeBtn').textContent = state.theme === 'auto' ? '🌓' : state.theme === 'light' ? '☀️' : '🌙';
+
+  // Collapsibles
+  $$('[data-toggle]').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      e.preventDefault();
+      const collapsible = btn.closest('.collapsible');
+      if(collapsible) collapsible.classList.toggle('open');
+    });
+  });
+
+  // Step buttons
+  $$('[data-step]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const id = btn.getAttribute('data-step');
+      const delta = Number(btn.getAttribute('data-delta'));
+      const el = document.getElementById(id);
+      const newValue = clamp(Number(el.value)+delta, Number(el.min), Number(el.max));
+      el.value = newValue;
+      renderSettingsSummary();
+    };
+  });
+
+  // Events
+  $('#addPlayer').onclick = addPlayer;
+  $('#playerInput').addEventListener('keydown', e=>{ if(e.key==='Enter') addPlayer(); });
+  $('#shufflePlayers').onclick = ()=>{ state.players.sort(()=>Math.random()-0.5); savePlayers(); renderPlayers(); };
+  $('#clearPlayers').onclick = ()=>{
+    modal(t('clearPlayersList'), { title: t('confirm'), actions:[
+      {label: t('cancel'), kind:'ghost'},
+      {label: t('clear'), kind:'danger', onClick:()=>{ state.players=[]; savePlayers(); renderPlayers(); }}
+    ]});
+  };
+  $('#categorySelect').onchange = e=>{ state.category = e.target.value; LS.set('category', state.category); updateSelectedCat(); };
+  $('#openCats').onclick = ()=> showView('view-cats');
+  $('#backHomeFromCats').onclick = ()=> showView('view-home');
+  $('#resetToDefaults').onclick = resetCategories;
+  $('#saveCategory').onclick = saveNewCategory;
+  $('#saveSettings').onclick = saveSettings;
+  $('#statsCard').onclick = ()=>{ renderHistory(); showView('view-history'); };
+  $('#backFromHistory').onclick = ()=> showView('view-landing');
+  $('#clearHistory').onclick = ()=>{
+    modal(t('clearGameHistory'), { title: t('confirm'), actions:[
+      {label: t('cancel'), kind:'ghost'},
+      {label: t('clear'), kind:'danger', onClick:()=>{ state.history=[]; LS.set('history', state.history); renderHistory(); renderStats(); }}
+    ]});
+  };
+  $('#startGameMain').onclick = startGame;
+  $('#pauseTimer').onclick = pauseTimer;
+  $('#endRound').onclick = onTimeUp;
+  $('#seeRoundResult').onclick = seeRoundResult;
+  $('#restart').onclick = ()=>{ state.game=null; showView('view-home'); };
+  $('#lang').onchange = e=> switchLang(e.target.value);
+  $('#themeBtn').onclick = cycleTheme;
+  $('#helpBtn').onclick = showRules;
+  $('#howToBtn').onclick = showRules;
+  $('#titleBtn').onclick = ()=> showView('view-landing');
+  $('#goStart').onclick = ()=> showView('view-home');
+  $('#goHow').onclick = showRules;
+  $('#modalClose').onclick = ()=> $('#modal').close();
+
+  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', ()=>{ if(state.theme==='auto') applyTheme(); });
+
+  // Start closed
+  $$('.collapsible').forEach(c=>c.classList.remove('open'));
+
+  loadCustomForLang(state.lang);
+  i18nRefresh();
+  writeSettings(state.settings);
+  setTimeout(revealOnScroll, 100);
+  renderStats();
+
+  // Splash
+  setTimeout(()=>{
+    const splash = $('#splash');
+    if(splash){ splash.classList.add('hide'); setTimeout(()=> splash.remove(), 800); }
+  }, 1000);
+
+  console.log('🕵️‍♂️ Spia Game initialized successfully!');
+}
+
+document.addEventListener('DOMContentLoaded', initializeApp);
+</script>
+
 </body>
 </html>
