@@ -108,7 +108,7 @@
     .btn.ghost:hover{ background:var(--glass-border); }
     .btn.danger{ background:linear-gradient(135deg, var(--danger), #dc2626); }
     .btn.success{ background:linear-gradient(135deg, var(--success), #059669); }
-    .btn.small{ padding:var(--space-sm) var(--space-md); font-size:.875rem; }
+    .btn.small{ padding:var(--space-sm) var(--space-md); font-size:.875rem; min-width:2.25rem; } /* evita + tagliato */
     .btn:disabled{ opacity:.5; cursor:not-allowed; transform:none!important; }
 
     .form-group{ margin-bottom:var(--space-lg); }
@@ -206,6 +206,31 @@
 
     /* Better contrast for muted text in dark */
     html[data-theme="dark"] .text-muted{ color:#b7c2d6; }
+
+    /* ====== EXTRA FIX: responsive impostazioni ====== */
+    #card-settings .collapsible-header{ flex-wrap: wrap; gap: var(--space-sm); }
+    #settingsSummary{ margin-left:auto; }
+    @media (max-width: 640px){
+      #settingsSummary{ order: 3; width:100%; margin-top: var(--space-sm); }
+      #card-settings .collapsible-toggle{ order: 2; margin-left: auto; }
+    }
+    #card-settings .collapsible-content .flex.gap-md{ flex-wrap: wrap; }
+    #card-settings .collapsible-content .flex.gap-md > div{ flex:1 1 280px; min-width: 240px; }
+    #card-settings .items-center{ flex-wrap: wrap; }
+    #card-settings .items-center .form-input{
+      flex: 1 1 140px;
+      min-width: 7ch; /* mostra "10" senza tagli */
+      text-align: center;
+    }
+    @media (max-width: 420px){
+      .form-input,.form-select,.form-textarea{ padding: var(--space-sm) var(--space-md); }
+      #card-settings .items-center .form-input{ flex:1 1 100%; }
+      .vote-controls{ flex-wrap: wrap; }
+    }
+    input[type="number"]{ text-align:center; }
+
+    /* Modali: testo sempre leggibile in dark */
+    dialog, dialog * { color: var(--text-primary); }
   </style>
 </head>
 <body>
@@ -372,6 +397,18 @@
             </label>
           </div>
 
+          <!-- NEW: Conoscenza Avvocati -->
+          <div class="mb-lg">
+            <label class="form-label" for="lawKnowledge">⚖️ Conoscenza Avvocati</label>
+            <select id="lawKnowledge" class="form-select">
+              <option value="own">Solo la propria Spia (predefinito)</option>
+              <option value="all">Tutte le Spie vere</option>
+            </select>
+            <p class="text-muted mt-sm mb-0">
+              Casi limite gestiti: se ci sono più Avvocati che Spie, più Avvocati conoscono la stessa Spia; se ci sono più Spie che Avvocati, un Avvocato conosce più Spie.
+            </p>
+          </div>
+
           <p class="text-muted mb-lg">💡 I ruoli speciali totali devono essere <strong>minori</strong> dei giocatori.</p>
           <button id="saveSettings" class="btn success">💾 Salva</button>
         </div>
@@ -392,7 +429,10 @@
     <section data-view id="view-cats">
       <div class="card">
         <h2 class="section-title"><span class="emoji">📚</span> Gestisci categorie</h2>
-        <button id="backHomeFromCats" class="btn ghost">← Indietro</button>
+        <div class="flex gap-md">
+          <button id="backHomeFromCats" class="btn ghost">← Indietro</button>
+          <button id="resetStockCats" class="btn danger">↺ Ripristina predefinite</button>
+        </div>
       </div>
       <div class="card">
         <h3 class="section-title"><span class="emoji">🧩</span> Le tue categorie</h3>
@@ -420,7 +460,7 @@
         <div class="role-card" id="roleCard" tabindex="0"><span class="text-muted">Tocca o premi Invio per vedere il tuo ruolo</span></div>
         <div class="flex justify-center mt-lg"><button id="nextPlayer" class="btn secondary" disabled>➡️ Prossimo</button></div>
 
-        <!-- Legend moved below with short descriptions -->
+        <!-- Legend -->
         <div id="roleLegend" class="mt-lg">
           <div class="flex items-center gap-sm mb-sm"><span class="badge role-spy">🕵️ Spia</span><small class="text-muted">Non conosce la parola.</small></div>
           <div class="flex items-center gap-sm mb-sm"><span class="badge role-fake">🎭 Finta Spia</span><small class="text-muted">Conosce la parola, vince se viene eliminata.</small></div>
@@ -529,7 +569,11 @@
     players: LS.get('players',[]),
     custom:  LS.get('custom_'+(LS.get('lang','it')||'it'),{}),
     category: LS.get('category',''),
-    settings: LS.get('settings',{spies:1,fakes:0,laws:0,minutes:5,optElimNoVote:false,optSpiesKnow:false}),
+    settings: LS.get('settings',{
+      spies:1,fakes:0,laws:0,minutes:5,
+      optElimNoVote:false,optSpiesKnow:false,
+      lawKnowledge:'own' // 'own' | 'all'
+    }),
     history: LS.get('history',[]),
     game: null
   };
@@ -592,7 +636,7 @@
     d.showModal();
   }
 
-  /* ====== i18n ====== */
+  /* ====== i18n (basico, estendibile) ====== */
   function i18nRefresh(){
     $('#appTitle').textContent = state.lang === 'it' ? 'Spia' : 'Spy Game';
     $('#heroTitle').textContent = state.lang === 'it' ? 'Il party game in tasca' : 'The party game in your pocket';
@@ -601,6 +645,25 @@
     $('#catName').placeholder = state.lang === 'it' ? 'Nome categoria (es. Film)' : 'Category name (e.g., Movies)';
     $('#catWords').placeholder = state.lang === 'it' ? 'Parole separate da virgola o a capo' : 'Words separated by comma or newline';
     $('#lang').value = state.lang;
+
+    // Pulsanti Gestione Categorie
+    const backBtn = $('#backHomeFromCats');
+    if (backBtn) backBtn.textContent = state.lang==='it' ? '← Indietro' : '← Back';
+    const resetBtn = $('#resetStockCats');
+    if (resetBtn) resetBtn.textContent = state.lang==='it' ? '↺ Ripristina predefinite' : '↺ Reset defaults';
+
+    // Conoscenza Avvocati
+    const lawLabel = document.querySelector('label[for="lawKnowledge"]');
+    if (lawLabel) lawLabel.innerText = state.lang==='it' ? '⚖️ Conoscenza Avvocati' : '⚖️ Lawyer knowledge';
+    const lk = $('#lawKnowledge');
+    if(lk){
+      lk.options[0].text = state.lang==='it'
+        ? 'Solo la propria Spia (predefinito)'
+        : 'Only assigned Spy (default)';
+      lk.options[1].text = state.lang==='it'
+        ? 'Tutte le Spie vere'
+        : 'All real Spies';
+    }
 
     renderCategories();
     updateSelectedCat();
@@ -709,7 +772,7 @@
       customUl.appendChild(li);
     });
 
-    // Stock (now editable)
+    // Stock (editabili tramite override)
     Object.keys(stock).sort().forEach(cat=>{
       const li = document.createElement('li');
       li.innerHTML = `
@@ -738,7 +801,7 @@
   }
 
   function openStockEditor(cat, li){
-    // Promote stock category to editable custom copy (keeps same name, overrides in merge)
+    // Promuove a copia custom modificabile
     if(!state.custom[cat]){
       state.custom[cat] = [...STOCK[state.lang][cat]];
       LS.set('custom_'+state.lang, state.custom);
@@ -746,8 +809,28 @@
     openEditor(cat, li);
   }
 
+  // chiusura editor clic esterno
+  let outsideCloser = null;
+  function attachOutsideCloser(hostEl, onClose){
+    detachOutsideCloser();
+    outsideCloser = (e)=>{
+      if(!hostEl.contains(e.target)){
+        onClose();
+        detachOutsideCloser();
+      }
+    };
+    setTimeout(()=>document.addEventListener('mousedown', outsideCloser),0);
+    setTimeout(()=>document.addEventListener('touchstart', outsideCloser,{passive:true}),0);
+  }
+  function detachOutsideCloser(){
+    if(!outsideCloser) return;
+    document.removeEventListener('mousedown', outsideCloser);
+    document.removeEventListener('touchstart', outsideCloser);
+    outsideCloser = null;
+  }
+
   function openEditor(cat, li){
-    // Close any other inline editor to avoid duplicate IDs
+    // Chiudi altri editor
     $$('.cat-inline-editor').forEach(n=>n.remove());
     [...$('#customCatsList').children].forEach(x=>x.classList.remove('editing'));
     [...$('#stockCatsList').children].forEach(x=>x.classList.remove('editing'));
@@ -758,15 +841,21 @@
     editor.style.cssText = 'padding:var(--space-md); background:var(--surface-elevated); border-radius:var(--radius-md); border:1px solid var(--line);';
     editor.innerHTML = `
       <div class="flex gap-sm mb-md">
-        <input id="wInput" class="form-input" type="text" placeholder="Aggiungi parola" style="flex:1; margin-bottom:0;"/>
-        <button id="addWordBtn" class="btn success small">✓</button>
+        <input class="form-input w-input" type="text" placeholder="Aggiungi parola" style="flex:1; margin-bottom:0;"/>
+        <button class="btn success small add-word">✓</button>
       </div>
-      <div id="wChips" class="flex gap-sm" style="flex-wrap:wrap;"></div>`;
+      <div class="flex gap-sm mb-md" style="flex-wrap:wrap;" id="wChips"></div>
+      <div class="flex gap-sm">
+        <button class="btn secondary small done-edit">✔️ Fatto</button>
+        <button class="btn ghost small cancel-edit">✖️ Annulla</button>
+      </div>`;
     li.appendChild(editor);
 
     const chips = editor.querySelector('#wChips');
-    const input = editor.querySelector('#wInput');
-    const addBtn = editor.querySelector('#addWordBtn');
+    const input = editor.querySelector('.w-input');
+    const addBtn = editor.querySelector('.add-word');
+    const doneBtn = editor.querySelector('.done-edit');
+    const cancelBtn = editor.querySelector('.cancel-edit');
 
     function refreshCount(){
       const cnt = li.querySelector('[data-count]');
@@ -781,8 +870,7 @@
         LS.set('custom_'+state.lang, state.custom);
         drawChips(); renderCategories(); refreshCount();
       }
-      input.value='';
-      input.focus();
+      input.value=''; input.focus();
     }
 
     function drawChips(){
@@ -800,9 +888,37 @@
       });
     }
 
+    function closeEditor(){
+      detachOutsideCloser();
+      editor.remove();
+      li.classList.remove('editing');
+    }
+
     drawChips();
     input.addEventListener('keydown', e=>{ if(e.key==='Enter') addWord(); });
     addBtn.onclick = addWord;
+    doneBtn.onclick = closeEditor;
+    cancelBtn.onclick = closeEditor;
+
+    // chiudi toccando fuori
+    attachOutsideCloser(li, closeEditor);
+  }
+
+  // Reset categorie predefinite (rimuove override custom dei nomi stock)
+  function resetStockOverrides(){
+    const stock = STOCK[state.lang];
+    const names = new Set(Object.keys(stock));
+    const custom = state.custom || {};
+    let changed = false;
+    Object.keys(custom).forEach(cat=>{
+      if(names.has(cat)){ delete custom[cat]; changed = true; }
+    });
+    if(changed){
+      state.custom = custom;
+      LS.set('custom_'+state.lang, state.custom);
+    }
+    renderCategories(); renderCatsPage();
+    modal(state.lang==='it' ? 'Categorie predefinite ripristinate.' : 'Default categories restored.');
   }
 
   /* ====== Settings ====== */
@@ -814,7 +930,8 @@
       laws: clamp($('#numLawyers').value, 0, 6),
       minutes: clamp($('#roundMinutes').value, 1, 99),
       optElimNoVote: $('#optElimNoVote').checked,
-      optSpiesKnow: $('#optSpiesKnow').checked
+      optSpiesKnow: $('#optSpiesKnow').checked,
+      lawKnowledge: ($('#lawKnowledge') ? $('#lawKnowledge').value : (state.settings?.lawKnowledge || 'own'))
     };
   }
   function writeSettings(s){
@@ -824,6 +941,7 @@
     $('#roundMinutes').value = s.minutes;
     $('#optElimNoVote').checked = s.optElimNoVote;
     $('#optSpiesKnow').checked = s.optSpiesKnow;
+    if($('#lawKnowledge')) $('#lawKnowledge').value = s.lawKnowledge || 'own';
     renderSettingsSummary();
   }
   function saveSettings(){ state.settings = readSettings(); LS.set('settings', state.settings); modal('Impostazioni salvate!'); renderSettingsSummary(); }
@@ -851,7 +969,7 @@
     container.innerHTML = history.map(item=>{
       const timestamp = new Date(item.time).toLocaleString();
       const eliminations = item.eliminations.map(x=>`<li><span>${x.name}</span><span class="badge ${roleBadgeCls(x.role)}">${roleLabel(x.role)}</span></li>`).join('');
-      return `<div class="card visible" style="margin-bottom:var(--space-lg);">
+      return `<div class="card visible" style="margin:var(--space-lg) 0;">
         <p class="text-muted mb-md">${timestamp} • Cat: <strong>${item.category || '—'}</strong> • Parola: <strong>${item.secret || '—'}</strong></p>
         <h4 style="margin:var(--space-sm) 0;">Eliminazioni:</h4>
         <ul class="enhanced-list">${eliminations}</ul>
@@ -886,12 +1004,32 @@
 
     const spyIndices = roles.map((r,i)=>r===Role.spy ? i : -1).filter(i=>i>=0);
     const lawyerIndices = roles.map((r,i)=>r===Role.law ? i : -1).filter(i=>i>=0);
-    const lawyerForSpy = {};
-    if(lawyerIndices.length>0){ spyIndices.forEach((spyIdx,k)=>{ const lawyerIdx = lawyerIndices[k % lawyerIndices.length]; lawyerForSpy[spyIdx] = lawyerIdx; }); }
+
+    // Assegnazioni Avvocati <-> Spie (gestione casi limite)
+    const assignedSpiesForLawyer = {};   // lawIdx -> [spyIdx]
+    const assignedLawyersForSpy  = {};   // spyIdx -> [lawIdx]
+    if(spyIndices.length && lawyerIndices.length){
+      // Prima: ogni Spia ha almeno un Avvocato (round-robin)
+      spyIndices.forEach((spyIdx, j)=>{
+        const lawIdx = lawyerIndices[j % lawyerIndices.length];
+        (assignedSpiesForLawyer[lawIdx] ||= []).push(spyIdx);
+        (assignedLawyersForSpy[spyIdx] ||= []).push(lawIdx);
+      });
+      // Poi: garantisci che ogni Avvocato abbia almeno una Spia (se avvocati > spie)
+      lawyerIndices.forEach((lawIdx, k)=>{
+        if(!(assignedSpiesForLawyer[lawIdx]?.length)){
+          const spyIdx = spyIndices[k % spyIndices.length];
+          (assignedSpiesForLawyer[lawIdx] ||= []).push(spyIdx);
+          (assignedLawyersForSpy[spyIdx] ||= []).push(lawIdx);
+        }
+      });
+    }
 
     state.game = {
-      order, roles, secret, lawyerForSpy,
+      order, roles, secret,
+      assignedSpiesForLawyer, assignedLawyersForSpy,
       spiesKnow: settings.optSpiesKnow,
+      lawKnowledge: settings.lawKnowledge,
       index:0, revealed:false,
       minutes:settings.minutes, time:settings.minutes*60, timer:null,
       voteRound:1, voteMaxRounds: spyIndices.length || 1,
@@ -908,8 +1046,15 @@
     if(role === Role.civ) return `Sei un <span style="font-weight:700;">Civile</span>! La parola è: <span style="font-weight:700; color:var(--primary);">${g.secret}</span>`;
     if(role === Role.fake) return `Sei la <span style="font-weight:700;">Finta Spia</span>! Parola: <span style="font-weight:700; color:var(--primary);">${g.secret}</span>`;
     if(role === Role.law){
-      const spies = g.roles.map((r,k)=> r===Role.spy ? g.order[k] : null).filter(Boolean);
-      return `Sei l'<span style="font-weight:700;">Avvocato</span>! La parola è "<span style="font-weight:700; color:var(--primary);">${g.secret}</span>". Le Spie sono: <strong>${spies.join(', ') || '—'}</strong>.`;
+      // Nomi Spie
+      const allSpiesNames = g.roles.map((r,k)=> r===Role.spy ? g.order[k] : null).filter(Boolean);
+      let knownSpiesNames = allSpiesNames;
+      if(g.lawKnowledge==='own'){
+        const spiesIdx = g.assignedSpiesForLawyer[index] || [];
+        knownSpiesNames = spiesIdx.map(si=>g.order[si]);
+      }
+      return `Sei l'<span style="font-weight:700;">Avvocato</span>! La parola è "<span style="font-weight:700; color:var(--primary);">${g.secret}</span>". ` +
+             `Conosci ${g.lawKnowledge==='own'?'la tua Spia':'tutte le Spie'}: <strong>${knownSpiesNames.join(', ') || '—'}</strong>.`;
     }
     if(role === Role.spy){
       const otherSpies = g.spiesKnow ? g.roles.map((r,k)=>(r===Role.spy && k!==index) ? g.order[k] : null).filter(Boolean) : [];
@@ -1038,7 +1183,7 @@
     const spyIndices = g.roles.map((r,i)=> r===Role.spy ? i : -1).filter(i=>i>=0);
     const eliminatedIndices = new Set(g.eliminated.map(x=>x.index));
 
-    // If any Fake Spy eliminated → Fake wins, others lose
+    // Fake vince se eliminata
     const eliminatedFakes = g.eliminated.filter(x=>x.role===Role.fake);
     if(eliminatedFakes.length){
       const lines = eliminatedFakes.map(x=>`<p>🎭 <strong>${x.name}</strong> ha vinto <em>come Finta Spia</em>.</p>`).join('');
@@ -1046,16 +1191,16 @@
       endAndSave({winner:'fake', html}); return;
     }
 
-    // If at least one Spy survives → Spies (and their Lawyers if alive) win
+    // Se almeno una Spia sopravvive → Spie e i loro Avvocati assegnati (non eliminati) vincono
     const survivingSpies = spyIndices.filter(i=>!eliminatedIndices.has(i));
     if(survivingSpies.length){
       let html = '';
       survivingSpies.forEach(si=>{
         const spyName = g.order[si];
-        const lawyerIndex = g.lawyerForSpy[si];
-        if(Number.isInteger(lawyerIndex) && !eliminatedIndices.has(lawyerIndex)){
-          const lawyerName = g.order[lawyerIndex];
-          html += `\n<p>🕵️ <strong>${spyName}</strong> ha vinto <strong>insieme al suo Avvocato</strong> <strong>${lawyerName}</strong>.</p>`;
+        const lawyerIdxs = g.assignedLawyersForSpy[si] || [];
+        const winningLawyers = lawyerIdxs.filter(li=>!eliminatedIndices.has(li)).map(li=>g.order[li]);
+        if(winningLawyers.length){
+          html += `\n<p>🕵️ <strong>${spyName}</strong> ha vinto <strong>insieme</strong> al suo Avvocato: <strong>${winningLawyers.join(', ')}</strong>.</p>`;
         } else {
           html += `\n<p>🕵️ <strong>${spyName}</strong> ha vinto.</p>`;
         }
@@ -1064,7 +1209,7 @@
       endAndSave({winner:'spy', html}); return;
     }
 
-    // Else Civilians win
+    // Altrimenti vincono i Civili
     endAndSave({winner:'civ', html:'<p>👤 <strong>I Civili vincono</strong>! Avete identificato correttamente tutte le Spie.</p>'});
   }
 
@@ -1131,7 +1276,7 @@
       <ul style="margin:var(--space-md) 0; padding-left:var(--space-lg);">
         <li>🕵️ <strong>Spia</strong>: non conosce la parola. <u>Vince se non viene eliminata</u>. Le spie possono <strong>conoscersi</strong> tra loro (opzione), <strong>escluse</strong> le Finte Spie.</li>
         <li>🎭 <strong>Finta Spia</strong>: <em>conosce</em> la parola. <u>Vince solo se viene eliminata</u> (passando per Spia). Se succede, <strong>perdono tutti gli altri</strong>, comprese le Spie.</li>
-        <li>⚖️ <strong>Avvocato</strong>: conosce parola e Spie vere. È <em>assegnato</em> a una Spia; se quella Spia <strong>vince</strong>, <strong>vince anche il suo Avvocato</strong>.</li>
+        <li>⚖️ <strong>Avvocato</strong>: conosce parola e Spie secondo impostazioni. È <em>assegnato</em> a una o più Spie; se una sua Spia <strong>vince</strong> ed è vivo, <strong>vince anche l'Avvocato</strong>.</li>
         <li>👤 <strong>Civile</strong>: conosce la parola e prova a smascherare le Spie.</li>
       </ul>
       <h3>⏳ Come si gioca</h3>
@@ -1185,6 +1330,15 @@
     $('#categorySelect').onchange = e=>{ state.category = e.target.value; LS.set('category', state.category); updateSelectedCat(); };
     $('#openCats').onclick = ()=> showView('view-cats');
     $('#backHomeFromCats').onclick = ()=> showView('view-home');
+    $('#resetStockCats').onclick = ()=>{
+      modal('Ripristinare le categorie predefinite (senza toccare le tue categorie personalizzate)?', {
+        title:'Conferma',
+        actions:[
+          {label:'Annulla', kind:'ghost'},
+          {label:'Ripristina', kind:'danger', onClick: resetStockOverrides}
+        ]
+      });
+    };
     $('#saveCategory').onclick = saveNewCategory;
     $('#saveSettings').onclick = saveSettings;
     $('#statsCard').onclick = ()=>{ renderHistory(); showView('view-history'); };
